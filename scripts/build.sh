@@ -7,7 +7,7 @@
 CURRENT_PATH="$(dirname "$(readlink ${BASH_SOURCE[0]})")"
 BUILD_PATH=$CURRENT_PATH/../build
 SRC_PATH=$CURRENT_PATH/../js
-YUIcompressorJar=~/Tools/yuicompressor-2.3.6/build/yuicompressor-2.3.6.jar
+YUIcompressorJar=$CURRENT_PATH/yuicompressor-2.4.2.jar
 
 # Remove previous files
 rm -f $BUILD_PATH/*
