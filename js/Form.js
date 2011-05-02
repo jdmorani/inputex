@@ -31,9 +31,9 @@ lang.extend(inputEx.Form, inputEx.Group, {
       this.options.buttons = options.buttons || [];
 
       this.options.action = options.action;
-   	this.options.method = options.method;
+   	  this.options.method = options.method;
 
-		this.options.className =  options.className || 'inputEx-Group';
+		  this.options.className =  options.className || 'inputEx-Group';
 	   this.options.autocomplete = lang.isUndefined(options.autocomplete) ?
 	                                  inputEx.browserAutocomplete :
 	                                  (options.autocomplete === false || options.autocomplete === "off") ? false : true;

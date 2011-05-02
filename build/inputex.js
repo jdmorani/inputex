@@ -1185,6 +1185,7 @@ inputEx.Field = function(options) {
 	
 	// Set the initial value
 	//   -> no initial value = no style (setClassFromState called by setValue)
+
 	if(!lang.isUndefined(this.options.value)) {
 		this.setValue(this.options.value, false);
 	}
@@ -1231,6 +1232,11 @@ inputEx.Field.prototype = {
 	   this.options.className = options.className ? options.className : 'inputEx-Field';
 	   this.options.required = lang.isUndefined(options.required) ? false : options.required;
 	   this.options.showMsg = lang.isUndefined(options.showMsg) ? false : options.showMsg;
+
+     //this.options.table = options.table;
+     if(options.table){  
+       this.options.name = options.table[0] + "." + options.table[1]
+     }
 	},
 	
 	
@@ -1243,8 +1249,7 @@ inputEx.Field.prototype = {
    /**
     * Default render of the dom element. Create a divEl that wraps the field.
     */
-	render: function() {
-	
+	render: function() {  
 	   // Create a DIV element to wrap the editing el and the image
 	   this.divEl = inputEx.cn('div', {className: 'inputEx-fieldWrapper'});
 	   if(this.options.id) {
@@ -1276,6 +1281,10 @@ inputEx.Field.prototype = {
       
 	   // Insert a float breaker
 	   this.divEl.appendChild( inputEx.cn('div',null, {clear: 'both'}," ") );
+	   
+	   // start assuming the field is invalid
+	   if(!typeof this.options.name || !this.options.name)
+	      Dom.addClass(this.el, "inputEx-invalid-name");
 	
 	},
 	
@@ -1328,7 +1337,6 @@ inputEx.Field.prototype = {
     */
 	setValue: function(value, sendUpdatedEvt) {
 	   // to be inherited
-	   
 	   // set corresponding style
 	   this.setClassFromState();
 	   
@@ -1342,6 +1350,10 @@ inputEx.Field.prototype = {
     * Set the styles for valid/invalide state
     */
 	setClassFromState: function() {
+	  
+	  if(typeof this.options.name && this.options.name)
+      Dom.removeClass(this.el, "inputEx-invalid-name");
+      
 		var className;
 	   // remove previous class
 	   if( this.previousState ) {
@@ -1426,6 +1438,7 @@ inputEx.Field.prototype = {
     * @param {Event} e The original 'change' event
     */
 	onChange: function(e) {
+  
       this.fireUpdatedEvt();
 	},
 
@@ -1544,7 +1557,7 @@ inputEx.Field.prototype = {
 };
 
 inputEx.Field.groupOptions = [
-	{ type: "string", label: "Name", name: "name", value: '', required: true },
+   { type: "tablefield", label: "Table", name: "table", choices: [], required: true },
    { type: "string", label: "Label", name: "label", value: '' },
    { type: "string", label: "Description",name: "description", value: '' },
    { type: "boolean", label: "Required?",name: "required", value: false },
@@ -1584,7 +1597,6 @@ lang.extend(inputEx.Group, inputEx.Field, {
     * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
-      
       inputEx.Group.superclass.setOptions.call(this, options);
          	
    	this.options.className = options.className || 'inputEx-Group';
@@ -1629,8 +1641,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
     * Render all the fields.
     * We use the parentEl so that inputEx.Form can append them to the FORM tag
     */
-   renderFields: function(parentEl) {
-      
+   renderFields: function(parentEl) {      
       this.fieldset = inputEx.cn('fieldset');
       this.legend = inputEx.cn('legend', {className: 'inputEx-Group-legend'});
    
@@ -1648,7 +1659,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
       if( this.options.collapsible || (!lang.isUndefined(this.options.legend) && this.options.legend !== '') ) {
          this.fieldset.appendChild(this.legend);
       }
-  	   
+      
       // Iterate this.createInput on input fields
       for (var i = 0 ; i < this.options.fields.length ; i++) {
          var fieldOptions = this.options.fields[i];
@@ -1833,7 +1844,8 @@ lang.extend(inputEx.Group, inputEx.Field, {
    getValue: function() {
 	   var o = {};
 	   for (var i = 0 ; i < this.inputs.length ; i++) {
-	      var v = this.inputs[i].getValue();
+	      var v = this.inputs[i].getValue();	    
+	      console.log(this.inputs[i].options)
 	      if(this.inputs[i].options.name) {
 	         if(this.inputs[i].options.flatten && lang.isObject(v) ) {
 	            lang.augmentObject( o, v);
@@ -1883,7 +1895,6 @@ lang.extend(inputEx.Group, inputEx.Field, {
     * @param {Array} args Array of [fieldValue, fieldInstance] 
     */
    onChange: function(eventName, args) {
-
       // Run interactions
       var fieldValue = args[0];
       var fieldInstance = args[1];
@@ -2260,9 +2271,9 @@ lang.extend(inputEx.Form, inputEx.Group, {
       this.options.buttons = options.buttons || [];
 
       this.options.action = options.action;
-   	this.options.method = options.method;
+   	  this.options.method = options.method;
 
-		this.options.className =  options.className || 'inputEx-Group';
+		  this.options.className =  options.className || 'inputEx-Group';
 	   this.options.autocomplete = lang.isUndefined(options.autocomplete) ?
 	                                  inputEx.browserAutocomplete :
 	                                  (options.autocomplete === false || options.autocomplete === "off") ? false : true;
@@ -2823,7 +2834,6 @@ lang.extend( inputEx.CombineField, inputEx.Group, {
 	
 // Register this class as "combine" type
 inputEx.registerType("combine", inputEx.CombineField, [
-   { type: 'list', name: 'fields', label: 'Elements', required: true, elementType: {type: 'type'} },
    { type: 'list', name: 'separators', label: 'Separators', required: true }
 ]);
 	
@@ -5026,7 +5036,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	 */
 	setValue: function(value, sendUpdatedEvt) {
 	   
-	   if(!lang.isArray(value) ) {
+    if(!lang.isArray(value) && value != '' ){
 	      throw new Error("inputEx.ListField.setValue expected an array, got "+(typeof value));
 	   }
 	      
@@ -7858,6 +7868,595 @@ YAHOO.lang.extend(inputEx.SliderField, inputEx.Field, {
 inputEx.registerType("slider", inputEx.SliderField, [
    { type: 'integer', label: 'Min. value',  name: 'minValue', value: 0 },
    { type: 'integer', label: 'Max. value', name: 'maxValue', value: 100 }
+]);
+
+})();
+(function () { 
+	var util = YAHOO.util, Event = YAHOO.util.Event, lang = YAHOO.lang;
+
+	/**
+	 * Create a table field select field
+	 * @class inputEx.SelectField
+	 * @extends inputEx.Field
+	 * @constructor
+	 * @param {Object} options Added options:
+	 * <ul>
+	 *    <li>choices: contains the list of choices configs ([{value:'usa'}, {value:'fr', label:'France'}])</li>
+	 * </ul>
+	 */
+	inputEx.DynamicField = function (options) {
+		inputEx.DynamicField.superclass.constructor.call(this, options);
+		
+    this.options.fieldDidChangeEvt = new util.CustomEvent('fieldDidChange', this); 		
+	};
+
+	lang.extend(inputEx.DynamicField, inputEx.SelectField, {
+
+  	/**
+  	 * Fire the "tableDidChange" event
+  	 * Escape the stack using a setTimeout
+  	 */
+  	fireFieldDidChangeEvt: function() {
+        // Uses setTimeout to escape the stack (that originiated in an event)
+        var that = this;
+        setTimeout(function() {
+           that.options.fieldDidChangeEvt.fire(that.getValue(), that);
+        },50);
+  	},
+		
+    /**
+     * Register the tableDidChange event
+     */
+    setTableDidChangeCallback: function(event){
+      event.subscribe(this.onTableDidChange, this, true);
+    },
+    				
+		onTableDidChange: function(event, arg){
+		  console.log("dyn field should change!!!")
+		  console.log(arg)
+		},
+
+		onChange: function(){
+		  this.fireFieldDidChangeEvt();
+		  inputEx.DynamicField.superclass.onChange.call(this);
+		},
+		
+		/**
+		 * We successfully retrieve the list of tables
+		 */
+		didReceiveFields: function(o){
+		  var fieldList = YAHOO.lang.JSON.parse(o.responseText);
+		  for(var i=0; i<fieldList.length; i++){
+		    this.addChoice(fieldList[i]);
+		  }
+		  
+		  this.fireFieldDidChangeEvt();
+    },
+
+		/**
+		 * We did not receive the list of tables (an error occured)
+		 */
+    didNotReceiveFields: function(o){
+    },
+		
+		/**
+		 * Retrieve the list of tables to be used to populate
+		 * the select field
+		 */
+     updateFieldList: function(){
+       var tableList = [];
+       var callback = {
+         success: this.didReceiveFields,
+         failure: this.didNotReceiveFields,
+         scope: this
+       }
+       try{         
+         YAHOO.util.Connect.asyncRequest('GET', inputExOptions.DynamicField.url, callback, null)
+       }
+       catch(err){
+         console.log("inputExOptions is undefined. Please define inputExOptions (ex: var inputExOptions = {DynamicField : {url: '../../tables.json'}};)")
+       }
+     },	
+		
+		/**
+ 		 * Set the default values of the options
+ 		 * @param {Object} options Options object as passed to the constructor
+ 		 */
+ 		setOptions: function (options) {
+
+ 			var i, length;
+
+ 			inputEx.SelectField.superclass.setOptions.call(this, options);
+
+ 			this.options.choices = lang.isArray(options.choices) ? options.choices : [];
+
+ 			// Retro-compatibility with old pattern (changed since 2010-06-30)
+ 			if (lang.isArray(options.selectValues)) {
+
+ 				for (i = 0, length = options.selectValues.length; i < length; i += 1) {
+
+ 					this.options.choices.push({
+ 						value: options.selectValues[i],
+ 						label: "" + ((options.selectOptions && !lang.isUndefined(options.selectOptions[i])) ? options.selectOptions[i] : options.selectValues[i])
+ 					});
+
+ 				}
+ 			}
+
+ 		},
+		
+	});
+	
+	// Augment prototype with choice mixin (functions : addChoice, removeChoice, etc.)
+	lang.augmentObject(inputEx.SelectField.prototype, inputEx.mixin.choice);
+	
+	
+	// Register this class as "select" type
+	inputEx.registerType("dynamicfield", inputEx.DynamicField, [
+		{
+			type: 'list',
+			name: 'choices',
+			label: 'Choices',
+			elementType: {
+				type: 'group',
+				fields: [
+					{ label: 'Value', name: 'value', value: '' }, // not required to allow '' value (which is default)
+					{ label: 'Label', name: 'label' } // optional : if left empty, label is same as value
+				]
+			},
+			value: [],
+			required: true
+		}
+	]);
+
+}());(function () {
+  var util  = YAHOO.util
+	var Event = YAHOO.util.Event, lang = YAHOO.lang;
+
+	/**
+	 * Create a table select field
+	 * @class inputEx.SelectField
+	 * @extends inputEx.Field
+	 * @constructor
+	 * @param {Object} options Added options:
+	 * <ul>
+	 *    <li>choices: contains the list of choices configs ([{value:'usa'}, {value:'fr', label:'France'}])</li>
+	 * </ul>
+	 */
+	inputEx.DynamicTable = function (options) {
+		/**
+  	 * Event fired after the table got populated or after the user changed the selected field
+  	 * @event tableDidChange
+  	 * @param {Any} value The new value of the field
+  	 * @desc YAHOO custom event fired when the field is "updated"<br /> subscribe with: this.updatedEvt.subscribe(function(e, params) { var value = params[0]; console.log("updated",value, this.updatedEvt); }, this, true);
+  	 */
+ 		inputEx.DynamicTable.superclass.constructor.call(this, options);
+ 		
+  	this.options.tableDidChangeEvt = new util.CustomEvent('tableDidChange', this); 		
+		
+    this.updateTableList();
+	};
+
+	lang.extend(inputEx.DynamicTable, inputEx.SelectField, {
+		
+		
+  	/**
+  	 * Fire the "tableDidChange" event
+  	 * Escape the stack using a setTimeout
+  	 */
+  	fireTableDidChangeEvt: function() {
+        // Uses setTimeout to escape the stack (that originiated in an event)
+        var that = this;
+        setTimeout(function() {
+           that.options.tableDidChangeEvt.fire(that.getValue(), that);
+        },50);
+  	},		
+		
+		/**
+		 * We successfully retrieve the list of tables
+		 */
+		didReceiveTables: function(o){
+		  var tableList = YAHOO.lang.JSON.parse(o.responseText);
+		  for(var i=0; i<tableList.length; i++){
+		    this.addChoice(tableList[i]);
+		  }
+		  		  
+		  this.fireTableDidChangeEvt();
+    },
+
+		/**
+		 * We did not receive the list of tables (an error occured)
+		 */
+    didNotReceiveTables: function(o){
+    },
+		
+		/**
+		 * Retrieve the list of tables to be used to populate
+		 * the select field
+		 */
+     updateTableList: function(){
+       var tableList = [];
+       var callback = {
+         success: this.didReceiveTables,
+         failure: this.didNotReceiveTables,
+         scope: this
+       }
+       try{         
+         YAHOO.util.Connect.asyncRequest('GET', inputExOptions.Table.url, callback, null)
+       }
+       catch(err){
+         console.log("inputExOptions is undefined. Please define inputExOptions (ex: var inputExOptions = {Table : {url: '../../tables.json'}};)")
+       }
+     },
+		
+		/**
+		 * Set the default values of the options
+		 * @param {Object} options Options object as passed to the constructor
+		 */
+		setOptions: function (options) {
+		
+			var i, length;
+		
+			inputEx.SelectField.superclass.setOptions.call(this, options);
+		
+			this.options.choices = lang.isArray(options.choices) ? options.choices : [];
+		
+			// Retro-compatibility with old pattern (changed since 2010-06-30)
+			if (lang.isArray(options.selectValues)) {
+			
+				for (i = 0, length = options.selectValues.length; i < length; i += 1) {
+				
+					this.options.choices.push({
+						value: options.selectValues[i],
+						label: "" + ((options.selectOptions && !lang.isUndefined(options.selectOptions[i])) ? options.selectOptions[i] : options.selectValues[i])
+					});
+				
+				}
+			}
+		
+		},
+	
+		/**
+		 * Build a select tag with options
+		 */
+		renderComponent: function () {
+		
+			var i, length;
+		
+			// create DOM <select> node
+			this.el = inputEx.cn('select', {
+			
+				id: this.divEl.id ? this.divEl.id + '-field' : YAHOO.util.Dom.generateId(),
+				name: this.options.name || ''
+			
+			});
+		
+			// list of choices (e.g. [{ label: "France", value:"fr", node:<DOM-node>, visible:true }, {...}, ...])
+			this.choicesList = [];
+		
+			// add choices
+			for (i = 0, length = this.options.choices.length; i < length; i += 1) {
+				this.addChoice(this.options.choices[i]);
+			}
+		
+			// append <select> to DOM tree
+			this.fieldContainer.appendChild(this.el);
+		},
+	
+		/**
+		 * Register the "change" event
+		 */
+		initEvents: function () {
+			Event.addListener(this.el, "change", this.onChange, this, true);
+			Event.addFocusListener(this.el, this.onFocus, this, true);
+			Event.addBlurListener(this.el, this.onBlur, this, true);
+		},
+		
+		onChange: function(){
+		  this.fireTableDidChangeEvt();
+		  inputEx.DynamicTable.superclass.onChange.call(this);
+		},
+		
+		/**
+		 * Set the value
+		 * @param {String} value The value to set
+		 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+		 */
+		setValue: function (value, sendUpdatedEvt) {
+		
+			var i, length, choice, firstIndexAvailable, choiceFound = false;
+		
+			for (i = 0, length = this.choicesList.length; i < length ; i += 1) {
+			
+				if (this.choicesList[i].visible) {
+				
+					choice = this.choicesList[i];
+				
+					if (value === choice.value) {
+					
+						choice.node.selected = "selected";
+						choiceFound = true;
+						break; // choice node already found
+					
+					} else if (lang.isUndefined(firstIndexAvailable)) {
+					
+						firstIndexAvailable = i;
+					}
+				
+				}
+			
+			}
+			
+			// select value from first choice available when
+			// value not matching any visible choice
+			//
+			// if no choice available (-> firstIndexAvailable is undefined), skip value setting
+			if (!choiceFound && !lang.isUndefined(firstIndexAvailable)) {
+				
+				choice = this.choicesList[firstIndexAvailable];
+				choice.node.selected = "selected";
+				value = choice.value;
+				
+			}
+			
+			// Call Field.setValue to set class and fire updated event
+			inputEx.SelectField.superclass.setValue.call(this, value, sendUpdatedEvt);
+		},
+	
+		/**
+		 * Return the value
+		 * @return {Any} the selected value
+		 */
+		getValue: function () {
+		
+			var choiceIndex;
+			
+			if (this.el.selectedIndex >= 0) {
+				
+				choiceIndex = inputEx.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {
+					return node === choice.node;
+				});
+			
+				return this.choicesList[choiceIndex].value;
+				
+			} else {
+				
+				return "";
+				
+			}
+		},
+	
+		/**
+		 * Disable the field
+		 */
+		disable: function () {
+			this.el.disabled = true;
+		},
+
+		/**
+		 * Enable the field
+		 */
+		enable: function () {
+			this.el.disabled = false;
+		},
+		
+		createChoiceNode: function (choice) {
+			
+			return inputEx.cn('option', {value: choice.value}, null, choice.label);
+			
+		},
+		
+		removeChoiceNode: function (node) {
+			
+			// remove from selector
+			// 
+			//   -> style.display = 'none' would work only on FF (when node is an <option>)
+			//   -> other browsers (IE, Chrome...) require to remove <option> node from DOM
+			//
+			this.el.removeChild(node);
+			
+		},
+		
+		disableChoiceNode: function (node) {
+			
+			node.disabled = "disabled";
+			
+		},
+		
+		enableChoiceNode: function (node) {
+			
+			node.removeAttribute("disabled");
+			
+		},
+		
+		/**
+		 * Attach an <option> node to the <select> at the specified position
+		 * @param {HTMLElement} node The <option> node to attach to the <select>
+		 * @param {Int} position The position of the choice in choicesList (may not be the "real" position in DOM)
+		 */
+		appendChoiceNode: function (node, position) {
+			
+			var domPosition, i;
+			
+			// Compute real DOM position (since previous choices in choicesList may be hidden)
+			domPosition = 0;
+			
+			for (i = 0; i < position; i += 1) {
+				
+				if (this.choicesList[i].visible) {
+					
+					domPosition += 1;
+					
+				}
+				
+			}
+			
+			// Insert in DOM
+			if (domPosition < this.el.childNodes.length) {
+				
+				YAHOO.util.Dom.insertBefore(node, this.el.childNodes[domPosition]);
+				
+			} else {
+				
+				this.el.appendChild(node);
+				
+			}
+		}
+		
+	});
+	
+	// Augment prototype with choice mixin (functions : addChoice, removeChoice, etc.)
+	lang.augmentObject(inputEx.SelectField.prototype, inputEx.mixin.choice);
+	
+	
+	// Register this class as "select" type
+	inputEx.registerType("dynamictable", inputEx.DynamicTable, [
+		{
+			type: 'list',
+			name: 'choices',
+			label: 'Choices',
+			elementType: {
+				type: 'group',
+				fields: [
+					{ label: 'Value', name: 'value', value: '' }, // not required to allow '' value (which is default)
+					{ label: 'Label', name: 'label' } // optional : if left empty, label is same as value
+				]
+			},
+			value: [],
+			required: true
+		}
+	]);
+
+}());(function () {
+   var util = YAHOO.util, lang = YAHOO.lang, Event = util.Event, Dom = util.Dom;
+
+/**
+ * Create a group of fields within a FORM tag and adds buttons
+ * @class inputEx.Form
+ * @extends inputEx.Group
+ * @constructor
+ * @param {Object} options The following options are added for Forms:
+ * <ul>
+ *   <li>buttons: list of button definition objects {value: 'Click Me', type: 'submit'}</li>
+ *   <li>ajax: send the form through an ajax request (submit button should be present): {method: 'POST', uri: 'myScript.php', callback: same as YAHOO.util.Connect.asyncRequest callback}</li>
+ *   <li>showMask: adds a mask over the form while the request is running (default is false)</li>
+ * </ul>
+ */
+inputEx.TableField = function(options) {
+   inputEx.TableField.superclass.constructor.call(this, options);
+};
+
+lang.extend(inputEx.TableField, inputEx.CombineField, {
+
+   /**
+    * Adds buttons and set ajax default parameters
+    * @param {Object} options Options object as passed to the constructor
+    */
+   setOptions: function(options) {
+      inputEx.TableField.superclass.setOptions.call(this, options);
+      
+      this.options.fields = [
+        {type: 'dynamictable', name:'table'},
+        {type: 'dynamicfield', name:'field'}        
+      ]
+      
+   },
+   
+   onFieldDidChange: function(event, arg){
+	   this.setName();
+   },
+   	
+	 onTableDidChange: function(event, arg){
+	   this.setName();
+	 },   
+   
+   render: function() {   
+      // Create the div wrapper for this group
+      this.divEl = inputEx.cn('div', {className: this.options.className});
+      if(this.options.id) {
+     	   this.divEl.id = this.options.id;
+     	}
+   
+      Dom.addClass(this.divEl, "inputEx-required");
+   
+      // Label element
+      if (YAHOO.lang.isString(this.options.label)) {
+         this.labelDiv = inputEx.cn('div', {id: this.divEl.id+'-label', className: 'inputEx-label', 'for': this.divEl.id+'-field'});
+         this.labelEl = inputEx.cn('label', null, null, this.options.label === "" ? "&nbsp;" : this.options.label);
+         this.labelDiv.appendChild(this.labelEl);
+         this.divEl.appendChild(this.labelDiv);
+        }
+   
+    	   this.renderFields(this.divEl);  	  
+   
+    	   if(this.options.disabled) {
+    	      this.disable();
+    	   }
+   
+      // Insert a float breaker
+      this.divEl.appendChild( inputEx.cn('div', {className: "inputEx-clear-div"}, null, " ") );
+   },   
+
+   /**
+    * Instanciate one field given its parameters, type or fieldClass
+    * @param {Object} fieldOptions The field properties as required by the inputEx() method
+    */
+   renderField: function(fieldOptions) {
+
+      // Instanciate the field
+      var fieldInstance = inputEx(fieldOptions,this);
+      
+      if(fieldOptions.type == 'dynamictable'){
+        this.options.tableDidChangeEvt = fieldInstance.options.tableDidChangeEvt;        
+        this.options.tableDidChangeEvt.subscribe(this.onTableDidChange, this, true);        
+      }
+      
+      if(fieldOptions.type == 'dynamicfield'){
+        fieldInstance.setTableDidChangeCallback(this.options.tableDidChangeEvt);
+        fieldInstance.options.fieldDidChangeEvt.subscribe(this.onFieldDidChange, this, true);        
+      }
+      
+	    this.inputs.push(fieldInstance);
+      
+      // Create an index to access fields by their name
+      if(fieldInstance.options.name) {
+         this.inputsNames[fieldInstance.options.name] = fieldInstance;
+      }
+      
+      // Create the this.hasInteractions to run interactions at startup
+      if(!this.hasInteractions && fieldOptions.interactions) {
+         this.hasInteractions = true;
+      }
+      
+	    // Subscribe to the field "updated" event to send the group "updated" event
+      fieldInstance.updatedEvt.subscribe(this.onChange, this, true);
+   	  
+      return fieldInstance;
+   },
+
+   onChange: function(e){
+     Dom.addClass(this.divEl, "inputEx-"+inputEx.stateInvalid );
+   },
+
+   /**
+    * Init the events
+    */
+   initEvents: function() {
+       
+   },
+
+   
+   /**
+    * Purge all event listeners and remove the component from the dom
+    */
+   destroy: function() {
+      
+   }
+
+});
+
+// Register this class as "form" type
+inputEx.registerType("tablefield", inputEx.TableField, [
 ]);
 
 })();

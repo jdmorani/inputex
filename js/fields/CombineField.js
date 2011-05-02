@@ -198,7 +198,6 @@ lang.extend( inputEx.CombineField, inputEx.Group, {
 	
 // Register this class as "combine" type
 inputEx.registerType("combine", inputEx.CombineField, [
-   { type: 'list', name: 'fields', label: 'Elements', required: true, elementType: {type: 'type'} },
    { type: 'list', name: 'separators', label: 'Separators', required: true }
 ]);
 	
