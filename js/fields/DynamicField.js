@@ -38,20 +38,26 @@
       event.subscribe(this.onTableDidChange, this, true);
     },
     				
-		onTableDidChange: function(event, arg){
-		  console.log("dyn field should change!!!")
-		  console.log(arg)
+		onTableDidChange: function(event, args){
+      this.updateFieldList(args[0])
 		},
 
-		onChange: function(){
+		onChange: function(e){
 		  this.fireFieldDidChangeEvt();
-		  inputEx.DynamicField.superclass.onChange.call(this);
+		  inputEx.DynamicField.superclass.onChange.call(this, e);
 		},
+		
+    clearFieldsList: function(){
+    	for (i = 0, length = this.choicesList.length; i < length; i += 1) {
+				this.hideChoice({ position: i }, false); // no updatedEvt in case of clear (because multiple clear could happen...)
+			}
+    },
 		
 		/**
 		 * We successfully retrieve the list of tables
 		 */
 		didReceiveFields: function(o){
+		  this.clearFieldsList();
 		  var fieldList = YAHOO.lang.JSON.parse(o.responseText);
 		  for(var i=0; i<fieldList.length; i++){
 		    this.addChoice(fieldList[i]);
@@ -70,7 +76,7 @@
 		 * Retrieve the list of tables to be used to populate
 		 * the select field
 		 */
-     updateFieldList: function(){
+     updateFieldList: function(dynamic_table_id){
        var tableList = [];
        var callback = {
          success: this.didReceiveFields,
@@ -78,12 +84,34 @@
          scope: this
        }
        try{         
-         YAHOO.util.Connect.asyncRequest('GET', inputExOptions.DynamicField.url, callback, null)
+         YAHOO.util.Connect.asyncRequest('GET', inputExOptions.DynamicField.url + "?dynamic_table_id=" + dynamic_table_id, callback, null)
        }
        catch(err){
-         console.log("inputExOptions is undefined. Please define inputExOptions (ex: var inputExOptions = {DynamicField : {url: '../../tables.json'}};)")
+         console.log("inputExOptions is undefined. Please define inputExOptions (ex: var inputExOptions = {DynamicField : {url: '../../dynamic_fields.json'}};)")
        }
      },	
+
+ 		/**
+ 		 * Return the value
+ 		 * @return {Any} the selected value
+ 		 */
+ 		getValue: function () {
+
+ 			var choiceIndex;
+
+ 			if (this.el.selectedIndex >= 0) {
+
+ 				choiceIndex = inputEx.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {
+ 					return node === choice.node;
+ 				});
+ 				return this.choicesList[choiceIndex].label;
+
+ 			} else {
+
+ 				return "";
+
+ 			}
+ 		},		
 		
 		/**
  		 * Set the default values of the options

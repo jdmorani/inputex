@@ -37,7 +37,7 @@
         // Uses setTimeout to escape the stack (that originiated in an event)
         var that = this;
         setTimeout(function() {
-           that.options.tableDidChangeEvt.fire(that.getValue(), that);
+           that.options.tableDidChangeEvt.fire(that.getId(), that);
         },50);
   	},		
 		
@@ -71,10 +71,10 @@
          scope: this
        }
        try{         
-         YAHOO.util.Connect.asyncRequest('GET', inputExOptions.Table.url, callback, null)
+         YAHOO.util.Connect.asyncRequest('GET', inputExOptions.DynamicTable.url, callback, null)
        }
        catch(err){
-         console.log("inputExOptions is undefined. Please define inputExOptions (ex: var inputExOptions = {Table : {url: '../../tables.json'}};)")
+         console.log("inputExOptions is undefined. Please define inputExOptions (ex: var inputExOptions = {DynamicTable : {url: '../../dynamic_tables.json'}};)")
        }
      },
 		
@@ -141,9 +141,9 @@
 			Event.addBlurListener(this.el, this.onBlur, this, true);
 		},
 		
-		onChange: function(){
+		onChange: function(e){
 		  this.fireTableDidChangeEvt();
-		  inputEx.DynamicTable.superclass.onChange.call(this);
+		  inputEx.DynamicTable.superclass.onChange.call(this, e);
 		},
 		
 		/**
@@ -191,7 +191,32 @@
 			// Call Field.setValue to set class and fire updated event
 			inputEx.SelectField.superclass.setValue.call(this, value, sendUpdatedEvt);
 		},
-	
+
+
+
+		/**
+		 * Return the value
+		 * @return {Any} the selected value
+		 */
+		getId: function () {
+
+			var choiceIndex;
+
+			if (this.el.selectedIndex >= 0) {
+
+				choiceIndex = inputEx.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {
+					return node === choice.node;
+				});
+				return this.choicesList[choiceIndex].value;
+
+			} else {
+
+				return "";
+
+			}
+		},
+
+
 		/**
 		 * Return the value
 		 * @return {Any} the selected value
@@ -205,8 +230,7 @@
 				choiceIndex = inputEx.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {
 					return node === choice.node;
 				});
-			
-				return this.choicesList[choiceIndex].value;
+				return this.choicesList[choiceIndex].label;
 				
 			} else {
 				

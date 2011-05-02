@@ -279,7 +279,6 @@ lang.extend(inputEx.Group, inputEx.Field, {
 	   var o = {};
 	   for (var i = 0 ; i < this.inputs.length ; i++) {
 	      var v = this.inputs[i].getValue();	    
-	      console.log(this.inputs[i].options)
 	      if(this.inputs[i].options.name) {
 	         if(this.inputs[i].options.flatten && lang.isObject(v) ) {
 	            lang.augmentObject( o, v);

@@ -101,19 +101,17 @@ lang.extend(inputEx.TableField, inputEx.CombineField, {
       
 	    // Subscribe to the field "updated" event to send the group "updated" event
       fieldInstance.updatedEvt.subscribe(this.onChange, this, true);
+      
+      // Subscribe to the field "updated" event to send the group "updated" event
+      this.options.tableDidChangeEvt.subscribe(this.onChange, this, true);  
    	  
       return fieldInstance;
    },
 
    onChange: function(e){
      Dom.addClass(this.divEl, "inputEx-"+inputEx.stateInvalid );
-   },
-
-   /**
-    * Init the events
-    */
-   initEvents: function() {
-       
+     this.onBlur(e);
+     //inputEx.TableField.superclass.onChange.call(this, e);
    },
 
    
@@ -122,8 +120,7 @@ lang.extend(inputEx.TableField, inputEx.CombineField, {
     */
    destroy: function() {
       
-   }
-
+   },
 });
 
 // Register this class as "form" type

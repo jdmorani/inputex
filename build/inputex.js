@@ -114,7 +114,7 @@ lang.augmentObject(inputEx, {
     * @type String
     */
    stateInvalid: 'invalid',
-   
+      
    /**
     * Associative array containing field messages
     */
@@ -1234,8 +1234,10 @@ inputEx.Field.prototype = {
 	   this.options.showMsg = lang.isUndefined(options.showMsg) ? false : options.showMsg;
 
      //this.options.table = options.table;
-     if(options.table){  
-       this.options.name = options.table[0] + "." + options.table[1]
+     console.log(options.tablefield)
+     if(options.tablefield){
+       this.options.tablefield = options.tablefield;
+       this.options.name = options.tablefield[0] + "." + options.tablefield[1]
      }
 	},
 	
@@ -1280,12 +1282,7 @@ inputEx.Field.prototype = {
    	this.divEl.appendChild(this.fieldContainer);
       
 	   // Insert a float breaker
-	   this.divEl.appendChild( inputEx.cn('div',null, {clear: 'both'}," ") );
-	   
-	   // start assuming the field is invalid
-	   if(!typeof this.options.name || !this.options.name)
-	      Dom.addClass(this.el, "inputEx-invalid-name");
-	
+	   this.divEl.appendChild( inputEx.cn('div',null, {clear: 'both'}," ") );	
 	},
 	
 	/**
@@ -1350,10 +1347,6 @@ inputEx.Field.prototype = {
     * Set the styles for valid/invalide state
     */
 	setClassFromState: function() {
-	  
-	  if(typeof this.options.name && this.options.name)
-      Dom.removeClass(this.el, "inputEx-invalid-name");
-      
 		var className;
 	   // remove previous class
 	   if( this.previousState ) {
@@ -1373,6 +1366,12 @@ inputEx.Field.prototype = {
 	   if(this.options.showMsg) {
 	      this.displayMessage( this.getStateString(state) );
       }
+	   
+ 	   // start assuming the field is invalid
+ 	   if(this.options.tablefield && !this.options.name.match(/\w+\.\w+/))
+ 	      Dom.addClass(this.el, "inputEx-invalid-name");
+ 	   else
+        Dom.removeClass(this.el, "inputEx-invalid-name");	   
 	   
 	   this.previousState = state;
 	},
@@ -1396,7 +1395,7 @@ inputEx.Field.prototype = {
     * Returns the current state (given its value)
     * @return {String} One of the following states: 'empty', 'required', 'valid' or 'invalid'
     */
-	getState: function() { 
+	getState: function() {         
 	   // if the field is empty :
 	   if( this.isEmpty() ) {
 	      return this.options.required ? inputEx.stateRequired : inputEx.stateEmpty;
@@ -1438,8 +1437,8 @@ inputEx.Field.prototype = {
     * @param {Event} e The original 'change' event
     */
 	onChange: function(e) {
-  
-      this.fireUpdatedEvt();
+	  console.log(e)
+    this.fireUpdatedEvt();
 	},
 
    /**
@@ -1557,7 +1556,7 @@ inputEx.Field.prototype = {
 };
 
 inputEx.Field.groupOptions = [
-   { type: "tablefield", label: "Table", name: "table", choices: [], required: true },
+   { type: "tablefield", label: "Table & Field", name: "tablefield", choices: [], required: true },
    { type: "string", label: "Label", name: "label", value: '' },
    { type: "string", label: "Description",name: "description", value: '' },
    { type: "boolean", label: "Required?",name: "required", value: false },
@@ -1845,7 +1844,6 @@ lang.extend(inputEx.Group, inputEx.Field, {
 	   var o = {};
 	   for (var i = 0 ; i < this.inputs.length ; i++) {
 	      var v = this.inputs[i].getValue();	    
-	      console.log(this.inputs[i].options)
 	      if(this.inputs[i].options.name) {
 	         if(this.inputs[i].options.flatten && lang.isObject(v) ) {
 	            lang.augmentObject( o, v);
@@ -7911,20 +7909,26 @@ inputEx.registerType("slider", inputEx.SliderField, [
       event.subscribe(this.onTableDidChange, this, true);
     },
     				
-		onTableDidChange: function(event, arg){
-		  console.log("dyn field should change!!!")
-		  console.log(arg)
+		onTableDidChange: function(event, args){
+      this.updateFieldList(args[0])
 		},
 
-		onChange: function(){
+		onChange: function(e){
 		  this.fireFieldDidChangeEvt();
-		  inputEx.DynamicField.superclass.onChange.call(this);
+		  inputEx.DynamicField.superclass.onChange.call(this, e);
 		},
+		
+    clearFieldsList: function(){
+    	for (i = 0, length = this.choicesList.length; i < length; i += 1) {
+				this.hideChoice({ position: i }, false); // no updatedEvt in case of clear (because multiple clear could happen...)
+			}
+    },
 		
 		/**
 		 * We successfully retrieve the list of tables
 		 */
 		didReceiveFields: function(o){
+		  this.clearFieldsList();
 		  var fieldList = YAHOO.lang.JSON.parse(o.responseText);
 		  for(var i=0; i<fieldList.length; i++){
 		    this.addChoice(fieldList[i]);
@@ -7943,7 +7947,7 @@ inputEx.registerType("slider", inputEx.SliderField, [
 		 * Retrieve the list of tables to be used to populate
 		 * the select field
 		 */
-     updateFieldList: function(){
+     updateFieldList: function(dynamic_table_id){
        var tableList = [];
        var callback = {
          success: this.didReceiveFields,
@@ -7951,12 +7955,34 @@ inputEx.registerType("slider", inputEx.SliderField, [
          scope: this
        }
        try{         
-         YAHOO.util.Connect.asyncRequest('GET', inputExOptions.DynamicField.url, callback, null)
+         YAHOO.util.Connect.asyncRequest('GET', inputExOptions.DynamicField.url + "?dynamic_table_id=" + dynamic_table_id, callback, null)
        }
        catch(err){
-         console.log("inputExOptions is undefined. Please define inputExOptions (ex: var inputExOptions = {DynamicField : {url: '../../tables.json'}};)")
+         console.log("inputExOptions is undefined. Please define inputExOptions (ex: var inputExOptions = {DynamicField : {url: '../../dynamic_fields.json'}};)")
        }
      },	
+
+ 		/**
+ 		 * Return the value
+ 		 * @return {Any} the selected value
+ 		 */
+ 		getValue: function () {
+
+ 			var choiceIndex;
+
+ 			if (this.el.selectedIndex >= 0) {
+
+ 				choiceIndex = inputEx.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {
+ 					return node === choice.node;
+ 				});
+ 				return this.choicesList[choiceIndex].label;
+
+ 			} else {
+
+ 				return "";
+
+ 			}
+ 		},		
 		
 		/**
  		 * Set the default values of the options
@@ -8048,7 +8074,7 @@ inputEx.registerType("slider", inputEx.SliderField, [
         // Uses setTimeout to escape the stack (that originiated in an event)
         var that = this;
         setTimeout(function() {
-           that.options.tableDidChangeEvt.fire(that.getValue(), that);
+           that.options.tableDidChangeEvt.fire(that.getId(), that);
         },50);
   	},		
 		
@@ -8082,10 +8108,10 @@ inputEx.registerType("slider", inputEx.SliderField, [
          scope: this
        }
        try{         
-         YAHOO.util.Connect.asyncRequest('GET', inputExOptions.Table.url, callback, null)
+         YAHOO.util.Connect.asyncRequest('GET', inputExOptions.DynamicTable.url, callback, null)
        }
        catch(err){
-         console.log("inputExOptions is undefined. Please define inputExOptions (ex: var inputExOptions = {Table : {url: '../../tables.json'}};)")
+         console.log("inputExOptions is undefined. Please define inputExOptions (ex: var inputExOptions = {DynamicTable : {url: '../../dynamic_tables.json'}};)")
        }
      },
 		
@@ -8152,9 +8178,9 @@ inputEx.registerType("slider", inputEx.SliderField, [
 			Event.addBlurListener(this.el, this.onBlur, this, true);
 		},
 		
-		onChange: function(){
+		onChange: function(e){
 		  this.fireTableDidChangeEvt();
-		  inputEx.DynamicTable.superclass.onChange.call(this);
+		  inputEx.DynamicTable.superclass.onChange.call(this, e);
 		},
 		
 		/**
@@ -8202,7 +8228,32 @@ inputEx.registerType("slider", inputEx.SliderField, [
 			// Call Field.setValue to set class and fire updated event
 			inputEx.SelectField.superclass.setValue.call(this, value, sendUpdatedEvt);
 		},
-	
+
+
+
+		/**
+		 * Return the value
+		 * @return {Any} the selected value
+		 */
+		getId: function () {
+
+			var choiceIndex;
+
+			if (this.el.selectedIndex >= 0) {
+
+				choiceIndex = inputEx.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {
+					return node === choice.node;
+				});
+				return this.choicesList[choiceIndex].value;
+
+			} else {
+
+				return "";
+
+			}
+		},
+
+
 		/**
 		 * Return the value
 		 * @return {Any} the selected value
@@ -8216,8 +8267,7 @@ inputEx.registerType("slider", inputEx.SliderField, [
 				choiceIndex = inputEx.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {
 					return node === choice.node;
 				});
-			
-				return this.choicesList[choiceIndex].value;
+				return this.choicesList[choiceIndex].label;
 				
 			} else {
 				
@@ -8430,19 +8480,17 @@ lang.extend(inputEx.TableField, inputEx.CombineField, {
       
 	    // Subscribe to the field "updated" event to send the group "updated" event
       fieldInstance.updatedEvt.subscribe(this.onChange, this, true);
+      
+      // Subscribe to the field "updated" event to send the group "updated" event
+      this.options.tableDidChangeEvt.subscribe(this.onChange, this, true);  
    	  
       return fieldInstance;
    },
 
    onChange: function(e){
      Dom.addClass(this.divEl, "inputEx-"+inputEx.stateInvalid );
-   },
-
-   /**
-    * Init the events
-    */
-   initEvents: function() {
-       
+     this.onBlur(e);
+     //inputEx.TableField.superclass.onChange.call(this, e);
    },
 
    
@@ -8451,8 +8499,7 @@ lang.extend(inputEx.TableField, inputEx.CombineField, {
     */
    destroy: function() {
       
-   }
-
+   },
 });
 
 // Register this class as "form" type

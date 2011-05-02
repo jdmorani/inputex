@@ -90,7 +90,7 @@ lang.augmentObject(inputEx, {
     * @type String
     */
    stateInvalid: 'invalid',
-   
+      
    /**
     * Associative array containing field messages
     */

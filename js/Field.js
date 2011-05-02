@@ -84,8 +84,10 @@ inputEx.Field.prototype = {
 	   this.options.showMsg = lang.isUndefined(options.showMsg) ? false : options.showMsg;
 
      //this.options.table = options.table;
-     if(options.table){  
-       this.options.name = options.table[0] + "." + options.table[1]
+     console.log(options.tablefield)
+     if(options.tablefield){
+       this.options.tablefield = options.tablefield;
+       this.options.name = options.tablefield[0] + "." + options.tablefield[1]
      }
 	},
 	
@@ -130,12 +132,7 @@ inputEx.Field.prototype = {
    	this.divEl.appendChild(this.fieldContainer);
       
 	   // Insert a float breaker
-	   this.divEl.appendChild( inputEx.cn('div',null, {clear: 'both'}," ") );
-	   
-	   // start assuming the field is invalid
-	   if(!typeof this.options.name || !this.options.name)
-	      Dom.addClass(this.el, "inputEx-invalid-name");
-	
+	   this.divEl.appendChild( inputEx.cn('div',null, {clear: 'both'}," ") );	
 	},
 	
 	/**
@@ -200,10 +197,6 @@ inputEx.Field.prototype = {
     * Set the styles for valid/invalide state
     */
 	setClassFromState: function() {
-	  
-	  if(typeof this.options.name && this.options.name)
-      Dom.removeClass(this.el, "inputEx-invalid-name");
-      
 		var className;
 	   // remove previous class
 	   if( this.previousState ) {
@@ -223,6 +216,12 @@ inputEx.Field.prototype = {
 	   if(this.options.showMsg) {
 	      this.displayMessage( this.getStateString(state) );
       }
+	   
+ 	   // start assuming the field is invalid
+ 	   if(this.options.tablefield && !this.options.name.match(/\w+\.\w+/))
+ 	      Dom.addClass(this.el, "inputEx-invalid-name");
+ 	   else
+        Dom.removeClass(this.el, "inputEx-invalid-name");	   
 	   
 	   this.previousState = state;
 	},
@@ -246,7 +245,7 @@ inputEx.Field.prototype = {
     * Returns the current state (given its value)
     * @return {String} One of the following states: 'empty', 'required', 'valid' or 'invalid'
     */
-	getState: function() { 
+	getState: function() {         
 	   // if the field is empty :
 	   if( this.isEmpty() ) {
 	      return this.options.required ? inputEx.stateRequired : inputEx.stateEmpty;
@@ -288,8 +287,8 @@ inputEx.Field.prototype = {
     * @param {Event} e The original 'change' event
     */
 	onChange: function(e) {
-  
-      this.fireUpdatedEvt();
+	  console.log(e)
+    this.fireUpdatedEvt();
 	},
 
    /**
@@ -407,7 +406,7 @@ inputEx.Field.prototype = {
 };
 
 inputEx.Field.groupOptions = [
-   { type: "tablefield", label: "Table", name: "table", choices: [], required: true },
+   { type: "tablefield", label: "Table & Field", name: "tablefield", choices: [], required: true },
    { type: "string", label: "Label", name: "label", value: '' },
    { type: "string", label: "Description",name: "description", value: '' },
    { type: "boolean", label: "Required?",name: "required", value: false },
