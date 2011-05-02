@@ -31,7 +31,6 @@ lang.extend(inputEx.Group, inputEx.Field, {
     * @param {Object} options Options object as passed to the constructor
     */
    setOptions: function(options) {
-      
       inputEx.Group.superclass.setOptions.call(this, options);
          	
    	this.options.className = options.className || 'inputEx-Group';
@@ -76,8 +75,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
     * Render all the fields.
     * We use the parentEl so that inputEx.Form can append them to the FORM tag
     */
-   renderFields: function(parentEl) {
-      
+   renderFields: function(parentEl) {      
       this.fieldset = inputEx.cn('fieldset');
       this.legend = inputEx.cn('legend', {className: 'inputEx-Group-legend'});
    
@@ -95,7 +93,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
       if( this.options.collapsible || (!lang.isUndefined(this.options.legend) && this.options.legend !== '') ) {
          this.fieldset.appendChild(this.legend);
       }
-  	   
+      
       // Iterate this.createInput on input fields
       for (var i = 0 ; i < this.options.fields.length ; i++) {
          var fieldOptions = this.options.fields[i];
@@ -280,7 +278,8 @@ lang.extend(inputEx.Group, inputEx.Field, {
    getValue: function() {
 	   var o = {};
 	   for (var i = 0 ; i < this.inputs.length ; i++) {
-	      var v = this.inputs[i].getValue();
+	      var v = this.inputs[i].getValue();	    
+	      console.log(this.inputs[i].options)
 	      if(this.inputs[i].options.name) {
 	         if(this.inputs[i].options.flatten && lang.isObject(v) ) {
 	            lang.augmentObject( o, v);
@@ -330,7 +329,6 @@ lang.extend(inputEx.Group, inputEx.Field, {
     * @param {Array} args Array of [fieldValue, fieldInstance] 
     */
    onChange: function(eventName, args) {
-
       // Run interactions
       var fieldValue = args[0];
       var fieldInstance = args[1];

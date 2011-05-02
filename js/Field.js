@@ -35,6 +35,7 @@ inputEx.Field = function(options) {
 	
 	// Set the initial value
 	//   -> no initial value = no style (setClassFromState called by setValue)
+
 	if(!lang.isUndefined(this.options.value)) {
 		this.setValue(this.options.value, false);
 	}
@@ -81,6 +82,11 @@ inputEx.Field.prototype = {
 	   this.options.className = options.className ? options.className : 'inputEx-Field';
 	   this.options.required = lang.isUndefined(options.required) ? false : options.required;
 	   this.options.showMsg = lang.isUndefined(options.showMsg) ? false : options.showMsg;
+
+     //this.options.table = options.table;
+     if(options.table){  
+       this.options.name = options.table[0] + "." + options.table[1]
+     }
 	},
 	
 	
@@ -93,8 +99,7 @@ inputEx.Field.prototype = {
    /**
     * Default render of the dom element. Create a divEl that wraps the field.
     */
-	render: function() {
-	
+	render: function() {  
 	   // Create a DIV element to wrap the editing el and the image
 	   this.divEl = inputEx.cn('div', {className: 'inputEx-fieldWrapper'});
 	   if(this.options.id) {
@@ -126,6 +131,10 @@ inputEx.Field.prototype = {
       
 	   // Insert a float breaker
 	   this.divEl.appendChild( inputEx.cn('div',null, {clear: 'both'}," ") );
+	   
+	   // start assuming the field is invalid
+	   if(!typeof this.options.name || !this.options.name)
+	      Dom.addClass(this.el, "inputEx-invalid-name");
 	
 	},
 	
@@ -178,7 +187,6 @@ inputEx.Field.prototype = {
     */
 	setValue: function(value, sendUpdatedEvt) {
 	   // to be inherited
-	   
 	   // set corresponding style
 	   this.setClassFromState();
 	   
@@ -192,6 +200,10 @@ inputEx.Field.prototype = {
     * Set the styles for valid/invalide state
     */
 	setClassFromState: function() {
+	  
+	  if(typeof this.options.name && this.options.name)
+      Dom.removeClass(this.el, "inputEx-invalid-name");
+      
 		var className;
 	   // remove previous class
 	   if( this.previousState ) {
@@ -276,6 +288,7 @@ inputEx.Field.prototype = {
     * @param {Event} e The original 'change' event
     */
 	onChange: function(e) {
+  
       this.fireUpdatedEvt();
 	},
 
@@ -394,7 +407,7 @@ inputEx.Field.prototype = {
 };
 
 inputEx.Field.groupOptions = [
-	{ type: "string", label: "Name", name: "name", value: '', required: true },
+   { type: "tablefield", label: "Table", name: "table", choices: [], required: true },
    { type: "string", label: "Label", name: "label", value: '' },
    { type: "string", label: "Description",name: "description", value: '' },
    { type: "boolean", label: "Required?",name: "required", value: false },

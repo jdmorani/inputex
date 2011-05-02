@@ -137,7 +137,7 @@ lang.extend(inputEx.ListField,inputEx.Field, {
 	 */
 	setValue: function(value, sendUpdatedEvt) {
 	   
-	   if(!lang.isArray(value) ) {
+    if(!lang.isArray(value) && value != '' ){
 	      throw new Error("inputEx.ListField.setValue expected an array, got "+(typeof value));
 	   }
 	      

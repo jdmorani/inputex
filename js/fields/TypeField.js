@@ -28,7 +28,14 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
       
       // The list of all inputEx declared types to be used in the "type" selector
       var selectOptions = [];
+      var skipFields = ["form", "type", "table", "tablefield"]
+
       for(var key in inputEx.typeClasses) {
+          
+         // we don't want users to be able to create a form on their own
+         if(skipFields.indexOf(key) >= 0)
+          continue;
+          
          if(inputEx.typeClasses.hasOwnProperty(key)) {
             selectOptions.push( { value : key } );
          }
