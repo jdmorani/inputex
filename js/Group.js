@@ -32,25 +32,25 @@ lang.extend(inputEx.Group, inputEx.Field, {
     */
    setOptions: function(options) {
       inputEx.Group.superclass.setOptions.call(this, options);
-         	
-   	this.options.className = options.className || 'inputEx-Group';
-   	
-   	this.options.fields = options.fields;
-   	
-   	this.options.flatten = options.flatten;
+          
+    this.options.className = options.className || 'inputEx-Group';
+    
+    this.options.fields = options.fields;
+    
+    this.options.flatten = options.flatten;
    
-      this.options.legend = options.legend || '';
-   
-      this.options.collapsible = lang.isUndefined(options.collapsible) ? false : options.collapsible;
-      this.options.collapsed = lang.isUndefined(options.collapsed) ? false : options.collapsed;
-      
-      this.options.disabled = lang.isUndefined(options.disabled) ? false : options.disabled;
-      
-      // Array containing the list of the field instances
-      this.inputs = [];
-
-      // Associative array containing the field instances by names
-      this.inputsNames = {};
+    this.options.legend = options.legend || '';
+    
+    this.options.collapsible = lang.isUndefined(options.collapsible) ? false : options.collapsible;
+    this.options.collapsed = lang.isUndefined(options.collapsed) ? false : options.collapsed;
+    
+    this.options.disabled = lang.isUndefined(options.disabled) ? false : options.disabled;
+    
+    // Array containing the list of the field instances
+    this.inputs = [];
+    
+    // Associative array containing the field instances by names
+    this.inputsNames = {};
    },
 
    /**
@@ -59,16 +59,16 @@ lang.extend(inputEx.Group, inputEx.Field, {
    render: function() {
    
       // Create the div wrapper for this group
-	   this.divEl = inputEx.cn('div', {className: this.options.className});
-	   if(this.options.id) {
-   	   this.divEl.id = this.options.id;
-   	}
-  	   
-  	   this.renderFields(this.divEl);
-  	   
-  	   if(this.options.disabled) {
-  	      this.disable();
-  	   }
+     this.divEl = inputEx.cn('div', {className: this.options.className});
+     if(this.options.id) {
+       this.divEl.id = this.options.id;
+    }
+       
+       this.renderFields(this.divEl);
+       
+       if(this.options.disabled) {
+          this.disable();
+       }
    },
    
    /**
@@ -98,32 +98,32 @@ lang.extend(inputEx.Group, inputEx.Field, {
       for (var i = 0 ; i < this.options.fields.length ; i++) {
          var fieldOptions = this.options.fields[i];
         
-			// Throw Error if input is undefined
-			if(!fieldOptions) {
-				throw new Error("inputEx.Form: One of the provided fields is undefined ! (check trailing comma)");
-			}
-			
+      // Throw Error if input is undefined
+      if(!fieldOptions) {
+        throw new Error("inputEx.Form: One of the provided fields is undefined ! (check trailing comma)");
+      }
+      
          // Render the field
-			this.addField(fieldOptions);
-  	   }
-  	
-  	   // Collapsed at creation ?
-  	   if(this.options.collapsed) {
-  	      this.toggleCollapse();
-  	   }
-  	
-  	   // Append the fieldset
-  	   parentEl.appendChild(this.fieldset);
+      this.addField(fieldOptions);
+       }
+    
+       // Collapsed at creation ?
+       if(this.options.collapsed) {
+          this.toggleCollapse();
+       }
+    
+       // Append the fieldset
+       parentEl.appendChild(this.fieldset);
    },
 
-	/**
-	 * Render a field and add it to the field set
+  /**
+   * Render a field and add it to the field set
     * @param {Object} fieldOptions The field properties as required by the inputEx() method
-	 */
+   */
    addField: function(fieldOptions) {
-		var field = this.renderField(fieldOptions);
+    var field = this.renderField(fieldOptions);
       this.fieldset.appendChild(field.getEl() );
-	},
+  },
 
    /**
     * Instanciate one field given its parameters, type or fieldClass
@@ -134,7 +134,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
       // Instanciate the field
       var fieldInstance = inputEx(fieldOptions,this);
       
-	   this.inputs.push(fieldInstance);
+     this.inputs.push(fieldInstance);
       
       // Create an index to access fields by their name
       if(fieldInstance.options.name) {
@@ -146,9 +146,9 @@ lang.extend(inputEx.Group, inputEx.Field, {
          this.hasInteractions = true;
       }
       
-	   // Subscribe to the field "updated" event to send the group "updated" event
+     // Subscribe to the field "updated" event to send the group "updated" event
       fieldInstance.updatedEvt.subscribe(this.onChange, this, true);
-   	  
+      
       return fieldInstance;
    },
   
@@ -193,45 +193,45 @@ lang.extend(inputEx.Group, inputEx.Field, {
       }
       return response;
    },
-	
-	/**
-	 * Alternative method to validate for advanced error handling
-	 * @returns {Object} with all Forms's fields state, error message
-	 * and validate containing a boolean for the global Form validation
-	 */
-	getFieldsStates: function() {
-		var input, inputName, state, message,
-		returnedObj = { fields:{}, validate:true };
+  
+  /**
+   * Alternative method to validate for advanced error handling
+   * @returns {Object} with all Forms's fields state, error message
+   * and validate containing a boolean for the global Form validation
+   */
+  getFieldsStates: function() {
+    var input, inputName, state, message,
+    returnedObj = { fields:{}, validate:true };
       
       // Loop on all the sub fields
       for (var i = 0 ; i < this.inputs.length ; i++) {
-	
-   	   input = this.inputs[i];
-			inputName = input.options.name;
-   	   state = input.getState();
-			message = input.getStateString(state);
-						
-			returnedObj.fields[inputName] = {};
-			returnedObj.fields[inputName].valid = true;
-			returnedObj.fields[inputName].message = message;
-			
-			// check if subfield validates
-   	   if( state == inputEx.stateRequired || state == inputEx.stateInvalid ) {
-				returnedObj.fields[inputName].valid = false;
-				returnedObj.validate = false;
-   	   }
+  
+       input = this.inputs[i];
+      inputName = input.options.name;
+       state = input.getState();
+      message = input.getStateString(state);
+            
+      returnedObj.fields[inputName] = {};
+      returnedObj.fields[inputName].valid = true;
+      returnedObj.fields[inputName].message = message;
+      
+      // check if subfield validates
+       if( state == inputEx.stateRequired || state == inputEx.stateInvalid ) {
+        returnedObj.fields[inputName].valid = false;
+        returnedObj.validate = false;
+       }
 
       }
 
       return returnedObj;
-	},
+  },
    
    /**
     * Enable all fields in the group
     */
    enable: function() {
- 	   for (var i = 0 ; i < this.inputs.length ; i++) {
- 	      this.inputs[i].enable();
+     for (var i = 0 ; i < this.inputs.length ; i++) {
+        this.inputs[i].enable();
       }
    },
    
@@ -239,8 +239,8 @@ lang.extend(inputEx.Group, inputEx.Field, {
     * Disable all fields in the group
     */
    disable: function() {
- 	   for (var i = 0 ; i < this.inputs.length ; i++) {
- 	      this.inputs[i].disable();
+     for (var i = 0 ; i < this.inputs.length ; i++) {
+        this.inputs[i].disable();
       }
    },
    
@@ -253,21 +253,21 @@ lang.extend(inputEx.Group, inputEx.Field, {
       if(!oValues) {
          return;
       }
-	   for (var i = 0 ; i < this.inputs.length ; i++) {
-	      var field = this.inputs[i];
-	      var name = field.options.name;
-	      if(name && !lang.isUndefined(oValues[name]) ) {
-	         field.setValue(oValues[name], false); // don't fire the updated event !
-	      }
-	      else {
-	         field.clear(false);
-	      }
+     for (var i = 0 ; i < this.inputs.length ; i++) {
+        var field = this.inputs[i];
+        var name = field.options.name;
+        if(name && !lang.isUndefined(oValues[name]) ) {
+           field.setValue(oValues[name], false); // don't fire the updated event !
+        }
+        else {
+           field.clear(false);
+        }
       }
       
       this.runFieldsInteractions();
       
-	   if(sendUpdatedEvt !== false) {
-	      // fire update event
+     if(sendUpdatedEvt !== false) {
+        // fire update event
          this.fireUpdatedEvt();
       }
    },
@@ -276,20 +276,19 @@ lang.extend(inputEx.Group, inputEx.Field, {
     * Return an object with all the values of the fields
     */
    getValue: function() {
-	   var o = {};
-	   for (var i = 0 ; i < this.inputs.length ; i++) {
-	      var v = this.inputs[i].getValue();	    
-	      console.log(this.inputs[i].options)
-	      if(this.inputs[i].options.name) {
-	         if(this.inputs[i].options.flatten && lang.isObject(v) ) {
-	            lang.augmentObject( o, v);
-	         }
-	         else {
-		         o[this.inputs[i].options.name] = v;
-	         }
-	      }
+     var o = {};
+     for (var i = 0 ; i < this.inputs.length ; i++) {
+        var v = this.inputs[i].getValue();      
+        if(this.inputs[i].options.name) {
+           if(this.inputs[i].options.flatten && lang.isObject(v) ) {
+              lang.augmentObject( o, v);
+           }
+           else {
+             o[this.inputs[i].options.name] = v;
+           }
+        }
       }
-	   return o;
+     return o;
    },
   
    /**
@@ -298,7 +297,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
     */
    close: function() {
       for (var i = 0 ; i < this.inputs.length ; i++) {
- 	      this.inputs[i].close();
+        this.inputs[i].close();
       }
    },
 
@@ -392,51 +391,51 @@ lang.extend(inputEx.Group, inputEx.Field, {
       }
    },
    
-	/**
-	 * Clear all subfields
-	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this clear should fire the updatedEvt or not (default is true, pass false to NOT send the event)
-	 */
-	clear: function(sendUpdatedEvt) {
-	   for(var i = 0 ; i < this.inputs.length ; i++) {
-	      this.inputs[i].clear(false);
-	   }
-	   if(sendUpdatedEvt !== false) {
-	      // fire update event
+  /**
+   * Clear all subfields
+   * @param {boolean} [sendUpdatedEvt] (optional) Wether this clear should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+   */
+  clear: function(sendUpdatedEvt) {
+     for(var i = 0 ; i < this.inputs.length ; i++) {
+        this.inputs[i].clear(false);
+     }
+     if(sendUpdatedEvt !== false) {
+        // fire update event
          this.fireUpdatedEvt();
       }
-	},
-	
-	/**
-	 * Write error messages for fields as specified in the hash
-	 * @param {Object || Array} errors Hash object containing error messages as Strings referenced by the field name, or array [ ["fieldName", "Message"], ...]
-	 */
-	setErrors: function(errors) {	
-		var i,k;
-		if(YAHOO.lang.isArray(errors)) {
-			for(i = 0 ; i < errors.length ; i++) {
-				k = errors[i][0];
-				value = errors[i][1];
-				if(this.inputsNames[k]) {
-					if(this.inputsNames[k].options.showMsg) {
-						this.inputsNames[k].displayMessage(value);
-						Dom.replaceClass(this.inputsNames[k].divEl, "inputEx-valid", "inputEx-invalid" );
-					}
-				}
-			}
-		}
-		else if(YAHOO.lang.isObject(errors)) {
-			for(k in errors) {
-				if(errors.hasOwnProperty(k)) {
-					if(this.inputsNames[k]) {
-						if(this.inputsNames[k].options.showMsg) {
-							this.inputsNames[k].displayMessage(errors[k]);
-							Dom.replaceClass(this.inputsNames[k].divEl, "inputEx-valid", "inputEx-invalid" );
-						}
-					}
-				}
-			}
-		}
-	},
+  },
+  
+  /**
+   * Write error messages for fields as specified in the hash
+   * @param {Object || Array} errors Hash object containing error messages as Strings referenced by the field name, or array [ ["fieldName", "Message"], ...]
+   */
+  setErrors: function(errors) { 
+    var i,k;
+    if(YAHOO.lang.isArray(errors)) {
+      for(i = 0 ; i < errors.length ; i++) {
+        k = errors[i][0];
+        value = errors[i][1];
+        if(this.inputsNames[k]) {
+          if(this.inputsNames[k].options.showMsg) {
+            this.inputsNames[k].displayMessage(value);
+            Dom.replaceClass(this.inputsNames[k].divEl, "inputEx-valid", "inputEx-invalid" );
+          }
+        }
+      }
+    }
+    else if(YAHOO.lang.isObject(errors)) {
+      for(k in errors) {
+        if(errors.hasOwnProperty(k)) {
+          if(this.inputsNames[k]) {
+            if(this.inputsNames[k].options.showMsg) {
+              this.inputsNames[k].displayMessage(errors[k]);
+              Dom.replaceClass(this.inputsNames[k].divEl, "inputEx-valid", "inputEx-invalid" );
+            }
+          }
+        }
+      }
+    }
+  },
 
    
    /**

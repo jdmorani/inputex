@@ -19,9 +19,11 @@
   	 * @param {Any} value The new value of the field
   	 * @desc YAHOO custom event fired when the field is "updated"<br /> subscribe with: this.updatedEvt.subscribe(function(e, params) { var value = params[0]; console.log("updated",value, this.updatedEvt); }, this, true);
   	 */
- 		inputEx.DynamicTable.superclass.constructor.call(this, options);
+ 	inputEx.DynamicTable.superclass.constructor.call(this, options);
  		
   	this.options.tableDidChangeEvt = new util.CustomEvent('tableDidChange', this); 		
+  	
+  	this.options.selectedValue = null;
 		
     this.updateTableList();
 	};
@@ -42,39 +44,18 @@
   	},		
 		
 		/**
-		 * We successfully retrieve the list of tables
-		 */
-		didReceiveTables: function(o){
-		  var tableList = YAHOO.lang.JSON.parse(o.responseText);
-		  for(var i=0; i<tableList.length; i++){
-		    this.addChoice(tableList[i]);
-		  }
-		  		  
-		  this.fireTableDidChangeEvt();
-    },
-
-		/**
-		 * We did not receive the list of tables (an error occured)
-		 */
-    didNotReceiveTables: function(o){
-    },
-		
-		/**
 		 * Retrieve the list of tables to be used to populate
 		 * the select field
 		 */
      updateTableList: function(){
-       var tableList = [];
-       var callback = {
-         success: this.didReceiveTables,
-         failure: this.didNotReceiveTables,
-         scope: this
-       }
-       try{         
-         YAHOO.util.Connect.asyncRequest('GET', inputExOptions.Table.url, callback, null)
+       try{
+         for(var i=0; i< inputExTableField.length;i++){
+           this.addChoice({label: inputExTableField[i].dynamic_table.name, value: inputExTableField[i].dynamic_table.id});
+         }
+         this.fireTableDidChangeEvt();         
        }
        catch(err){
-         console.log("inputExOptions is undefined. Please define inputExOptions (ex: var inputExOptions = {Table : {url: '../../tables.json'}};)")
+         console.log("inputExTableField is undefined. - " + err)
        }
      },
 		
@@ -141,9 +122,9 @@
 			Event.addBlurListener(this.el, this.onBlur, this, true);
 		},
 		
-		onChange: function(){
+		onChange: function(e){
 		  this.fireTableDidChangeEvt();
-		  inputEx.DynamicTable.superclass.onChange.call(this);
+		  inputEx.DynamicTable.superclass.onChange.call(this, e);
 		},
 		
 		/**
@@ -152,19 +133,18 @@
 		 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
 		 */
 		setValue: function (value, sendUpdatedEvt) {
-		
 			var i, length, choice, firstIndexAvailable, choiceFound = false;
-		
+			
 			for (i = 0, length = this.choicesList.length; i < length ; i += 1) {
 			
 				if (this.choicesList[i].visible) {
-				
 					choice = this.choicesList[i];
-				
+
 					if (value === choice.value) {
-					
+					  
 						choice.node.selected = "selected";
 						choiceFound = true;
+            this.options.selectedValue = value;
 						break; // choice node already found
 					
 					} else if (lang.isUndefined(firstIndexAvailable)) {
@@ -191,7 +171,7 @@
 			// Call Field.setValue to set class and fire updated event
 			inputEx.SelectField.superclass.setValue.call(this, value, sendUpdatedEvt);
 		},
-	
+
 		/**
 		 * Return the value
 		 * @return {Any} the selected value
@@ -205,7 +185,6 @@
 				choiceIndex = inputEx.indexOf(this.el.childNodes[this.el.selectedIndex], this.choicesList, function (node, choice) {
 					return node === choice.node;
 				});
-			
 				return this.choicesList[choiceIndex].value;
 				
 			} else {

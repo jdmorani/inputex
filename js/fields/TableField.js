@@ -34,19 +34,19 @@ lang.extend(inputEx.TableField, inputEx.CombineField, {
    },
    
    onFieldDidChange: function(event, arg){
-	   this.setName();
+     this.fireUpdatedEvt();     
    },
-   	
-	 onTableDidChange: function(event, arg){
-	   this.setName();
-	 },   
+    
+   onTableDidChange: function(event, arg){
+      this.fireUpdatedEvt();     
+   },   
    
    render: function() {   
       // Create the div wrapper for this group
       this.divEl = inputEx.cn('div', {className: this.options.className});
       if(this.options.id) {
-     	   this.divEl.id = this.options.id;
-     	}
+         this.divEl.id = this.options.id;
+      }
    
       Dom.addClass(this.divEl, "inputEx-required");
    
@@ -58,11 +58,11 @@ lang.extend(inputEx.TableField, inputEx.CombineField, {
          this.divEl.appendChild(this.labelDiv);
         }
    
-    	   this.renderFields(this.divEl);  	  
+         this.renderFields(this.divEl);     
    
-    	   if(this.options.disabled) {
-    	      this.disable();
-    	   }
+         if(this.options.disabled) {
+            this.disable();
+         }
    
       // Insert a float breaker
       this.divEl.appendChild( inputEx.cn('div', {className: "inputEx-clear-div"}, null, " ") );
@@ -87,7 +87,7 @@ lang.extend(inputEx.TableField, inputEx.CombineField, {
         fieldInstance.options.fieldDidChangeEvt.subscribe(this.onFieldDidChange, this, true);        
       }
       
-	    this.inputs.push(fieldInstance);
+      this.inputs.push(fieldInstance);
       
       // Create an index to access fields by their name
       if(fieldInstance.options.name) {
@@ -99,31 +99,21 @@ lang.extend(inputEx.TableField, inputEx.CombineField, {
          this.hasInteractions = true;
       }
       
-	    // Subscribe to the field "updated" event to send the group "updated" event
+      // Subscribe to the field "updated" event to send the group "updated" event
       fieldInstance.updatedEvt.subscribe(this.onChange, this, true);
-   	  
+      
+      // Subscribe to the field "updated" event to send the group "updated" event
+      this.options.tableDidChangeEvt.subscribe(this.onChange, this, true);  
+      
       return fieldInstance;
    },
 
-   onChange: function(e){
-     Dom.addClass(this.divEl, "inputEx-"+inputEx.stateInvalid );
-   },
-
-   /**
-    * Init the events
-    */
-   initEvents: function() {
-       
-   },
-
-   
    /**
     * Purge all event listeners and remove the component from the dom
     */
    destroy: function() {
       
-   }
-
+   },
 });
 
 // Register this class as "form" type
