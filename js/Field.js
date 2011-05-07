@@ -67,6 +67,7 @@ inputEx.Field.prototype = {
     this.options = {};
     
     // Basic options
+    this.options.parentField = options.parentField;
     this.options.name = options.name;
     this.options.value = options.value;
     this.options.id = options.id || Dom.generateId();

@@ -33,6 +33,9 @@ inputEx = function(fieldOptions, parentField) {
 	   fieldClass = fieldOptions.fieldClass ? fieldOptions.fieldClass : inputEx.StringField;
 	}
 
+   if(parentField)
+      fieldOptions.parentField = parentField;
+
    // Instanciate the field
    
    // Retro-compatibility with deprecated inputParams Object
