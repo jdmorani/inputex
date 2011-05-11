@@ -35,7 +35,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
           
     this.options.className = options.className || 'inputEx-Group';
     
-    this.options.fields = options.fields;
+    this.options.fields = options.fields;    
     
     this.options.flatten = options.flatten;
    
@@ -451,7 +451,7 @@ lang.extend(inputEx.Group, inputEx.Field, {
          field.destroy();
       }
       
-      // Destroy group itself
+      // Destroy group itself      
       inputEx.Group.superclass.destroy.call(this);
       
    }

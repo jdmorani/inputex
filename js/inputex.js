@@ -47,10 +47,10 @@ inputEx = function(fieldOptions, parentField) {
       inputInstance = new fieldClass(fieldOptions);
    }
 
-	// If the parentField argument is provided
-	if(parentField) {
-		inputInstance.setParentField(parentField);
-	}
+	// // If the parentField argument is provided
+	// if(parentField) {
+	// 	inputInstance.setParentField(parentField);
+	// }
 
    // Add the flatten attribute if present in the params
    /*if(fieldOptions.flatten) {

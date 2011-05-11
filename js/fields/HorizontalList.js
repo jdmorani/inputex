@@ -6,7 +6,7 @@
 
   /**
    * A meta field to put N fields on the same line, separated by separators
-   * @class inputEx.CombineField
+   * @class inputEx.HorizontalField
    * @extends inputEx.Group
    * @constructor
    * @param {Object} options Added options:
@@ -14,20 +14,20 @@
    *    <li>separators: array of string inserted</li>
    * </ul>
    */
-  inputEx.CombineField = function(options) {
-    inputEx.CombineField.superclass.constructor.call(this, options);
+  inputEx.HorizontalField = function(options) {
+    inputEx.HorizontalField.superclass.constructor.call(this, options);
   };
 
-  lang.extend(inputEx.CombineField, inputEx.Group, {
+  lang.extend(inputEx.HorizontalField, inputEx.Table, {
     /**
      * Set the default values of the options
      * @param {Object} options Options object as passed to the constructor
      */
     setOptions: function(options) {
-      inputEx.CombineField.superclass.setOptions.call(this, options);
+      inputEx.HorizontalField.superclass.setOptions.call(this, options);
 
       // Overwrite options
-      this.options.className = options.className ? options.className : 'inputEx-CombineField';
+      this.options.className = options.className ? options.className : 'inputEx-HorizontalField';
 
       // Added options
       this.options.separators = options.separators;
@@ -117,7 +117,7 @@
         fieldOptions.required = true;
       }
 
-      return inputEx.CombineField.superclass.renderField.call(this, fieldOptions);
+      return inputEx.HorizontalField.superclass.renderField.call(this, fieldOptions);
     },
 
 
@@ -141,7 +141,7 @@
     appendSeparator: function(i) {
       if (this.options.separators && this.options.separators[i]) {
         var sep = inputEx.cn('div', {
-          className: 'inputEx-CombineField-separator'
+          className: 'inputEx-HorizontalField-separator'
         }, null, this.options.separators[i]);
         this.divEl.appendChild(sep);
       }
@@ -151,7 +151,7 @@
       var me = this,
           blurTimeout;
 
-      inputEx.CombineField.superclass.initEvents.apply(this, arguments);
+      inputEx.HorizontalField.superclass.initEvents.apply(this, arguments);
 
       Event.addListener(this.divEl, "focusout", function(e) {
         // store local copy of the event to use in setTimeout
@@ -211,7 +211,7 @@
   });
 
   // Register this class as "combine" type
-  inputEx.registerType("combine", inputEx.CombineField, [
+  inputEx.registerType("horizontal list", inputEx.HorizontalField, [
   {
     type: 'list',
     name: 'separators',

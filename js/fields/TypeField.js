@@ -28,7 +28,9 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
       
       // The list of all inputEx declared types to be used in the "type" selector
       var selectOptions = [];
-      var skipFields = ["form", "type", "table", "tablefield"]
+      var skipFields = ["form", "type", "dynamictable", "dynamicfield", "tablefield"]
+
+      if(this.getParentField().subFields)
 
       for(var key in inputEx.typeClasses) {
           
@@ -77,8 +79,7 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
     * Regenerate the property form
     */
    rebuildGroupOptions: function() {
-      try {
-         
+      try {      
          // Save the previous value:
          var previousVal = null;
          
@@ -168,10 +169,10 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
          // Refire the event when the fieldValue is updated
          this.fieldValue.updatedEvt.subscribe(this.fireUpdatedEvt, this, true);
       }
-      catch(ex) {	
+      catch(ex) { 
          if(YAHOO.lang.isObject(window["console"]) && YAHOO.lang.isFunction(window["console"]["log"]) ) {
-         	console.log("Error while updateFieldValue", ex.message);
-			}
+            console.log("Error while updateFieldValue", ex.message);
+         }
       }
    },
    
@@ -204,23 +205,23 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
       this.updateFieldValue();
       
       // Set field value :
-		// fix it for default value (because updateFieldValue is called after first setValue)
- 		var that = this;      
+      // fix it for default value (because updateFieldValue is called after first setValue)
+      var that = this;      
 
       // Retro-compatibility with deprecated inputParams Object
-      if(lang.isObject(value.inputParams) && !lang.isUndefined(value.inputParams.value)) {	
-			setTimeout(function(){
-         	that.fieldValue.setValue(value.inputParams.value, false);
-			}, 50);
+      if(lang.isObject(value.inputParams) && !lang.isUndefined(value.inputParams.value)) {   
+         setTimeout(function(){
+            that.fieldValue.setValue(value.inputParams.value, false);
+         }, 50);
       // New prefered way to describe a field
       } else if (!lang.isUndefined(value.value)) {
-			setTimeout(function(){
-				that.fieldValue.setValue(value.value, false);
-			}, 50);
+         setTimeout(function(){
+            that.fieldValue.setValue(value.value, false);
+         }, 50);
       }
       
-	   if(sendUpdatedEvt !== false) {
-	      // fire update event
+      if(sendUpdatedEvt !== false) {
+         // fire update event
          this.fireUpdatedEvt(false);
       }
    },
