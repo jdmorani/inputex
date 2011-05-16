@@ -89,7 +89,7 @@
         for (var i = 0; i < parentField.inputs.length; i++) {
           if (parentField.inputs[i].type == 'dynamictable') {
             for(var j = 0; j < inputExTableField.length;j++){
-              if(inputExTableField[j].dynamic_table.id == parentField.inputs[i].options.selectedValue){
+              if(inputExTableField[j].table.id == parentField.inputs[i].options.selectedValue){
                 fieldsToAdd.push(inputExTableField[j]);
                 break;
               }
@@ -113,8 +113,8 @@
         var fieldsList = this.getFieldsList(this.options.parentField);
         for (var i = 0; i < fieldsList.length; i++) {
           this.addChoice({
-            label: fieldsList[i].dynamic_table.name,
-            value: fieldsList[i].dynamic_table.id
+            label: fieldsList[i].table.name,
+            value: fieldsList[i].table.id
           });
         }
         this.fireTableDidChangeEvt();

@@ -34,7 +34,7 @@
      */
     setOptions: function(options) {
       inputEx.StringField.superclass.setOptions.call(this, options);
-
+      
       this.options.regexp = options.regexp;
       this.options.size = options.size;
       this.options.maxLength = options.maxLength;

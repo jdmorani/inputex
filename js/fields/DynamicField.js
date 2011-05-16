@@ -60,11 +60,11 @@
     updateFieldList: function(dynamic_table_id) {
       try {
         for (var i = 0; i < inputExTableField.length; i++) {
-          if (inputExTableField[i].dynamic_table.id == dynamic_table_id) {
-            for (var j = 0; j < inputExTableField[i].dynamic_table.dynamic_fields.length; j++) {
+          if (inputExTableField[i].table.id == dynamic_table_id) {
+            for (var j = 0; j < inputExTableField[i].table.fields.length; j++) {
               this.addChoice({
-                label: inputExTableField[i].dynamic_table.dynamic_fields[j].name,
-                value: inputExTableField[i].dynamic_table.dynamic_fields[j].id
+                label: inputExTableField[i].table.fields[j].name,
+                value: inputExTableField[i].table.fields[j].id
               });
             }
             break;

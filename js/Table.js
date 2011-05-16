@@ -60,7 +60,6 @@
         this.updateFieldList();
       }
       this.subscribeToTableDidChangeEvent();
-
     },
 
     subscribeToTableDidChangeEvent: function() {
@@ -89,12 +88,12 @@
         var fields = [];
         this.setFieldsList(this.parentField.group, []);
         for (var i = 0; i < inputExTableField.length; i++) {
-          if (inputExTableField[i].dynamic_table.id == this.options.name) {
-            for (var j = 0; j < inputExTableField[i].dynamic_table.dynamic_fields.length; j++) {
+          if (inputExTableField[i].table.id == this.options.name) {
+            for (var j = 0; j < inputExTableField[i].table.fields.length; j++) {
               fields.push({
-                label: inputExTableField[i].dynamic_table.dynamic_fields[j].name,
+                label: inputExTableField[i].table.fields[j].name,
                 type: "string",
-                tablefield : [this.options.name, inputExTableField[i].dynamic_table.dynamic_fields[j].id]
+                tablefield : [this.options.name, inputExTableField[i].table.fields[j].id]
               });
             }
             break;

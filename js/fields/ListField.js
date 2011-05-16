@@ -53,7 +53,7 @@
       this.options.elementType = options.elementType || {
         type: 'string'
       };
-      this.options.useButtons = lang.isUndefined(options.useButtons) ? false : options.useButtons;
+      this.options.useButtons = true;
       this.options.unique = lang.isUndefined(options.unique) ? false : options.unique;
 
       this.options.listAddLabel = options.listAddLabel || inputEx.messages.listAddLink;
@@ -436,10 +436,9 @@
       var index = -1;
 
       // field to destroy
-
       var subFieldEl = elementDiv.childNodes[this.options.useButtons ? 1 : 0];
       for (var i = 0; i < this.subFields.length; i++) {
-        if (this.subFields[i].getEl() == subFieldEl) {          
+        if (this.subFields[i].getEl() == subFieldEl) {
           field = this.subFields[i];
           index = i;
           break;
