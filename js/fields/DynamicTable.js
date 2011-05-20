@@ -83,15 +83,21 @@
 
     getFieldsList: function(){
       var fieldsToAdd = inputExTableField;
-      var parentField = this.options.parentDynamicTable;
+      var parentField = this.options.parentDynamicTable;      
       if (parentField){
         fieldsToAdd = [];
         for (var i = 0; i < parentField.inputs.length; i++) {
           if (parentField.inputs[i].type == 'dynamictable') {
             for(var j = 0; j < inputExTableField.length;j++){
-              if(inputExTableField[j].table.id == parentField.inputs[i].options.selectedValue){
-                fieldsToAdd.push(inputExTableField[j]);
-                break;
+              if(this.parentField.parentField.type != 'list'){
+                if(inputExTableField[j].table.id == parentField.inputs[i].options.selectedValue){
+                  fieldsToAdd.push(inputExTableField[j]);
+                  break;
+                }
+              }else{
+                if(inputExTableField[j].table.id != parentField.inputs[i].options.selectedValue){
+                  fieldsToAdd.push(inputExTableField[j]);
+                }
               }
             }
             parentField.inputs[i].options.selectedValue
