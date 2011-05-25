@@ -87,13 +87,13 @@
       try {
         var fields = [];
         this.setFieldsList(this.parentField.group, []);
-        for (var i = 0; i < inputExTableField.length; i++) {
-          if (inputExTableField[i].table.id == this.options.name) {
-            for (var j = 0; j < inputExTableField[i].table.fields.length; j++) {
+        for (var i = 0; i < inputEx.TablesFields.length; i++) {
+          if (inputEx.TablesFields[i].table.id == this.options.name) {
+            for (var j = 0; j < inputEx.TablesFields[i].table.fields.length; j++) {
               fields.push({
-                label: inputExTableField[i].table.fields[j].name,
+                label: inputEx.TablesFields[i].table.fields[j].name,
                 type: "string",
-                tablefield : [this.options.name, inputExTableField[i].table.fields[j].id]
+                tablefield : [this.options.name, inputEx.TablesFields[i].table.fields[j].id]
               });
             }
             break;
@@ -101,7 +101,7 @@
         }
         if (fields.length > 0) this.setFieldsList(this.parentField.group, fields);
       } catch (err) {
-        console.log("inputExTableField is undefined. - " + err)
+        console.log("inputEx.TablesFields is undefined. - " + err)
       }
     },
 

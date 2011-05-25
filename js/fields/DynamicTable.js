@@ -82,21 +82,21 @@
     },
 
     getFieldsList: function(){
-      var fieldsToAdd = inputExTableField;
+      var fieldsToAdd = inputEx.TablesFields;
       var parentField = this.options.parentDynamicTable;      
       if (parentField){
         fieldsToAdd = [];
         for (var i = 0; i < parentField.inputs.length; i++) {
           if (parentField.inputs[i].type == 'dynamictable') {
-            for(var j = 0; j < inputExTableField.length;j++){
-              if(this.parentField.parentField.type != 'list'){
-                if(inputExTableField[j].table.id == parentField.inputs[i].options.selectedValue){
-                  fieldsToAdd.push(inputExTableField[j]);
+            for(var j = 0; j < inputEx.TablesFields.length;j++){
+              if(this.parentField.parentField.type != 'list'){ //if it's not a list we only allow selecting the parent table
+                if(inputEx.TablesFields[j].table.id == parentField.inputs[i].options.selectedValue){
+                  fieldsToAdd.push(inputEx.TablesFields[j]);
                   break;
                 }
-              }else{
-                if(inputExTableField[j].table.id != parentField.inputs[i].options.selectedValue){
-                  fieldsToAdd.push(inputExTableField[j]);
+              }else{ //in case of a list, we can access any table that are descendant from the parent table
+                if(inputEx.TablesFields[j].table.id != parentField.inputs[i].options.selectedValue){
+                  fieldsToAdd.push(inputEx.TablesFields[j]);
                 }
               }
             }
@@ -125,7 +125,7 @@
         }
         this.fireTableDidChangeEvt();
       } catch (err) {
-        console.log("inputExTableField is undefined. - " + err)
+        console.log("inputEx.TablesFields is undefined. - " + err)
       }
     },
 

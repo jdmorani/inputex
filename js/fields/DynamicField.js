@@ -59,19 +59,20 @@
      */
     updateFieldList: function(dynamic_table_id) {
       try {
-        for (var i = 0; i < inputExTableField.length; i++) {
-          if (inputExTableField[i].table.id == dynamic_table_id) {
-            for (var j = 0; j < inputExTableField[i].table.fields.length; j++) {
+        console.log(inputEx.TablesFields[0].table)
+        for (var i = 0; i < inputEx.TablesFields.length; i++) {
+          if (inputEx.TablesFields[i].table.id == dynamic_table_id) {
+            for (var j = 0; j < inputEx.TablesFields[i].table.fields.length; j++) {
               this.addChoice({
-                label: inputExTableField[i].table.fields[j].name,
-                value: inputExTableField[i].table.fields[j].id
+                label: inputEx.TablesFields[i].table.fields[j].name,
+                value: inputEx.TablesFields[i].table.fields[j].id
               });
             }
             break;
           }
         }
       } catch (err) {
-        console.log("inputExTableField is undefined. - " + err)
+        console.log("inputEx.TablesFields is undefined. - " + err)
       }
     },
 

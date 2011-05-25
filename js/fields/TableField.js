@@ -36,7 +36,6 @@
         type: 'dynamicfield',
         name: 'field'
       }]
-
     },
 
     onFieldDidChange: function(event, arg) {
