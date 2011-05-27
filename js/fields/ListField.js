@@ -477,18 +477,33 @@
 
   });
 
+// // Register this class as "group" type
+// inputEx.registerType("group", inputEx.Group, [
+//    { type: "string", label: "Name", name: "name", value: '' },
+//    { type: 'string', label: 'Legend', name:'legend'},
+//    { type: 'boolean', label: 'Collapsible', name:'collapsible', value: false},
+//    { type: 'boolean', label: 'Collapsed', name:'collapsed', value: false},
+//    { type: 'list', label: 'Fields', name: 'fields', elementType: {type: 'type' } }
+// ], true);
+
+
   // Register this class as "list" type
   inputEx.registerType("list", inputEx.ListField, [{
-    type: 'string',
-    label: 'List label',
-    name: 'listLabel',
+    type: 'integer',
+    label: 'Min. Items',
+    name: 'minItems',
+    value: ''
+  }, {
+    type: 'integer',
+    label: 'Max. Items',
+    name: 'maxItems',
     value: ''
   }, {
     type: 'type',
     label: 'List element type',
     required: true,
     name: 'elementType'
-  }]);
+  }], true);
 
 
   inputEx.messages.listAddLink = "Add";

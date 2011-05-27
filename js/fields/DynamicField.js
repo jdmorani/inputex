@@ -17,9 +17,33 @@
     inputEx.DynamicField.superclass.constructor.call(this, options);
 
     this.options.fieldDidChangeEvt = new util.CustomEvent('fieldDidChange', this);
+
+    this.options.parentDynamicTable = this.retrieveParentDynamicTable(this);
+
+    var table_key = null;
+    if (typeof this.options.parentDynamicTable != 'undefined' && this.options.parentDynamicTable){
+      table_key = this.options.parentDynamicTable.inputs[0].options.selectedValue;
+    }
+    
+    this.updateFieldList(table_key);
   };
 
   lang.extend(inputEx.DynamicField, inputEx.SelectField, {
+
+    /**
+     * Recursively go through the chain of parents for the
+     * specified field and retrieve its top parent that is
+     * of type table. For any other type null will be returned
+     * or if we reached the end of the chain.
+     */
+    retrieveParentDynamicTable: function(table) {
+      if (table.type == 'table') return table;
+      while (table.parentField && typeof table.parentField != 'undefined') {
+        parentTable = this.retrieveParentDynamicTable(table.parentField, table);
+        if(parentTable && this.parentField != parentTable) return parentTable;
+        return null;
+      }
+    },
 
     /**
      * Fire the "tableDidChange" event
@@ -57,18 +81,26 @@
      * Retrieve the list of tables to be used to populate
      * the select field
      */
-    updateFieldList: function(dynamic_table_id) {
+    updateFieldList: function(table_key) {
       try {
-        console.log(inputEx.TablesFields[0].table)
-        for (var i = 0; i < inputEx.TablesFields.length; i++) {
-          if (inputEx.TablesFields[i].table.id == dynamic_table_id) {
-            for (var j = 0; j < inputEx.TablesFields[i].table.fields.length; j++) {
-              this.addChoice({
-                label: inputEx.TablesFields[i].table.fields[j].name,
-                value: inputEx.TablesFields[i].table.fields[j].id
-              });
+        if(table_key){
+          for (var i = 0; i < inputEx.TablesFields.length; i++) {
+            if (inputEx.TablesFields[i].table.key == table_key) {
+              for (var j = 0; j < inputEx.TablesFields[i].table.fields.length; j++) {
+                this.addChoice({
+                  label: inputEx.TablesFields[i].table.fields[j].name,
+                  value: inputEx.TablesFields[i].table.fields[j].key
+                });
+              }
+              break;
             }
-            break;
+          }
+        }else{
+          for(var i=0; i<inputEx.OrphanFields.length;i++){
+            this.addChoice({
+              label: inputEx.OrphanFields[i].field.name,
+              value: inputEx.OrphanFields[i].field.key
+            });
           }
         }
       } catch (err) {

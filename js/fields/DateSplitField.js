@@ -45,7 +45,6 @@ lang.extend(inputEx.DateSplitField, inputEx.CombineField, {
 	 */
    setValue: function(value, sendUpdatedEvt) {
       var values = [];
-      
       // !value catches "" (empty field), and invalid dates
       if(!value || !lang.isFunction(value.getTime) || !lang.isNumber(value.getTime()) ) {
          values[this.monthIndex] = "";
@@ -141,11 +140,23 @@ lang.extend(inputEx.DateSplitField, inputEx.CombineField, {
    
 });
 
-inputEx.messages.monthTypeInvite = "Month";
-inputEx.messages.dayTypeInvite = "Day";
-inputEx.messages.yearTypeInvite = "Year";
+inputEx.messages.monthTypeInvite = "MM";
+inputEx.messages.dayTypeInvite = "DD";
+inputEx.messages.yearTypeInvite = "YYYY";
 
 // Register this class as "datesplit" type
-inputEx.registerType("datesplit", inputEx.DateSplitField);
+inputEx.registerType("datesplit", inputEx.DateSplitField, [{
+    type: "dynamicfield",
+    label: "Field",
+    name: "name",
+    choices: [],
+    required: true
+  },
+  {
+    type: 'list',
+    name: 'separators',
+    label: 'Separators',
+    required: true
+  }], true)
 
 })();

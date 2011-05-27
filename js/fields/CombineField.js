@@ -211,12 +211,22 @@
   });
 
   // Register this class as "combine" type
-  inputEx.registerType("combine", inputEx.CombineField, [
-  {
+  inputEx.registerType("combine", inputEx.CombineField, [{
+    type: "dynamicfield",
+    label: "Field",
+    name: "name",
+    choices: [],
+    required: true
+  },{ 
+    type: 'list', 
+    label: 'Fields', 
+    name: 'fields', 
+    elementType: {type: 'type' } 
+  },{
     type: 'list',
     name: 'separators',
     label: 'Separators',
     required: true
-  }]);
+  }], true);
 
 })();

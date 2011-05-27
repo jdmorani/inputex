@@ -88,11 +88,6 @@
       this.options.showMsg = lang.isUndefined(options.showMsg) ? false : options.showMsg;
 
       //this.options.table = options.table;
-      if (options.tablefield) {
-        this.options.tablefield = options.tablefield;
-        this.options.name = options.tablefield[0] + "." + options.tablefield[1]
-      }
-
       this.objectType = options.objectType;
 
     },
@@ -150,9 +145,6 @@
       this.divEl.appendChild(inputEx.cn('div', null, {
         clear: 'both'
       }, " "));
-
-      if (this.options.tablefield && !this.options.name.match(/\w+\.\w+/)) Dom.addClass(this.el, "inputEx-invalid-name");
-      else Dom.removeClass(this.el, "inputEx-invalid-name");
 
     },
 
@@ -421,9 +413,9 @@
   };
 
   inputEx.Field.groupOptions = [{
-    type: "tablefield",
-    label: "Table & Field",
-    name: "tablefield",
+    type: "dynamicfield",
+    label: "Field",
+    name: "name",
     choices: [],
     required: true
   }, {

@@ -56,9 +56,10 @@
       this.inputsNames = {};
 
       // associate the table with the initial fields list
-      if (this.options.fields.length == 0) {
+      if (this.options.fields.length == 0 && this.numberOfFieldsInTable() > 0) {
         this.updateFieldList();
       }
+      
       this.subscribeToTableDidChangeEvent();
     },
 
@@ -79,21 +80,30 @@
       this.updateFieldList();
     },
 
+    numberOfFieldsInTable: function(){
+      for (var i = 0; i < inputEx.TablesFields.length; i++) {
+        if (inputEx.TablesFields[i].table.key == this.options.name){
+          return(inputEx.TablesFields[i].table.fields.length);
+        }
+      }
+    },
+
     /**
      * Retrieve the list of tables to be used to populate
      * the select field
      */
     updateFieldList: function() {
       try {
+        console.log(inputEx.TablesFields)
         var fields = [];
         this.setFieldsList(this.parentField.group, []);
         for (var i = 0; i < inputEx.TablesFields.length; i++) {
-          if (inputEx.TablesFields[i].table.id == this.options.name) {
+          if (inputEx.TablesFields[i].table.key == this.options.name) {
             for (var j = 0; j < inputEx.TablesFields[i].table.fields.length; j++) {
               fields.push({
                 label: inputEx.TablesFields[i].table.fields[j].name,
+                name: inputEx.TablesFields[i].table.fields[j].key,
                 type: "string",
-                tablefield : [this.options.name, inputEx.TablesFields[i].table.fields[j].id]
               });
             }
             break;
@@ -105,10 +115,7 @@
       }
     },
 
-    addField: function(fieldOptions) {
-      if (fieldOptions.tablefield) {
-        fieldOptions.tablefield[0] = this.options.name;
-      }
+    addField: function(fieldOptions) {      
       var field = this.renderField(fieldOptions);
       this.fieldset.appendChild(field.getEl());
     },

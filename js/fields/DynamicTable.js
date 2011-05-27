@@ -26,7 +26,8 @@
 
     this.options.selectedValue = null;
 
-    this.options.parentDynamicTable = this.retrieveParentDynamicTable(this);
+    //this.parentField.parentField because we want to skip the first group/table/dynamic_table in the hierarchy
+    this.options.parentDynamicTable = this.retrieveParentDynamicTable(this.parentField.parentField);
 
     this.subscribeToParentFieldTableDidChangeEvent();
 
@@ -42,11 +43,11 @@
      * of type table. For any other type null will be returned
      * or if we reached the end of the chain.
      */
-    retrieveParentDynamicTable: function(field) {
-      if (field.type == 'table') return field;
-      while (field.parentField && field.parentField != 'undefined') {
-        parentField = this.retrieveParentDynamicTable(field.parentField);
-        if(parentField && this.parentField != parentField) return parentField;
+    retrieveParentDynamicTable: function(table) {
+      if (table.type == 'table') return table;
+      while (table.parentField && typeof table.parentField != 'undefined') {
+        parentTable = this.retrieveParentDynamicTable(table.parentField, table);
+        if(parentTable && this.parentField != parentTable) return parentTable;
         return null;
       }
     },
@@ -64,7 +65,7 @@
     },
 
     onParentTableDidChange: function(event, args){
-      this.clearFieldsList();
+      //this.clearFieldsList();
       this.updateTableList();
     },
 
@@ -73,11 +74,13 @@
      * Escape the stack using a setTimeout
      */
     fireTableDidChangeEvt: function() {
-      // Uses setTimeout to escape the stack (that originiated in an event)
+      // Uses setTimeout to escape the stack (that originiated in an event)      
       var that = this;
       setTimeout(function() {
-        that.options.selectedValue = that.getValue();
-        that.options.tableDidChangeEvt.fire(that.getValue(), that);
+        if(that.options.selectedValue != that.getValue()){
+          that.options.selectedValue = that.getValue();
+          that.options.tableDidChangeEvt.fire(that.getValue(), that);
+        }
       }, 50);
     },
 
@@ -89,18 +92,12 @@
         for (var i = 0; i < parentField.inputs.length; i++) {
           if (parentField.inputs[i].type == 'dynamictable') {
             for(var j = 0; j < inputEx.TablesFields.length;j++){
-              if(this.parentField.parentField.type != 'list'){ //if it's not a list we only allow selecting the parent table
-                if(inputEx.TablesFields[j].table.id == parentField.inputs[i].options.selectedValue){
-                  fieldsToAdd.push(inputEx.TablesFields[j]);
-                  break;
-                }
-              }else{ //in case of a list, we can access any table that are descendant from the parent table
-                if(inputEx.TablesFields[j].table.id != parentField.inputs[i].options.selectedValue){
-                  fieldsToAdd.push(inputEx.TablesFields[j]);
+              if(inputEx.TablesFields[j].table.key == parentField.inputs[i].options.selectedValue){
+                for(var k = 0; k < inputEx.TablesFields[j].table.descendants.length;k++){
+                  fieldsToAdd.push({'table' : inputEx.TablesFields[j].table.descendants[k]});
                 }
               }
             }
-            parentField.inputs[i].options.selectedValue
             break;
           }
         }
@@ -120,7 +117,7 @@
         for (var i = 0; i < fieldsList.length; i++) {
           this.addChoice({
             label: fieldsList[i].table.name,
-            value: fieldsList[i].table.id
+            value: fieldsList[i].table.key
           });
         }
         this.fireTableDidChangeEvt();
@@ -194,7 +191,6 @@
 
     onChange: function(e) {
       this.fireTableDidChangeEvt();
-      // inputEx.DynamicTable.superclass.onChange.call(this, e);
     },
 
     /**
