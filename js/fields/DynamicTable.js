@@ -86,19 +86,26 @@
 
     getFieldsList: function(){
       var fieldsToAdd = inputEx.TablesFields;
-      var parentField = this.options.parentDynamicTable;      
+      var parentField = this.options.parentDynamicTable;
       if (parentField){
         fieldsToAdd = [];
         for (var i = 0; i < parentField.inputs.length; i++) {
           if (parentField.inputs[i].type == 'dynamictable') {
             for(var j = 0; j < inputEx.TablesFields.length;j++){
               if(inputEx.TablesFields[j].table.key == parentField.inputs[i].options.selectedValue){
-                for(var k = 0; k < inputEx.TablesFields[j].table.descendants.length;k++){
-                  fieldsToAdd.push({'table' : inputEx.TablesFields[j].table.descendants[k]});
+                for(var k = 0; k < inputEx.TablesFields[j].table.children.length;k++){                  
+                  fieldsToAdd.push({'table' : inputEx.TablesFields[j].table.children[k]});
                 }
               }
             }
             break;
+          }
+        }
+      } else {
+        fieldsToAdd = []
+        for (var i = 0; i < inputEx.TablesFields.length; i++) {
+          if(inputEx.TablesFields[i].table.parents.length == 0){
+            fieldsToAdd.push(inputEx.TablesFields[i]);
           }
         }
       }

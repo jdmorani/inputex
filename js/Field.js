@@ -41,7 +41,7 @@
     this.initEvents();
 
     // Set the initial value
-    //   -> no initial value = no style (setClassFromState called by setValue)
+    //   -> no initial value = no style (setClassFromState called by setValue)    
     if (!lang.isUndefined(this.options.value)) {
       this.setValue(this.options.value, false);
     }

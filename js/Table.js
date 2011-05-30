@@ -94,7 +94,6 @@
      */
     updateFieldList: function() {
       try {
-        console.log(inputEx.TablesFields)
         var fields = [];
         this.setFieldsList(this.parentField.group, []);
         for (var i = 0; i < inputEx.TablesFields.length; i++) {

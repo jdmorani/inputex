@@ -27,7 +27,7 @@
      * List of all the subField instances
      */
     this.subFields = [];
-
+  
     inputEx.ListField.superclass.constructor.call(this, options);
   };
   lang.extend(inputEx.ListField, inputEx.Field, {
@@ -49,7 +49,7 @@
 
       this.options.className = options.className ? options.className : 'inputEx-Field inputEx-ListField';
 
-      this.options.sortable = lang.isUndefined(options.sortable) ? false : options.sortable;
+      this.options.sortable = lang.isUndefined(options.sortable) ? true : options.sortable;
       this.options.elementType = options.elementType || {
         type: 'string'
       };
@@ -61,6 +61,11 @@
 
       this.options.maxItems = options.maxItems;
       this.options.minItems = options.minItems;
+
+      if(typeof options.elementType != 'undefined' &&
+         typeof options.elementType.name != 'undefined')
+        this.options.name = options.elementType.name;
+        //console.log(options.elementType.name)
     },
 
     /**
@@ -149,7 +154,6 @@
      * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
      */
     setValue: function(value, sendUpdatedEvt) {
-
       if (!lang.isArray(value) && value != '') {
         throw new Error("inputEx.ListField.setValue expected an array, got " + (typeof value));
       }
@@ -476,16 +480,6 @@
     }
 
   });
-
-// // Register this class as "group" type
-// inputEx.registerType("group", inputEx.Group, [
-//    { type: "string", label: "Name", name: "name", value: '' },
-//    { type: 'string', label: 'Legend', name:'legend'},
-//    { type: 'boolean', label: 'Collapsible', name:'collapsible', value: false},
-//    { type: 'boolean', label: 'Collapsed', name:'collapsed', value: false},
-//    { type: 'list', label: 'Fields', name: 'fields', elementType: {type: 'type' } }
-// ], true);
-
 
   // Register this class as "list" type
   inputEx.registerType("list", inputEx.ListField, [{
