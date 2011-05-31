@@ -81,6 +81,9 @@
     },
 
     numberOfFieldsInTable: function(){
+      if(typeof inputEx.TablesFields === 'undefined'){
+        return 0;
+      }
       for (var i = 0; i < inputEx.TablesFields.length; i++) {
         if (inputEx.TablesFields[i].table.key == this.options.name){
           return(inputEx.TablesFields[i].table.fields.length);

@@ -86,6 +86,7 @@
       this.options.className = options.className ? options.className : 'inputEx-Field';
       this.options.required = lang.isUndefined(options.required) ? false : options.required;
       this.options.showMsg = lang.isUndefined(options.showMsg) ? false : options.showMsg;
+      this.options.align = lang.isUndefined(options.align) ? false : options.align;
 
       //this.options.table = options.table;
       this.objectType = options.objectType;
@@ -109,6 +110,11 @@
       if (this.options.id) {
         this.divEl.id = this.options.id;
       }
+
+      if(this.options.align){
+        Dom.setStyle(this.divEl, 'float', 'left');
+      }
+
       if (this.options.required) {
         Dom.addClass(this.divEl, "inputEx-required");
       }
@@ -438,6 +444,12 @@
     label: "Show messages",
     name: "showMsg",
     value: false
-  }];
+  }, {
+    type: "boolean",
+    label: "On same line?",
+    name: "align",
+    value: false
+  },
+  ];
 
 })();

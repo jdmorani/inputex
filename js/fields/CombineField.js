@@ -185,7 +185,9 @@
       }
       var i, n = this.inputs.length;
       for (i = 0; i < n; i++) {
-        this.inputs[i].setValue(values[i], false);
+        for(p in values[i]){
+          this.inputs[i].setValue(values[i][p], false); 
+        }
       }
 
       this.runFieldsInteractions();
@@ -203,7 +205,10 @@
     getValue: function() {
       var values = [], i, n = this.inputs.length;
       for (i = 0; i < n; i++) {
-        values.push(this.inputs[i].getValue());
+        var obj = {};
+        obj[this.inputs[i].options.name] = this.inputs[i].getValue()
+        values.push(obj);
+        //values.push(this.inputs[i].getValue());
       }
       return values;
     }
