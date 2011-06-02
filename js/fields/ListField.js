@@ -476,7 +476,7 @@
       elementDiv.parentNode.removeChild(elementDiv);
 
       //destroy the field
-      field.destroy();
+      //field.destroy();
     }
 
   });
