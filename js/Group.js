@@ -298,7 +298,7 @@
         var v = this.inputs[i].getValue();
         if (this.inputs[i].options.name) {
           //if(this.inputs[i].options.flatten && lang.isObject(v) ) {
-          if(o[this.inputs[i].options.name] && lang.isObject(v)){
+          if(o[this.inputs[i].options.name] && lang.isObject(v) && !lang.isArray(v)){
             for(p in v){
               lang.augmentObject(o[this.inputs[i].options.name][p], v[p]);
           }
