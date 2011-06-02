@@ -270,7 +270,7 @@
 
         //we may have received an array so just convert it to
         //an object by extracting the first element
-        if (name && lang.isArray(oValues)){
+        if (name && lang.isArray(oValues) && oValues.length > 0){
           oValues = oValues[0];
         }
 
