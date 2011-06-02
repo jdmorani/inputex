@@ -87,12 +87,30 @@
       this.options.required = lang.isUndefined(options.required) ? false : options.required;
       this.options.showMsg = lang.isUndefined(options.showMsg) ? false : options.showMsg;
       this.options.align = lang.isUndefined(options.align) ? false : options.align;
+      this.options.toplabel = lang.isUndefined(options.toplabel) ? false : options.toplabel;
 
       //this.options.table = options.table;
       this.objectType = options.objectType;
 
     },
 
+    /**
+     * Recursively go through the chain of parents for the
+     * specified field and retrieve its top parent that is
+     * of type table. For any other type null will be returned
+     * or if we reached the end of the chain.
+     */
+    isInPropertyPanel: function(field) {
+      if(typeof field == 'undefined'){
+        field = this;
+      }
+      if (field.type == 'type' && (typeof field.parentField.parentField.type != 'undefined')) return true;
+      while (field.parentField && typeof field.parentField != 'undefined') {
+        parentField = this.isInPropertyPanel(field.parentField, field);
+        if(parentField && this.parentField != parentField) return true;
+        return false;
+      }
+    },
 
     /**
      * Set the name of the field (or hidden field)
@@ -111,8 +129,11 @@
         this.divEl.id = this.options.id;
       }
 
-      if(this.options.align){
+      var isTypeField = this.isInPropertyPanel();
+      if(this.options.align && !isTypeField){
         Dom.setStyle(this.divEl, 'float', 'left');
+      }else if(!isTypeField){
+        Dom.setStyle(this.divEl, 'clear', 'left');
       }
 
       if (this.options.required) {
@@ -131,11 +152,26 @@
         this.divEl.appendChild(this.labelDiv);
       }
 
+
+      if(this.options.toplabel && !isTypeField){
+        Dom.setStyle(this.labelDiv, 'text-align', 'left');
+        Dom.setStyle(this.labelDiv, 'float', 'left');
+        Dom.setStyle(this.labelDiv, 'clear', 'left');
+      }
+
       this.fieldContainer = inputEx.cn('div', {
         className: this.options.className
       }); // for wrapping the field and description
       // Render the component directly
       this.renderComponent();
+
+      if(this.options.toplabel && !isTypeField){
+        Dom.setStyle(this.fieldContainer, 'text-align', 'left');
+        Dom.setStyle(this.fieldContainer, 'float', 'left');
+        Dom.setStyle(this.fieldContainer, 'clear', 'left');
+        Dom.setStyle(this.fieldContainer, 'margin-right', '10px');
+      }
+
 
       // Description
       if (this.options.description) {
@@ -449,7 +485,12 @@
     label: "On same line?",
     name: "align",
     value: false
-  },
+  }, {
+    type: "boolean",
+    label: "Label on top?",
+    name: "toplabel",
+    value: false
+  }
   ];
 
 })();
