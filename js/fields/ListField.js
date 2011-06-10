@@ -49,11 +49,13 @@
 
       this.options.className = options.className ? options.className : 'inputEx-Field inputEx-ListField';
 
-      this.options.sortable = lang.isUndefined(options.sortable) ? true : options.sortable;
+      this.options.sortable = lang.isUndefined(options.sortable) ? false : options.sortable;
+      this.options.useButtons = lang.isUndefined(options.useButtons) ? true : options.useButtons;
+      this.options.editable = lang.isUndefined(options.editable) ? true : options.editable;      
       this.options.elementType = options.elementType || {
-        type: 'string'
+        type: 'table'
       };
-      this.options.useButtons = true;
+
       this.options.unique = lang.isUndefined(options.unique) ? false : options.unique;
 
       this.options.listAddLabel = options.listAddLabel || inputEx.messages.listAddLink;
@@ -74,7 +76,7 @@
     renderComponent: function() {
 
       // Add element button
-      if (this.options.useButtons) {
+      if (this.options.useButtons && this.options.editable) {
         this.addButton = inputEx.cn('img', {
           src: inputEx.spacerUrl,
           className: 'inputEx-ListField-addButton'
@@ -94,7 +96,7 @@
       this.fieldContainer.appendChild(this.childContainer);
 
       // Add link
-      if (!this.options.useButtons) {
+      if (!this.options.useButtons && this.options.editable) {
         this.addButton = inputEx.cn('a', {
           className: 'inputEx-List-link'
         }, null, this.options.listAddLabel);
@@ -155,6 +157,7 @@
      */
     setValue: function(value, sendUpdatedEvt) {
       if (!lang.isArray(value) && value != '') {
+        console.log(value)
         throw new Error("inputEx.ListField.setValue expected an array, got " + (typeof value));
       }
 
@@ -256,7 +259,7 @@
           delButton;
 
       // Delete button
-      if (this.options.useButtons) {
+      if (this.options.useButtons && this.options.editable) {
         delButton = inputEx.cn('img', {
           src: inputEx.spacerUrl,
           className: 'inputEx-ListField-delButton'
@@ -301,7 +304,7 @@
       }
 
       // Delete link
-      if (!this.options.useButtons) {
+      if (!this.options.useButtons && this.options.editable) {
         delButton = inputEx.cn('a', {
           className: 'inputEx-List-link'
         }, null, this.options.listRemoveLabel);
@@ -440,7 +443,7 @@
       var index = -1;
 
       // field to destroy
-      var subFieldEl = elementDiv.childNodes[this.options.useButtons ? 1 : 0];
+      var subFieldEl = elementDiv.childNodes[(this.options.useButtons && this.options.editable) ? 1 : 0];
       for (var i = 0; i < this.subFields.length; i++) {
         if (this.subFields[i].getEl() == subFieldEl) {
           field = this.subFields[i];
@@ -493,11 +496,29 @@
     name: 'maxItems',
     value: ''
   }, {
+    type: 'boolean',
+    label: 'Use Buttons?',
+    required: false,
+    name: 'useButtons',
+    value: true
+  }, {
+    type: 'boolean',
+    label: 'editable?',
+    required: false,
+    name: 'editable',
+    value: true
+  }, {
+    type: 'boolean',
+    label: 'Sortable?',
+    required: false,
+    name: 'sortable'
+  }, {
     type: 'type',
     label: 'List element type',
     required: true,
     name: 'elementType'
-  }], true);
+  }
+  ], true);
 
 
   inputEx.messages.listAddLink = "Add";

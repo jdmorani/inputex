@@ -18,8 +18,8 @@
 			if (!lang.isObject(config)) {
 				config = { value: config };
 			}
-			
 			choice = {
+				name: config.name,
 				value: config.value,
 				label: lang.isString(config.label) ? config.label : "" + config.value,
 				visible: true

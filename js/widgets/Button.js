@@ -35,12 +35,13 @@ lang.augmentObject(inputEx.widget.Button.prototype,{
    setOptions: function(options) {
       
       this.options = {};
+      this.options.key = options.key;
       this.options.id = lang.isString(options.id) ? options.id  : Dom.generateId();
       this.options.className = options.className || "inputEx-Button";
       this.options.parentEl = lang.isString(options.parentEl) ? Dom.get(options.parentEl) : options.parentEl;
       
       // default type === "submit"
-      this.options.type = (options.type === "link" || options.type === "submit-link") ? options.type : "submit";
+      this.options.type = (options.type === "link" || options.type === "javascript" || options.type === "next" || options.type === "previous") ? options.type : "submit";
       
       // value is the text displayed inside the button (<input type="submit" value="Submit" /> convention...)
       this.options.value = options.value;
@@ -65,19 +66,30 @@ lang.augmentObject(inputEx.widget.Button.prototype,{
       
       var innerSpan;
       
-      if (this.options.type === "link" || this.options.type === "submit-link") {
+      if(this.options.type === "previous"){
+         this.options.key = '__btn_' + this.options.type + '__';
+      }
+
+      if(this.options.type === "javascript"){
+         this.options.className = this.options.className + ' javascript-button';      
+      }
+
+      if (this.options.type === "link") {
          
-         this.el = inputEx.cn('a', {className: this.options.className, id:this.options.id, href:"#"});
+         this.el = inputEx.cn('a', {className: this.options.className, name: this.options.key, id:this.options.id, href:"#"});
          Dom.addClass(this.el,this.options.type === "link" ? "inputEx-Button-Link" : "inputEx-Button-Submit-Link");
          
          innerSpan = inputEx.cn('span', null, null, this.options.value);
          
          this.el.appendChild(innerSpan);
          
-      // default type is "submit" input
+      } else if(this.options.type === "javascript"){
+         this.el = inputEx.cn('input', {type: "button", name: this.options.key, value: this.options.value, className: this.options.className, id:this.options.id});
+         Dom.addClass(this.el,"inputEx-Button");
+
+      // default type is "submit" input         
       } else {
-         
-         this.el = inputEx.cn('input', {type: "submit", value: this.options.value, className: this.options.className, id:this.options.id});
+         this.el = inputEx.cn('input', {type: "submit", name: this.options.key, value: this.options.value, className: this.options.className, id:this.options.id});
          Dom.addClass(this.el,"inputEx-Button-Submit");
       }
       

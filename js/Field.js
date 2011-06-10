@@ -88,6 +88,7 @@
       this.options.showMsg = lang.isUndefined(options.showMsg) ? false : options.showMsg;
       this.options.align = lang.isUndefined(options.align) ? false : options.align;
       this.options.toplabel = lang.isUndefined(options.toplabel) ? false : options.toplabel;
+      this.options.newline = lang.isUndefined(options.newline) ? false : options.newline;
 
       //this.options.table = options.table;
       this.objectType = options.objectType;
@@ -112,6 +113,18 @@
       }
     },
 
+    getContainerField: function(field){
+      if(typeof field == 'undefined'){
+        field = this;
+      }
+      if (field.type == 'type' && (typeof field.parentField.parentField.type != 'undefined')) return null;
+      while (field.parentField && typeof field.parentField != 'undefined') {
+        parentField = this.getContainerField(field.parentField, field);
+        if(parentField && this.parentField != parentField) return null;
+        return parentField;
+      }
+    },
+
     /**
      * Set the name of the field (or hidden field)
      */
@@ -129,10 +142,16 @@
         this.divEl.id = this.options.id;
       }
 
+      var containerField = this.getContainerField();
+
       var isTypeField = this.isInPropertyPanel();
       if(this.options.align && !isTypeField){
         Dom.setStyle(this.divEl, 'float', 'left');
       }else if(!isTypeField){
+        Dom.setStyle(this.divEl, 'clear', 'left');
+      }
+
+      if(this.options.newline && !isTypeField){
         Dom.setStyle(this.divEl, 'clear', 'left');
       }
 
@@ -374,8 +393,11 @@
       // Unsubscribe all listeners on the updatedEvt
       this.updatedEvt.unsubscribeAll();
 
+
+      //setTimeout(function(){util.Event.purgeElement(el, true);}, 0);
+
       // Purge element (remove listeners on el and childNodes recursively)
-      util.Event.purgeElement(el, true);
+      util.Event.purgeElement(el, false);
 
       // Remove from DOM
       if (Dom.inDocument(el)) {
@@ -486,6 +508,11 @@
     name: "align",
     value: false
   }, {
+    type: "boolean",
+    label: "On new line?",
+    name: "newline",
+    value: false
+  },{
     type: "boolean",
     label: "Label on top?",
     name: "toplabel",

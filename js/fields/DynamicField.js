@@ -81,9 +81,9 @@
      * Retrieve the list of tables to be used to populate
      * the select field
      */
-    updateFieldList: function(table_key) {
+    updateFieldList: function(table_key) {      
       try {
-        if(table_key){
+        if(table_key && table_key != ''){
           for (var i = 0; i < inputEx.TablesFields.length; i++) {
             if (inputEx.TablesFields[i].table.key == table_key) {
               for (var j = 0; j < inputEx.TablesFields[i].table.fields.length; j++) {

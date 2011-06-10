@@ -85,14 +85,17 @@
 		 */
 		renderComponent: function () {
 			
-			var choices, length, i, sep;
+			var choices, length, i, sep, name;
 			
 			this.choicesList = [];
 			
 			choices = this.options.choices;
 			
+			name = this.options.name + Dom.generateId();
+
 			for (i = 0, length = choices.length ; i < length ; i += 1 ) {
 				
+				choices[i].name = name;
 				this.addChoice(choices[i]);
 				
 			}
@@ -399,7 +402,7 @@
 			// radioId MUST be different for each option, to allow click on label (with for:id trick)
 			radioId = YAHOO.util.Dom.generateId();
 			
-			radioNode = inputEx.cn('input', { id: radioId, type: 'radio', name: this.options.name, value: choice.value, className: 'inputEx-RadioField-radio' });
+			radioNode = inputEx.cn('input', { id: radioId, type: 'radio', name: choice.name, value: choice.value, className: 'inputEx-RadioField-radio' });
 			div.appendChild(radioNode);
 			
 			if (choice.label.length > 0) {

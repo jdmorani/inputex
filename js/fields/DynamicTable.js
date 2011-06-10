@@ -121,6 +121,12 @@
       try {
         this.clearFieldsList();
         var fieldsList = this.getFieldsList(this.options.parentField);
+        if(fieldsList.length > 0){
+          this.addChoice({
+            label: "",
+            value: ""
+          });
+        }
         for (var i = 0; i < fieldsList.length; i++) {
           this.addChoice({
             label: fieldsList[i].table.name,
