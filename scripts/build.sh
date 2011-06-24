@@ -31,6 +31,6 @@ cat $CURRENT_PATH/../license.txt $BUILD_PATH/inputex-temp-min.css > $BUILD_PATH/
 rm -f $BUILD_PATH/inputex-temp-min.css
  
 #cp $BUILD_PATH/inputex-min.js "/Volumes/Data/Users/jdmorani/Code/github/case_center/public/javascripts/lib/inputex/"
-cp $BUILD_PATH/inputex.js "/Volumes/Data/Users/jdmorani/Code/github/case_center/public/javascripts/lib/inputex/inputex-min.js"
+cp $BUILD_PATH/inputex.js "/Users/jdmorani/Code/github/case_center/public/javascripts/lib/inputex/inputex-min.js"
  
 echo "done!"
