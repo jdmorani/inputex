@@ -86,6 +86,9 @@
         if (this.options.required) {
           f.required = true;
         }
+        if(this.options.align){
+          f.align = true;
+        }
         field = this.renderField(f);
         fieldEl = field.getEl();
         t = f.type;
