@@ -392,6 +392,28 @@
     }
   }, 
 
+  checkInteractionValue: function(valueTrigger, fieldValue){
+    if(YAHOO.lang.isArray(valueTrigger)){
+      for(var v in valueTrigger){
+        for(var e in valueTrigger[v]){
+          if (YAHOO.lang.isArray(valueTrigger[v][e])){
+            for(var i in valueTrigger[v][e]){
+              if(valueTrigger[v][e][i] === fieldValue[v][e]){
+                return true;
+              }
+            }
+          }else if(valueTrigger[v][e] === fieldValue[v][e]){
+            return true;
+          }
+        }        
+      }
+    }else if (valueTrigger === fieldValue){
+      return true;
+    }
+
+    return false;
+  },
+
   /**
    * Run the interactions for the given field instance
    * @param {inputEx.Field} fieldInstance Field that just changed
@@ -408,7 +430,7 @@
     for (var i = 0; i < interactions.length; i++) {
       var interaction = interactions[i];
       var type = 'action'
-      if (interaction.valueTrigger === fieldValue) {
+      if (this.checkInteractionValue(interaction.valueTrigger, fieldValue)) {
         for (var j = 0; j < interaction.actions.length; j++) {
           this.runAction(interaction.actions[j], fieldValue);
         }
