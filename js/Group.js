@@ -376,6 +376,22 @@
     }
   },
 
+   /**
+   * Revert an action (for interactions)
+   * @param {Object} action inputEx action object
+   * @param {Any} triggerValue The value that triggered the interaction
+   */
+  revertAction: function(action, triggerValue) {
+    var field = this.getFieldByName(action.name);
+    if (YAHOO.lang.isFunction(field[action.revert])) {
+      field[action.revert].call(field);
+    } else if (YAHOO.lang.isFunction(action.revert)) {
+      action.revert.call(field, triggerValue);
+    } else {
+      throw new Error("action " + action.revert + " is not a valid revert action for field " + action.name);
+    }
+  }, 
+
   /**
    * Run the interactions for the given field instance
    * @param {inputEx.Field} fieldInstance Field that just changed
@@ -391,9 +407,14 @@
     var interactions = fieldConfig.interactions;
     for (var i = 0; i < interactions.length; i++) {
       var interaction = interactions[i];
+      var type = 'action'
       if (interaction.valueTrigger === fieldValue) {
         for (var j = 0; j < interaction.actions.length; j++) {
           this.runAction(interaction.actions[j], fieldValue);
+        }
+      }else{
+        for (var j = 0; j < interaction.actions.length; j++) {
+          this.revertAction(interaction.actions[j], fieldValue);
         }
       }
     }
