@@ -81,6 +81,17 @@
       }, null, " "));
     },
 
+
+    /**
+     * Set the value
+     * @param {Array} values [value1, value2, ...]
+     * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+     */
+    setValue: function(values, sendUpdatedEvt) {
+      inputEx.TableField.superclass.setValue.call(this, values, sendUpdatedEvt);
+      this.inputs[0].fireTableDidChangeEvt(true);
+    },
+
     /**
      * Instanciate one field given its parameters, type or fieldClass
      * @param {Object} fieldOptions The field properties as required by the inputEx() method

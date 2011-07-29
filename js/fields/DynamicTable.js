@@ -73,11 +73,11 @@
      * Fire the "tableDidChange" event
      * Escape the stack using a setTimeout
      */
-    fireTableDidChangeEvt: function() {
+    fireTableDidChangeEvt: function(force) {
       // Uses setTimeout to escape the stack (that originiated in an event)      
       var that = this;
       setTimeout(function() {
-        if(that.options.selectedValue != that.getValue()){
+        if(force == true || that.options.selectedValue != that.getValue()){
           that.options.selectedValue = that.getValue();
           that.options.tableDidChangeEvt.fire(that.getValue(), that);
         }
@@ -147,7 +147,7 @@
 
       var i, length;
 
-      inputEx.SelectField.superclass.setOptions.call(this, options);
+      inputEx.DynamicTable.superclass.setOptions.call(this, options);
 
       this.options.choices = lang.isArray(options.choices) ? options.choices : [];
 
@@ -247,7 +247,7 @@
       }
 
       // Call Field.setValue to set class and fire updated event
-      inputEx.SelectField.superclass.setValue.call(this, value, sendUpdatedEvt);
+      inputEx.DynamicTable.superclass.setValue.call(this, value, sendUpdatedEvt);
     },
 
     /**
