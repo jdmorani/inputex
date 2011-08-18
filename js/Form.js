@@ -144,7 +144,7 @@
      */
     onChange: function(eventName, args) {
 
-      inputEx.Form.superclass.onChange.call(this, e);
+      inputEx.Form.superclass.onChange.call(this, eventName, args);
     },
 
 

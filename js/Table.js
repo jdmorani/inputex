@@ -56,7 +56,7 @@
       this.inputsNames = {};
 
       // associate the table with the initial fields list
-      if (this.options.fields.length == 0 && this.numberOfFieldsInTable() > 0) {
+      if (typeof this.options.fields !== 'undefined' && this.options.fields.length == 0 && this.numberOfFieldsInTable() > 0) {
         this.updateFieldList();
       }
       
@@ -102,10 +102,11 @@
         for (var i = 0; i < inputEx.TablesFields.length; i++) {
           if (inputEx.TablesFields[i].table.key == this.options.name) {
             for (var j = 0; j < inputEx.TablesFields[i].table.fields.length; j++) {
+
               fields.push({
                 label: inputEx.TablesFields[i].table.fields[j].name,
                 name: inputEx.TablesFields[i].table.fields[j].key,
-                type: "string",
+                type: this.getFieldType(inputEx.TablesFields[i].table.fields[j].field_type),
               });
             }
             break;

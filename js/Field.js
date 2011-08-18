@@ -472,7 +472,22 @@
      */
     getParentField: function() {
       return this.parentField;
-    }
+    },
+
+    getFieldType: function(ruby_field_type) {
+      switch(ruby_field_type){
+        case "String":
+          return "string";
+        case "Integer":
+          return "integer";
+        case "Float":
+        case "BigDecimal":        
+        case "Money":
+          return "number";
+        default:
+          return "string";
+      }
+    }    
 
   };
 

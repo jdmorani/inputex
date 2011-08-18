@@ -106,6 +106,8 @@
       } catch (err) {
         console.log("inputEx.TablesFields is undefined. - " + err)
       }
+
+      this.fireFieldDidChangeEvt();
     },
 
     /**
