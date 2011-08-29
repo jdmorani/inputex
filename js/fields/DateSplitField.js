@@ -156,6 +156,7 @@ inputEx.registerType("datesplit", inputEx.DateSplitField, [{
     type: 'list',
     name: 'separators',
     label: 'Separators',
+    elementType: {type: 'string'},
     required: true
   }], true)
 
