@@ -83,12 +83,15 @@
 
       for (i = 0; i < n; i++) {
         f = this.options.fields[i];
+        
+        f.name = this.options.name;
+
         if (this.options.required) {
           f.required = true;
         }
-        if(this.options.align){
+        //if(this.options.align){
           f.align = true;
-        }
+        //}
         field = this.renderField(f);
         fieldEl = field.getEl();
         t = f.type;
@@ -101,7 +104,7 @@
 
         this.divEl.appendChild(fieldEl);
 
-        this.appendSeparator(i + 1);
+        this.appendSeparator(i + 1);        
       }
 
       this.setFieldName(this.options.name);

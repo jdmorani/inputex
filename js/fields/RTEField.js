@@ -142,6 +142,6 @@ lang.extend(inputEx.RTEField, inputEx.Field, {
 });
 	
 // Register this class as "html" type
-inputEx.registerType("html", inputEx.RTEField, []);
+inputEx.registerType("rich-text-editor", inputEx.RTEField, []);
 	
 })();
