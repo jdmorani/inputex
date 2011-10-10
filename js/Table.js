@@ -168,6 +168,7 @@
     type: 'list',
     label: 'Fields',
     name: 'fields',
+    sortable: 'true',
     elementType: {
       type: 'type'
     }

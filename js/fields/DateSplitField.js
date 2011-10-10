@@ -8,7 +8,7 @@
  * @extends inputEx.CombineField
  */
 inputEx.DateSplitField = function(options) {
-   	
+    
    if(!options.dateFormat) {options.dateFormat = inputEx.messages.defaultDateFormat; }
    
    var formatSplit = options.dateFormat.split("/");
@@ -31,7 +31,7 @@ inputEx.DateSplitField = function(options) {
 
    options.separators = options.separators || [false,"&nbsp;","&nbsp;",false];
    
-	inputEx.DateSplitField.superclass.constructor.call(this,options);
+  inputEx.DateSplitField.superclass.constructor.call(this,options);
 
    this.initAutoTab();
 };
@@ -39,13 +39,16 @@ inputEx.DateSplitField = function(options) {
 lang.extend(inputEx.DateSplitField, inputEx.CombineField, {
    
    /**
-	 * Set the value. Format the date according to options.dateFormat
-	 * @param {Date} val Date to set
-	 * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
-	 */
+   * Set the value. Format the date according to options.dateFormat
+   * @param {Date} val Date to set
+   * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
+   */
    setValue: function(value, sendUpdatedEvt) {
       var values = [];
       // !value catches "" (empty field), and invalid dates
+      if( lang.isString(value)){
+         value = new Date(value);
+      }
       if(!value || !lang.isFunction(value.getTime) || !lang.isNumber(value.getTime()) ) {
          values[this.monthIndex] = "";
          values[this.yearIndex] = "";
@@ -55,13 +58,32 @@ lang.extend(inputEx.DateSplitField, inputEx.CombineField, {
             values.push( i == this.dayIndex ? value.getDate() : (i==this.yearIndex ? value.getFullYear() : value.getMonth()+1 ) );
          }
       }
-      inputEx.DateSplitField.superclass.setValue.call(this, values, sendUpdatedEvt);
+
+      if (!values) {
+        return;
+      }
+      var i, n = this.inputs.length;
+      for (i = 0; i < n; i++) {
+        this.inputs[i].setValue(values[i], false); 
+      }
+
+      this.runFieldsInteractions();
+
+      if (sendUpdatedEvt !== false) {
+        // fire update event
+        this.fireUpdatedEvt();
+      }
    },
    
    getValue: function() {
       if (this.isEmpty()) return "";
       
-      var values = inputEx.DateSplitField.superclass.getValue.call(this);
+      var values = [], i, n = this.inputs.length;
+      for (i = 0; i < n; i++) {
+        var obj = {};
+        obj[this.inputs[i].options.name] = this.inputs[i].getValue()
+        values.push(this.inputs[i].getValue());
+      }
       
       return new Date(values[this.yearIndex], values[this.monthIndex]-1, values[this.dayIndex] );
    },
@@ -92,51 +114,51 @@ lang.extend(inputEx.DateSplitField, inputEx.CombineField, {
       return (val != "Invalid Date");
    },
    
-	isEmpty: function() {
-	   var values = inputEx.DateSplitField.superclass.getValue.call(this);
-	   return (values[this.monthIndex] == "" && values[this.yearIndex] == "" &&  values[this.dayIndex] == "");
-	},
-	
-	initAutoTab: function() {
-	   // "keypress" event codes for numeric keys (keyboard & numpad) 
-	   //  (warning : "keydown" codes are different with numpad)
-	   var numKeyCodes = [48,49,50,51,52,53,54,55,56,57];
-	   
+  isEmpty: function() {
+     var values = inputEx.DateSplitField.superclass.getValue.call(this);
+     return (values[this.monthIndex] == "" && values[this.yearIndex] == "" &&  values[this.dayIndex] == "");
+  },
+  
+  initAutoTab: function() {
+     // "keypress" event codes for numeric keys (keyboard & numpad) 
+     //  (warning : "keydown" codes are different with numpad)
+     var numKeyCodes = [48,49,50,51,52,53,54,55,56,57];
+     
       // verify charCode (don't auto tab when pressing "tab", "arrow", etc...)
-	   var checkNumKey = function(charCode) {
-   	   for (var i=0, length=numKeyCodes.length; i < length; i++) {
-   	      if (charCode == numKeyCodes[i]) return true;
-   	   }
-   	   return false;       
-	   };
-	   
-	   // Function that checks charCode and execute tab action
-	   var that = this;
-	   var autoTab = function(inputIndex) {
+     var checkNumKey = function(charCode) {
+       for (var i=0, length=numKeyCodes.length; i < length; i++) {
+          if (charCode == numKeyCodes[i]) return true;
+       }
+       return false;       
+     };
+     
+     // Function that checks charCode and execute tab action
+     var that = this;
+     var autoTab = function(inputIndex) {
          // later to let input update its value
-   	   lang.later(0, that, function() {
-      	   var input = that.inputs[inputIndex];
-      	   
-      	   // check input.el.value (string) because getValue doesn't work
-      	   // example : if input.el.value == "06", getValue() == 6 (length == 1 instead of 2)
-      	   if (input.el.value.length == input.options.size) {
-      	      that.inputs[inputIndex+1].focus();
-      	   }
-   	   });
-	   };
-	   
-	   // add listeners on inputs
-	   Event.addListener(this.inputs[0].el, "keypress", function(e) {
-	      if (checkNumKey(Event.getCharCode(e))) {
+       lang.later(0, that, function() {
+           var input = that.inputs[inputIndex];
+           
+           // check input.el.value (string) because getValue doesn't work
+           // example : if input.el.value == "06", getValue() == 6 (length == 1 instead of 2)
+           if (input.el.value.length == input.options.size) {
+              that.inputs[inputIndex+1].focus();
+           }
+       });
+     };
+     
+     // add listeners on inputs
+     Event.addListener(this.inputs[0].el, "keypress", function(e) {
+        if (checkNumKey(Event.getCharCode(e))) {
             autoTab(0);
          }
-   	}, this, true);
-	   Event.addListener(this.inputs[1].el, "keypress", function(e) {
-	      if (checkNumKey(Event.getCharCode(e))) {
+    }, this, true);
+     Event.addListener(this.inputs[1].el, "keypress", function(e) {
+        if (checkNumKey(Event.getCharCode(e))) {
             autoTab(1);
          }
-   	}, this, true);
-	}
+    }, this, true);
+  }
    
 });
 
