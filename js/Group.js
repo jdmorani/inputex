@@ -208,30 +208,36 @@
      * @returns {Object} with all Forms's fields state, error message
      * and validate containing a boolean for the global Form validation
      */
-    getFieldsStates: function() {
-      var input, inputName, state, message, returnedObj = {
+    getFieldsStates: function(field, returnedObj) {
+      var input, inputName, state, message, returnedObj = returnedObj || {
         fields: {},
         validate: true
-      };
+      }, inputs = field || this.inputs;
+
 
       // Loop on all the sub fields
-      for (var i = 0; i < this.inputs.length; i++) {
+      for (var i = 0; i < inputs.length; i++) {
 
-        input = this.inputs[i];
+        input = inputs[i];
         inputName = input.options.name;
         state = input.getState();
         message = input.getStateString(state);
 
-        returnedObj.fields[inputName] = {};
-        returnedObj.fields[inputName].valid = true;
-        returnedObj.fields[inputName].message = message;
+        if(inputs[i].subFields)
+          this.getFieldsStates(inputs[i].subFields, returnedObj);
+        else if(inputs[i].inputs)
+          this.getFieldsStates(inputs[i].inputs, returnedObj);
+        else{                    
+          // check if subfield validates
+          if (state == inputEx.stateRequired || state == inputEx.stateInvalid) {
+            returnedObj.fields[inputName] = {};
+            returnedObj.fields[inputName].message = message;
+            returnedObj.fields[inputName].label = input.options.label;            
+            returnedObj.fields[inputName].valid = false;
+            returnedObj.validate = false;
+          }
 
-        // check if subfield validates
-        if (state == inputEx.stateRequired || state == inputEx.stateInvalid) {
-          returnedObj.fields[inputName].valid = false;
-          returnedObj.validate = false;
         }
-
       }
 
       return returnedObj;
