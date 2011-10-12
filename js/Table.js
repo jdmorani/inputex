@@ -106,6 +106,7 @@
               fields.push({
                 label: inputEx.TablesFields[i].table.fields[j].name,
                 name: inputEx.TablesFields[i].table.fields[j].key,
+                value: inputEx.TablesFields[i].table.fields[j].default_value,
                 type: this.getFieldType(inputEx.TablesFields[i].table.fields[j].field_type),
               });
             }
