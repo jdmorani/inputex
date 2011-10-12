@@ -397,7 +397,7 @@
       //setTimeout(function(){util.Event.purgeElement(el, true);}, 0);
 
       // Purge element (remove listeners on el and childNodes recursively)
-      util.Event.purgeElement(el, false);
+      //util.Event.purgeElement(el, false);
 
       // Remove from DOM
       if (Dom.inDocument(el)) {
