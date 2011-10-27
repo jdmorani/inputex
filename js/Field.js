@@ -166,7 +166,7 @@
           className: 'inputEx-label',
           'for': this.divEl.id + '-field'
         });
-        this.labelEl = inputEx.cn('label', null, null, this.options.label === "" ? "&nbsp;" : this.options.label);
+        this.labelEl = inputEx.cn('label', {id: Dom.generateId()}, null, this.options.label === "" ? "&nbsp;" : this.options.label);
         this.labelDiv.appendChild(this.labelEl);
         this.divEl.appendChild(this.labelDiv);
       }
