@@ -72,8 +72,8 @@
       // Basic options
       this.setParentField(options.parentField);
       this.options.name = options.name;
-      this.options.value = options.value;
-      this.options.id = options.id || Dom.generateId();
+      this.options.value = options.value;      
+      this.options.id = this.generateId(options);
       this.options.label = options.label;
       this.options.description = options.description;
 
@@ -93,6 +93,22 @@
       //this.options.table = options.table;
       this.objectType = options.objectType;
 
+    },
+
+    generateId: function(options){
+      
+      //get the parentfield name
+      var parentFieldName = 'root';
+
+      if(typeof this.parentField !== 'undefined' && !this.parentField)
+        var parentFieldName = this.parentField.options.name;
+
+      //get the actual field name
+      var fieldName = this.options.name;
+
+      var id = parentFieldName + '-' + fieldName;
+
+      return (options.id || id)
     },
 
     /**
@@ -128,7 +144,19 @@
     /**
      * Set the name of the field (or hidden field)
      */
-    setFieldName: function(name) {},
+    setFieldName: function(name) {
+    },
+
+
+
+    /**
+     * Set the id of the field (or hidden field)
+     */
+    setFieldId: function(id) {
+      this.options.id = id;
+      this.divEl.id = this.options.id;
+    },
+
 
     /**
      * Default render of the dom element. Create a divEl that wraps the field.
