@@ -203,6 +203,11 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
      * @returns {Boolean} true if all fields validate and required fields are not empty
      */
     validate: function() {
+
+      //when the control is loaded, the value (if any) is not already set into the editor
+      //therefore it may trigger a validation error because the editor will return empty or invalid.
+      this.editorField.setValue(this.getValue());
+
       return this.editorField.getState() == 'valid' ? true : false;
    },   
 
