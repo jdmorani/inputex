@@ -86,7 +86,7 @@
       this.options.className = options.className ? options.className : 'inputEx-Field';
       this.options.required = lang.isUndefined(options.required) ? false : options.required;
       this.options.showMsg = lang.isUndefined(options.showMsg) ? false : options.showMsg;
-      this.options.align = lang.isUndefined(options.align) ? false : options.align;
+      this.options.align = options.align;
       this.options.toplabel = lang.isUndefined(options.toplabel) ? false : options.toplabel;
       this.options.newline = lang.isUndefined(options.newline) ? false : options.newline;
 
@@ -98,15 +98,15 @@
     generateId: function(options){
       
       //get the parentfield name
-      var parentFieldName = 'root';
+      var parentFieldId = null;
 
-      if(typeof this.parentField !== 'undefined' && !this.parentField)
-        var parentFieldName = this.parentField.options.name;
+      if(typeof this.parentField !== 'undefined' && typeof this.parentField.options.name !== 'undefined')
+        var parentFieldId = this.parentField.options.id;
 
       //get the actual field name
       var fieldName = this.options.name;
 
-      var id = parentFieldName + '-' + fieldName;
+      var id = parentFieldId ? parentFieldId + '-' + fieldName : fieldName;
 
       return (options.id || id)
     },
@@ -173,9 +173,10 @@
       var containerField = this.getContainerField();
 
       var isTypeField = this.isInPropertyPanel();
+  
       if(this.options.align && !isTypeField){
         Dom.setStyle(this.divEl, 'float', 'left');
-      }else if(!isTypeField){
+      }else if(this.options.align == false && !isTypeField){
         Dom.setStyle(this.divEl, 'clear', 'left');
       }
 
@@ -190,11 +191,11 @@
       // Label element
       if (YAHOO.lang.isString(this.options.label)) {
         this.labelDiv = inputEx.cn('div', {
-          id: this.divEl.id + '-label',
+          id: this.divEl.id + '-label-wrapper',
           className: 'inputEx-label',
           'for': this.divEl.id + '-field'
         });
-        this.labelEl = inputEx.cn('label', {id: Dom.generateId()}, null, this.options.label === "" ? "&nbsp;" : this.options.label);
+        this.labelEl = inputEx.cn('label', {id: this.options.id + '-label' }, null, this.options.label === "" ? "&nbsp;" : this.options.label);
         this.labelDiv.appendChild(this.labelEl);
         this.divEl.appendChild(this.labelDiv);
       }

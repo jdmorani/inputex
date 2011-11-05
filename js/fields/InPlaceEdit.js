@@ -29,8 +29,12 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       this.options.visu = options.visu;
       
       this.options.editorField = options.editorField;
+
+      this.options.securedisplay = options.securedisplay;
+
+      this.options.alwayshide = options.alwayshide;
       
-      this.options.buttonTypes = options.buttonTypes || {ok:"submit",cancel:"link"};
+      this.options.buttonTypes = options.buttonTypes || {ok:"javascript",cancel:"link"};
       
       this.options.animColors = options.animColors || null;
    },
@@ -176,6 +180,13 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
    onOkEditor: function(e) {
       Event.stopEvent(e);
       
+      var errorMsg = this.editorField.getStateString(this.editorField.getState());
+
+      if (errorMsg != ''){
+         alert(errorMsg);
+         return false;
+      }
+
       var newValue = this.editorField.getValue();
       this.setValue(newValue);
       
@@ -185,6 +196,15 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
       var that = this;
       setTimeout(function() {that.updatedEvt.fire(newValue);}, 50);      
    },
+
+
+    /**
+     * Validate each field
+     * @returns {Boolean} true if all fields validate and required fields are not empty
+     */
+    validate: function() {
+      return this.editorField.getState() == 'valid' ? true : false;
+   },   
 
    
    /**
@@ -235,10 +255,17 @@ lang.extend(inputEx.InPlaceEdit, inputEx.Field, {
     */
    setValue: function(value, sendUpdatedEvt) {   
       // Store the value
+
+      var nb, match;
+
 	   this.value = value;
    
-      if(lang.isUndefined(value) || value == "") {
+      if(lang.isUndefined(value) || value == "" || this.options.alwayshide) {
          inputEx.renderVisu(this.options.visu, inputEx.messages.emptyInPlaceEdit, this.formattedContainer);
+      }
+      else if((nb = parseInt(this.options.securedisplay)) > 0 && (match = this.value.match(new RegExp(".{" + nb + "}$")))) {
+         var masked = this.value.substr(0, this.value.length  - match[0].length).replace(/./g, "*") + match[0]
+         inputEx.renderVisu(this.options.visu, masked, this.formattedContainer);
       }
       else {
          inputEx.renderVisu(this.options.visu, this.value, this.formattedContainer);
@@ -268,6 +295,8 @@ inputEx.messages.okEditor = "Ok";
 
 // Register this class as "inplaceedit" type
 inputEx.registerType("inplaceedit", inputEx.InPlaceEdit, [
+   { type: 'boolean', label: 'Always Hide', name: 'alwayshide'},
+   { type: 'integer', label: 'Show last # chars', name: 'securedisplay'},
    { type:'type', label: 'Editor', name: 'editorField'}
 ]);
 

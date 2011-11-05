@@ -48,7 +48,6 @@
       inputEx.ListField.superclass.setOptions.call(this, options);
 
       this.options.className = options.className ? options.className : 'inputEx-Field inputEx-ListField';
-
       this.options.sortable = lang.isUndefined(options.sortable) ? false : options.sortable;
       this.options.useButtons = lang.isUndefined(options.useButtons) ? true : options.useButtons;
       this.options.editable = lang.isUndefined(options.editable) ? true : options.editable;      
@@ -69,6 +68,20 @@
         this.options.name = options.elementType.name;
         //console.log(options.elementType.name)
     },
+
+    generateId: function(options){
+      
+      //get the parentfield name
+      var elementTypeName = 'root';
+
+      if(typeof options.elementType !== 'undefined' && options.elementType.name !== 'undefined')
+        elementTypeName = options.elementType.name;
+
+      var id = elementTypeName + '-List';
+
+      return (options.id || id)
+    },
+
 
     /**
      * Render the addButton
@@ -221,6 +234,7 @@
         for (var i = 0; i < this.subFields.length; i++) {
           var subFieldEl = this.subFields[i];
           subFieldEl.setFieldName(this.options.name + "[" + i + "]");
+          subFieldEl.setFieldId(this.options.id + "-" + i)
         }
       }
     },
@@ -271,13 +285,15 @@
       // Instantiate the new subField
       var opts = lang.merge({}, this.options.elementType);
 
+      opts.id = this.options.id + "-" + this.subFields.length;
+
       // Retro-compatibility with deprecated inputParams Object : TODO -> remove
       if (lang.isObject(opts.inputParams) && !lang.isUndefined(value)) {
         opts.inputParams.value = value;
 
         // New prefered way to set options of a field
       } else if (!lang.isUndefined(value)) {
-        opts.value = value;
+        opts.value = value;        
       }
 
       var el = inputEx(opts, this);

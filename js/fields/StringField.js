@@ -73,6 +73,7 @@
       if (this.options.maxLength) {
         attributes.maxLength = this.options.maxLength;
       }
+
       attributes.autocomplete = this.options.autocomplete ? 'on' : 'off';
 
       // Create the node
@@ -165,6 +166,11 @@
       if (this.options.minLength) {
         result = result && val.length >= this.options.minLength;
       }
+
+      if (this.options.maxLength) {
+        result = result && val.length <= this.options.maxLength;
+      }
+
       return result;
     },
 
@@ -292,6 +298,17 @@
     label: 'Min. length',
     name: 'minLength',
     value: 0
-  }]);
+  }, {
+    type: 'integer',
+    label: 'Max. length',
+    name: 'maxLength',
+    value: 255
+  }, {
+    type: 'string',
+    label: 'RegExp Validation',
+    name: 'regexp',
+    value: ''
+  }
+  ]);
 
 })();

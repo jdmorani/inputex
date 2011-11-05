@@ -103,10 +103,12 @@
 			// Build a "any" radio combined with a StringField
 			if (this.options.allowAny) {
 				
-				this.allowAnyChoice = this.addChoice({ value: this.options.allowAny.value, label:'' });
-				
+				this.allowAnyChoice = this.addChoice({ value: this.options.allowAny.value, label:'', name: name});
+
 				this.radioAny = this.allowAnyChoice.node.firstChild;
 				
+				this.options.allowAny.field.id = this.options.name + '-custom-' + this.choicesList.length;
+
 				this.anyField = new inputEx(this.options.allowAny.field);
 				this.anyField.disable();
 				
@@ -400,7 +402,7 @@
 			div = inputEx.cn('div', {className: 'inputEx-RadioField-choice'});
 			
 			// radioId MUST be different for each option, to allow click on label (with for:id trick)
-			radioId = YAHOO.util.Dom.generateId();
+			radioId = this.options.id + '-' + this.choicesList.length; //YAHOO.util.Dom.generateId();
 			
 			radioNode = inputEx.cn('input', { id: radioId, type: 'radio', name: choice.name, value: choice.value, className: 'inputEx-RadioField-radio' });
 			div.appendChild(radioNode);

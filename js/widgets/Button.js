@@ -211,4 +211,10 @@ lang.augmentObject(inputEx.widget.Button.prototype,{
    
 });
 
+// Register this class as "slider" type
+inputEx.registerType("button", inputEx.widget.Button, [
+   
+]);
+
+
 })();

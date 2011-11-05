@@ -225,7 +225,7 @@
 
         if(inputs[i].subFields)
           this.getFieldsStates(inputs[i].subFields, returnedObj);
-        else if(inputs[i].inputs)
+        else if(inputs[i].inputs && inputs[i].type != 'combine')
           this.getFieldsStates(inputs[i].inputs, returnedObj);
         else{                    
           // check if subfield validates

@@ -16,6 +16,8 @@
    */
   inputEx.CombineField = function(options) {
     inputEx.CombineField.superclass.constructor.call(this, options);
+
+    this.initAutoTab();
   };
 
   lang.extend(inputEx.CombineField, inputEx.Group, {
@@ -26,6 +28,8 @@
     setOptions: function(options) {
       inputEx.CombineField.superclass.setOptions.call(this, options);
 
+      this.options.regexp = options.regexp;
+
       // Overwrite options
       this.options.className = options.className ? options.className : 'inputEx-CombineField';
 
@@ -34,7 +38,6 @@
     },
 
     render: function() {
-
       // Create the div wrapper for this group
       this.divEl = inputEx.cn('div', {
         className: this.options.className
@@ -42,6 +45,24 @@
       if (this.options.id) {
         this.divEl.id = this.options.id;
       }
+
+      var containerField = this.getContainerField();
+
+      var isTypeField = this.isInPropertyPanel();
+  
+      if(this.options.align && !isTypeField){
+        Dom.setStyle(this.divEl, 'float', 'left');
+      }else if(this.options.align == false && !isTypeField){
+        Dom.setStyle(this.divEl, 'clear', 'left');
+      }
+
+      if(this.options.newline && !isTypeField){
+        Dom.setStyle(this.divEl, 'clear', 'left');
+      }
+
+      if (this.options.required) {
+        Dom.addClass(this.divEl, "inputEx-required");
+      }      
 
       // Label element
       if (YAHOO.lang.isString(this.options.label)) {
@@ -55,7 +76,14 @@
         this.divEl.appendChild(this.labelDiv);
       }
 
+      if(this.options.toplabel && !isTypeField){
+        Dom.setStyle(this.labelDiv, 'text-align', 'left');
+        Dom.setStyle(this.labelDiv, 'float', 'left');
+        Dom.setStyle(this.labelDiv, 'clear', 'left');
+      }
+
       this.renderFields(this.divEl);
+
 
       if (this.options.disabled) {
         this.disable();
@@ -72,7 +100,7 @@
      */
     renderFields: function(parentEl) {
 
-      this.appendSeparator(0);
+      var isTypeField = this.isInPropertyPanel();
 
       if (!this.options.fields) {
         return;
@@ -85,6 +113,7 @@
         f = this.options.fields[i];
         
         f.name = this.options.name;
+        f.id = this.options.id + '-' + i
 
         if (this.options.required) {
           f.required = true;
@@ -99,12 +128,19 @@
           // remove the line breaker (<div style='clear: both;'>)
           field.divEl.removeChild(fieldEl.childNodes[fieldEl.childNodes.length - 1]);
         }
+
         // make the field float left
-        Dom.setStyle(fieldEl, 'float', 'left');
+        Dom.setStyle(fieldEl, 'float', 'left');        
+
+        if( i == 0 && this.options.toplabel && !isTypeField){
+          Dom.setStyle(fieldEl, 'text-align', 'left');
+          Dom.setStyle(fieldEl, 'float', 'left');
+          Dom.setStyle(fieldEl, 'clear', 'left');
+        }
 
         this.divEl.appendChild(fieldEl);
 
-        this.appendSeparator(i + 1);        
+        this.appendSeparator(i);
       }
 
       this.setFieldName(this.options.name);
@@ -191,9 +227,8 @@
       }
       var i, n = this.inputs.length;
       for (i = 0; i < n; i++) {
-        for(p in values[i]){
-          this.inputs[i].setValue(values[i][p], false); 
-        }
+        var len = parseInt(this.inputs[i].options.maxLength);
+        this.inputs[i].setValue(values.substr(i*len, len), false); 
       }
 
       this.runFieldsInteractions();
@@ -209,15 +244,85 @@
      * @return {Array} An array of values [value1, value2, ...]
      */
     getValue: function() {
-      var values = [], i, n = this.inputs.length;
+      var value = "", i = 0, n = this.inputs.length;
       for (i = 0; i < n; i++) {
-        var obj = {};
-        obj[this.inputs[i].options.name] = this.inputs[i].getValue()
-        values.push(obj);
-        //values.push(this.inputs[i].getValue());
+        value += this.inputs[i].getValue();
       }
-      return values;
-    }
+      return value;
+    },
+
+
+    /**
+     * Validate each field
+     * @returns {Boolean} true if all fields validate and required fields are not empty
+     */
+    validate: function() {
+      var response = true;
+
+      var val = this.getValue();
+
+      // empty field
+      if (val === '') {
+        // validate only if not required
+        return !this.options.required;
+      }
+
+      //check the lenght of each input
+      for(var i = 0; i < this.inputs.length; i++){
+        if(this.inputs[i].length < this.inputs[i].options.minLength)
+          return false;
+      }
+
+      // Check regex matching and minLength (both used in password field...)
+      var result = true;
+
+      // if we are using a regular expression
+      if (this.options.regexp) {
+        result = result && val.match(this.options.regexp);
+      }
+
+      return result;
+    },
+
+
+    initAutoTab: function() {
+       if (this.inputs.length == 0) return;
+       
+        // verify charCode (don't auto tab when pressing "tab", "arrow", etc...)
+       var checkNumKey = function(charCode) {
+         for (var i=48; i <= 122; i++) {
+            if (charCode == i) return true;
+         }
+         return false;       
+       };
+       
+       // Function that checks charCode and execute tab action
+       var that = this;
+       var autoTab = function(inputIndex) {
+           // later to let input update its value
+         lang.later(0, that, function() {
+             var input = that.inputs[inputIndex];
+             
+             // check input.el.value (string) because getValue doesn't work
+             // example : if input.el.value == "06", getValue() == 6 (length == 1 instead of 2)
+             if (input.el.value.length == input.options.maxLength) {
+                that.inputs[inputIndex+1].focus();
+             }
+         });
+       };
+       
+       // add listeners on inputs
+       for(var i = 0; i < this.inputs.length; i++){
+         Event.addListener(this.inputs[i].el, "keypress", function(e, el) {
+            for(var i=0; i < this.inputs.length;i++){
+              if(this.inputs[i].el == e.currentTarget) break;
+            }
+            if (checkNumKey(Event.getCharCode(e)) && i < this.inputs.length - 1) {
+                autoTab(i);
+             }
+        }, this, true);         
+       }
+    }    
 
   });
 
@@ -228,7 +333,32 @@
     name: "name",
     choices: [],
     required: true
-  },{ 
+  }, {
+    type: "string",
+    label: "Label",
+    name: "label",
+    value: ''
+  },{
+    type: "boolean",
+    label: "On same line?",
+    name: "align",
+    value: false
+  }, {
+    type: "boolean",
+    label: "On new line?",
+    name: "newline",
+    value: false
+  },{
+    type: "boolean",
+    label: "Label on top?",
+    name: "toplabel",
+    value: false
+  }, {
+    type: 'string',
+    label: 'RegExp Validation',
+    name: 'regexp',
+    value: ''
+  }, { 
     type: 'list', 
     label: 'Fields', 
     name: 'fields', 
@@ -237,6 +367,7 @@
     type: 'list',
     name: 'separators',
     label: 'Separators',
+    elementType: {type: 'string'},
     required: true
   }], true);
 
