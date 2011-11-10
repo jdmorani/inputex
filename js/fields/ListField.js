@@ -198,10 +198,12 @@
      * Return the array of values
      * @return {Array} The array
      */
-    getValue: function() {
+    getValue: function(path) {
       var values = [];
       for (var i = 0; i < this.subFields.length; i++) {
-        values[i] = this.subFields[i].getValue();
+        var local_path = this.subFields[i].options.name + (['table','list'].indexOf(this.subFields[i].type) >= 0 ? "[" + i + "]" : "");
+        local_path = !path ? local_path : path + "." + local_path
+        values[i] = this.subFields[i].getValue(local_path);
       }
       return values;
     },

@@ -298,10 +298,14 @@
     /**
      * Return an object with all the values of the fields
      */
-    getValue: function() {
+    getValue: function(path) {
       var o = {};
       for (var i = 0; i < this.inputs.length; i++) {
-        var v = this.inputs[i].getValue();
+        var local_path = this.inputs[i].options.name + (['table','list'].indexOf(this.inputs[i].type) >= 0 ? "[" + i + "]" : "");
+        local_path = !path ? local_path : path + "." + local_path
+        if(this.inputs[i].type == 'list')
+          local_path = path;
+        var v = this.inputs[i].getValue(local_path);
         if (this.inputs[i].options.name) {
           if(this.inputs[i].options.flatten && lang.isObject(v) ) {
           // if(o[this.inputs[i].options.name] && lang.isObject(v) && !lang.isArray(v)){
