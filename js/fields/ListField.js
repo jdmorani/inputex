@@ -55,6 +55,11 @@
         type: 'table'
       };
 
+      this.options.legend = options.legend || '';
+
+      this.options.collapsible = lang.isUndefined(options.collapsible) ? false : options.collapsible;
+      this.options.collapsed = lang.isUndefined(options.collapsed) ? false : options.collapsed;
+
       this.options.unique = lang.isUndefined(options.unique) ? false : options.unique;
 
       this.options.listAddLabel = options.listAddLabel || inputEx.messages.listAddLink;
@@ -88,6 +93,29 @@
      */
     renderComponent: function() {
 
+      this.legend = inputEx.cn('legend', {
+        className: 'inputEx-Group-legend'
+      });
+
+      // Option Collapsible
+      if (this.options.legend != '' && this.options.collapsible) {
+        var collapseImg = inputEx.cn('div', {
+          className: 'inputEx-ListField-collapseImg'
+        }, null, ' ');
+        this.legend.appendChild(collapseImg);
+        inputEx.sn(this.fieldContainer, {
+          className: 'inputEx-Expanded'
+        });
+      }
+
+      if (!lang.isUndefined(this.options.legend) && this.options.legend !== '') {
+        this.legend.appendChild(inputEx.cn("span", null, null, " " + this.options.legend));
+      }
+
+      if (this.options.collapsible || (!lang.isUndefined(this.options.legend) && this.options.legend !== '')) {
+        this.fieldContainer.appendChild(this.legend);
+      }
+
       // Add element button
       if (this.options.useButtons && this.options.editable) {
         this.addButton = inputEx.cn('img', {
@@ -115,13 +143,33 @@
         }, null, this.options.listAddLabel);
         this.fieldContainer.appendChild(this.addButton);
       }
+
+      // Collapsed at creation ?
+      if (this.options.collapsed) {
+        this.toggleCollapse();
+      }      
     },
 
     /**
-     * Handle the click event on the add button
+     * Handle the click event on the add button and the 'collapsible option'
      */
     initEvents: function() {
       Event.addListener(this.addButton, 'click', this.onAddButton, this, true);
+      
+      if (this.options.collapsible) {
+        Event.addListener(this.legend, "click", this.toggleCollapse, this, true);
+      }      
+    },
+
+    /**
+     * Toggle the collapse state
+     */
+    toggleCollapse: function() {
+      if (Dom.hasClass(this.fieldContainer, 'inputEx-Expanded')) {
+        Dom.replaceClass(this.fieldContainer, 'inputEx-Expanded', 'inputEx-Collapsed');
+      } else {
+        Dom.replaceClass(this.fieldContainer, 'inputEx-Collapsed', 'inputEx-Expanded');
+      }
     },
 
     /**
@@ -530,6 +578,20 @@
     label: 'Sortable?',
     required: false,
     name: 'sortable'
+  }, {
+    type: 'string',
+    label: 'Legend',
+    name: 'legend'
+  }, {
+    type: 'boolean',
+    label: 'Collapsible',
+    name: 'collapsible',
+    value: false
+  }, {
+    type: 'boolean',
+    label: 'Collapsed',
+    name: 'collapsed',
+    value: false
   }, {
     type: 'type',
     label: 'List element type',
