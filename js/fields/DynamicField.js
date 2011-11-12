@@ -82,6 +82,11 @@
      * the select field
      */
     updateFieldList: function(table_key) {      
+      //add an empty value in case the user does not want to select a specific field
+      this.addChoice({
+        value: ''
+      });
+      
       try {
         if(table_key && table_key != ''){
           for (var i = 0; i < inputEx.TablesFields.length; i++) {

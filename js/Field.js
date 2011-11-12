@@ -71,11 +71,12 @@
 
       // Basic options
       this.setParentField(options.parentField);
-      this.options.name = options.name;
+      this.options.name = options.name
       this.options.value = options.value;      
       this.options.id = this.generateId(options);
       this.options.label = options.label;
       this.options.description = options.description;
+      this.options.placeholder = options.placeholder;
 
       // Define default messages
       this.options.messages = {};
@@ -90,7 +91,6 @@
       this.options.toplabel = lang.isUndefined(options.toplabel) ? false : options.toplabel;
       this.options.newline = lang.isUndefined(options.newline) ? false : options.newline;
 
-      //this.options.table = options.table;
       this.objectType = options.objectType;
 
     },
@@ -104,7 +104,7 @@
         var parentFieldId = this.parentField.options.id;
 
       //get the actual field name
-      var fieldName = this.options.name;
+      var fieldName = (!this.options.name || this.options.name == '' ? Dom.generateId() : this.options.name);
 
       var id = parentFieldId ? parentFieldId + '-' + fieldName : fieldName;
 
@@ -174,6 +174,10 @@
 
       var isTypeField = this.isInPropertyPanel();
   
+      if(this.options.placeholder){
+        Dom.setStyle(this.divEl, 'visibility', 'hidden');
+      };
+
       if(this.options.align && !isTypeField){
         Dom.setStyle(this.divEl, 'float', 'left');
       }else if(this.options.align == false && !isTypeField){
@@ -527,7 +531,7 @@
     label: "Field",
     name: "name",
     choices: [],
-    required: true
+    required: false
   }, {
     type: "string",
     label: "Label",
@@ -563,7 +567,12 @@
     label: "Label on top?",
     name: "toplabel",
     value: false
-  }
+  },{
+    type: "boolean",
+    label: "Placeholder?",
+    name: "placeholder",
+    value: false
+  }  
   ];
 
 })();

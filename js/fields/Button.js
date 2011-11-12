@@ -23,7 +23,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
       this.options.xsl = options.xsl;
       this.options.action = options.action;
       this.options.name = options.name || "Button-" + Dom.generateId();
-      this.options.id = lang.isString(options.id) ? options.id  : Dom.generateId();
+      this.options.id = this.generateId(options);
       this.options.className = options.className || "inputEx-ButtonField";
       if(this.options.action == 'transform'){
          this.options.className += " inputEx-ButtonField-Action-Transform";
@@ -106,7 +106,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
     * render a slider widget
     */
    renderComponent: function() {
-      this.el = inputEx.cn('input', {type: "button", name: this.options.name, value: this.options.label, className: this.options.className, id:this.options.id, 'data-xsl': this.options.xsl});
+      this.el = inputEx.cn('input', {type: "button", name: this.options.name, value: this.options.label, className: this.options.className, id:this.options.id + '-button', 'data-xsl': this.options.xsl});
       
       Dom.addClass(this.el,"inputEx-Button");
       
