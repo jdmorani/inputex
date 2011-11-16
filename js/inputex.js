@@ -68,7 +68,7 @@ lang.augmentObject(inputEx, {
     * Url to the spacer image. This url schould be changed according to your project directories
     * @type String
     */
-   spacerUrl: "images/space.gif", // 1x1 px
+   spacerUrl: "<%=asset_path 'inputex/space.gif'%>", // 1x1 px
    
    /**
     * Field empty state constant

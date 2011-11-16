@@ -70,7 +70,7 @@ lang.extend(inputEx.DateField, inputEx.StringField, {
      if (val instanceof Date) {
       str = inputEx.DateField.formatDate(val, this.options.dateFormat);
      } 
-    else if(this.options.valueFormat){
+    else if(this.options.valueFormat && val){
       var dateVal = inputEx.DateField.parseWithFormat(val, this.options.valueFormat);
       str = inputEx.DateField.formatDate(dateVal, this.options.dateFormat);
     }
@@ -88,11 +88,11 @@ lang.extend(inputEx.DateField, inputEx.StringField, {
    * @return {String || Date} Formatted date using the valueFormat or a javascript Date instance
    */
   getValue: function(forceDate) {
-     // let parent class function check if typeInvite, etc...
-     var value = inputEx.DateField.superclass.getValue.call(this);
+    // let parent class function check if typeInvite, etc...
+    var value = inputEx.DateField.superclass.getValue.call(this);
 
-     // Hack to validate if field not required and empty
-     if (value === '') { return '';}
+    // Hack to validate if field not required and empty
+    if (!value || value === '') { return '';}
   
     var finalDate = inputEx.DateField.parseWithFormat(value,this.options.dateFormat);
   
@@ -112,11 +112,11 @@ lang.extend(inputEx.DateField, inputEx.StringField, {
 inputEx.DateField.parseWithFormat = function(sDate,format) {
   var separator = format.match(/[^Ymd ]/g)[0];
   var ladate = sDate.split(separator);
-   var formatSplit = format.split(separator);
-   var d = parseInt(ladate[ inputEx.indexOf('d',formatSplit) ],10);
-   var Y = parseInt(ladate[ inputEx.indexOf('Y',formatSplit) ],10);
-   var m = parseInt(ladate[ inputEx.indexOf('m',formatSplit) ],10)-1;
-   return (new Date(Y,m,d));
+  var formatSplit = format.split(separator);
+  var d = parseInt(ladate[ inputEx.indexOf('d',formatSplit) ],10);
+  var Y = parseInt(ladate[ inputEx.indexOf('Y',formatSplit) ],10);
+  var m = parseInt(ladate[ inputEx.indexOf('m',formatSplit) ],10)-1;
+  return (new Date(Y,m,d));
 };
 
 /**
@@ -124,10 +124,10 @@ inputEx.DateField.parseWithFormat = function(sDate,format) {
  */
 inputEx.DateField.formatDate = function(d,format) {
   var str = format.replace('Y',d.getFullYear());
-   var m = d.getMonth()+1;
-   str = str.replace('m', ((m < 10)? '0':'')+m);
-   var day = d.getDate();
-   str = str.replace('d', ((day < 10)? '0':'')+day);
+  var m = d.getMonth()+1;
+  str = str.replace('m', ((m < 10)? '0':'')+m);
+  var day = d.getDate();
+  str = str.replace('d', ((day < 10)? '0':'')+day);
   return str;
 };
   

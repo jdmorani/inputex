@@ -142,7 +142,7 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
 	         Dom.addClass(this.divEl, "inputEx-typeInvite");
 			 if (this.el.value == '') this.el.value = this.options.typeInvite;
      }
-},
+   },
    /**
     * onChange event handler
     * @param {Event} e The original 'change' event
@@ -150,7 +150,7 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
    onChange: function(e) {
       this.setClassFromState();
       // Clear the field when no value 
-	 if (this.hiddenEl.value != this.el.value) this.hiddenEl.value = this.el.value;
+	    if (this.hiddenEl.value != this.el.value) this.hiddenEl.value = this.el.value;
       lang.later(50, this, function() {
          if(this.el.value == "") {
             this.setValue("");
@@ -169,12 +169,12 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       // "inherited" from inputex.Field :
       //    (can't inherit of inputex.StringField because would set this.el.value...)
       //
-   // set corresponding style
-   this.setClassFromState();
+      // set corresponding style
+      this.setClassFromState();
 
-   if(sendUpdatedEvt !== false) {
-      // fire update event
-         this.fireUpdatedEvt();
+      if(sendUpdatedEvt !== false) {
+        // fire update event
+        this.fireUpdatedEvt();
       }
    },
    

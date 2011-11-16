@@ -71,12 +71,13 @@
 
       // Basic options
       this.setParentField(options.parentField);
-      this.options.name = options.name
+      this.options.name = this.parseName(options.name);
       this.options.value = options.value;      
       this.options.id = this.generateId(options);
       this.options.label = options.label;
       this.options.description = options.description;
       this.options.placeholder = options.placeholder;
+      this.options.hide = options.hide;
 
       // Define default messages
       this.options.messages = {};
@@ -93,6 +94,17 @@
 
       this.objectType = options.objectType;
 
+    },
+
+    /**
+    * The name may include both the key and the name of the field. If this is the case
+    * the name and key will be delimited with @_@@_@
+    * It's a bit hacky but there is really no way around it unfortunately.
+    */
+    parseName: function(name){
+      if(!lang.isUndefined(name) && name && name.indexOf('@_@@_@') >= 0)
+        return name.split('@_@@_@')[1];
+      return name;
     },
 
     generateId: function(options){
@@ -239,6 +251,11 @@
       this.divEl.appendChild(inputEx.cn('div', null, {
         clear: 'both'
       }, " "));
+
+      if(this.options.hide)
+        Dom.setStyle(this.divEl, 'display', 'none');
+      else
+        Dom.setStyle(this.divEl, 'display', '');
 
     },
 
@@ -529,9 +546,8 @@
   inputEx.Field.groupOptions = [{
     type: "dynamicfield",
     label: "Field",
-    name: "name",
-    choices: [],
-    required: false
+    name: "name",    
+    required: true
   }, {
     type: "string",
     label: "Label",
@@ -572,7 +588,12 @@
     label: "Placeholder?",
     name: "placeholder",
     value: false
-  }  
+  },{
+    type: "boolean",
+    label: "Hide?",
+    name: "hide",
+    value: false
+  } 
   ];
 
 })();

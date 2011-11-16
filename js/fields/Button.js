@@ -137,7 +137,7 @@ inputEx.registerType("button", inputEx.ButtonField, [{
     type: "dynamicfield",
     label: "Field",
     name: "name",
-    choices: [],
+    choices: [''],
     required: false
   }, {
     type: "string",
@@ -164,7 +164,7 @@ inputEx.registerType("button", inputEx.ButtonField, [{
     label: "XSL",
     name: "xsl",
     required: false
-  }  
+  }
 ], true);
 
 })();
