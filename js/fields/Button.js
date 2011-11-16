@@ -138,7 +138,7 @@ inputEx.registerType("button", inputEx.ButtonField, [{
     label: "Field",
     name: "name",
     choices: [''],
-    required: false
+    required: true
   }, {
     type: "string",
     label: "Label",
