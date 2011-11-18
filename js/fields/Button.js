@@ -142,7 +142,7 @@ inputEx.registerType("button", inputEx.ButtonField, [{
   }, {
     type: "string",
     label: "Label",
-    name: "label",
+    name: "label"
   }, {
     type: "boolean",
     label: "On same line?",

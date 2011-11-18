@@ -138,7 +138,7 @@
     destroy: function() {
       // Destroy the combine field itself      
       inputEx.TableField.superclass.destroy.call(this);
-    },
+    }
   });
 
   // Register this class as "form" type
