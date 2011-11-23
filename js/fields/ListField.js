@@ -50,7 +50,7 @@
       this.options.className = options.className ? options.className : 'inputEx-Field inputEx-ListField';
       this.options.sortable = lang.isUndefined(options.sortable) ? false : options.sortable;
       this.options.useButtons = lang.isUndefined(options.useButtons) ? true : options.useButtons;
-      this.options.editable = lang.isUndefined(options.editable) ? true : options.editable;      
+      this.options.editable = lang.isUndefined(options.editable) ? true : options.editable;
       this.options.elementType = options.elementType || {
         type: 'table'
       };
@@ -99,10 +99,10 @@
 
       // Option Collapsible
       if (this.options.legend != '' && this.options.collapsible) {
-        var collapseImg = inputEx.cn('div', {
+        this.collapseImg = inputEx.cn('div', {
           className: 'inputEx-ListField-collapseImg'
         }, null, ' ');
-        this.legend.appendChild(collapseImg);
+        this.legend.appendChild(this.collapseImg);
         inputEx.sn(this.fieldContainer, {
           className: 'inputEx-Expanded'
         });
@@ -147,7 +147,8 @@
       // Collapsed at creation ?
       if (this.options.collapsed) {
         this.toggleCollapse();
-      }      
+      }
+
     },
 
     /**
@@ -170,6 +171,14 @@
       } else {
         Dom.replaceClass(this.fieldContainer, 'inputEx-Collapsed', 'inputEx-Expanded');
       }
+    },
+
+    toggleCollapseImage: function(){
+      if (this.subFields.length == 0 && this.options.collapsible){
+        Dom.setStyle(this.collapseImg, 'display', 'none');
+      }else if (this.subFields.length > 0 && this.options.collapsible){
+        Dom.setStyle(this.collapseImg, 'display', '');
+      }      
     },
 
     /**
@@ -216,10 +225,10 @@
      * @param {Array} value The list of values to set
      * @param {boolean} [sendUpdatedEvt] (optional) Wether this setValue should fire the updatedEvt or not (default is true, pass false to NOT send the event)
      */
-    setValue: function(value, sendUpdatedEvt) {
+    setValue: function(value, sendUpdatedEvt) {      
       if (!lang.isArray(value) && value != '') {
-        console.log(value)
-        throw new Error("inputEx.ListField.setValue expected an array, got " + (typeof value));
+        //if the value is not an array, make it one
+        value = [value]        
       }
 
       // Set the values (and add the lines if necessary)
@@ -272,6 +281,8 @@
 
       // Adds it to the local list
       this.subFields.push(subFieldEl);
+
+      this.toggleCollapseImage();
 
       return subFieldEl;
     },
@@ -530,6 +541,7 @@
       this.fireUpdatedEvt();
     },
 
+
     /**
      * Remove the line from the dom and the subField from the list.
      * @param {integer} index The index of the element to remove
@@ -543,6 +555,8 @@
 
       // Remove the element
       elementDiv.parentNode.removeChild(elementDiv);
+
+      this.toggleCollapseImage();
 
       //destroy the field
       //field.destroy();

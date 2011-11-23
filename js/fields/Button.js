@@ -20,19 +20,29 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
    setOptions: function(options) {
       inputEx.ButtonField.superclass.setOptions.call(this, options);
       
-      this.options.xsl = options.xsl;
+      this.options.xsl = options.xsl || null;
+      this.options.screenflow = options.screenflow || null;
       this.options.action = options.action;
-      this.options.name = options.name || "Button-" + Dom.generateId();
+      this.options.name = this.parseName(options.name)
       this.options.id = this.generateId(options);
       this.options.className = options.className || "inputEx-ButtonField";
+
       if(this.options.action == 'transform'){
          this.options.className += " inputEx-ButtonField-Action-Transform";
+      };
+
+      if(this.options.action == 'screen flow'){
+         this.options.className += " inputEx-ButtonField-Action-ScreenFlow";
+      };
+
+      if(this.options.action == 'submit'){
+        this.options.type = 'submit';
+      }else{
+        this.options.type = 'button';
       }
+
       this.options.parentEl = lang.isString(options.parentEl) ? Dom.get(options.parentEl) : options.parentEl;
-      
-      // default type === "submit"
-      this.options.type = (options.type === "link" || options.type === "javascript" || options.type === "next" || options.type === "previous") ? options.type : "submit";
-      
+            
       // value is the text displayed inside the button (<input type="submit" value="Submit" /> convention...)
       this.options.value = options.value;
       
@@ -99,14 +109,13 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
      this.divEl.appendChild(inputEx.cn('div', null, {
        clear: 'both'
      }, " "));
-
    },   
       
    /**
     * render a slider widget
     */
    renderComponent: function() {
-      this.el = inputEx.cn('input', {type: "button", name: this.options.name, value: this.options.label, className: this.options.className, id:this.options.id + '-button', 'data-xsl': this.options.xsl});
+      this.el = inputEx.cn('input', {type: this.options.type, name: this.options.name, value: this.options.label, className: this.options.className, id:this.options.id + '-button', 'data-xsl': this.options.xsl, 'data-screenflow': this.getScreenFlowKey() });
       
       Dom.addClass(this.el,"inputEx-Button");
       
@@ -115,19 +124,30 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
       this.initEvents();
       
    },
-   
+
+   getScreenFlowKey: function(){
+      if(this.options.screenflow){
+        return this.options.screenflow.split("@_@@_@")[1];
+      }
+
+      return null;
+   },
 
    setFieldName: function(name){
       this.el.name = name;
    },
 
-   setValue: function(){
-      
+   setValue: function(value){
+      if( this.options.xsl && (typeof value === 'undefined' || value == null || value == '')){
+        Dom.setStyle(this.divEl, 'display', 'none');
+      }else{
+        Dom.setStyle(this.divEl, 'display', '');
+      }
    },
 
    getValue: function(path){
+      path = path ? path : this.options.name;
       this.setFieldName(path);
-      return path;
    }
    
 });
@@ -157,12 +177,18 @@ inputEx.registerType("button", inputEx.ButtonField, [{
     type: "select",
     label: "Action",
     name: "action",
-    choices: ['','transform'],
+    choices: ['','transform', 'screen flow (overlay)', 'submit'],
     required: false
   },{
     type: "string",
     label: "XSL",
     name: "xsl",
+    required: false
+  }, {
+    type: "dynamicscreenflow",
+    label: "Flow",
+    name: "screenflow",
+    typeInvite: "Start typing a flow name",
     required: false
   }
 ], true);

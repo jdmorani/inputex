@@ -302,7 +302,7 @@
       var o = {};
       for (var i = 0; i < this.inputs.length; i++) {
         var v = null;
-        var local_path = this.inputs[i].options.name + (['table','list'].indexOf(this.inputs[i].type) >= 0 ? "[" + i + "]" : "");
+        var local_path = this.inputs[i].options.name.split('@_@@_@')[0] + (['table','list'].indexOf(this.inputs[i].type) >= 0 ? "[" + i + "]" : "");
         local_path = !path ? local_path : path + "." + local_path
         if (['button', 'list', 'group', 'table'].indexOf(this.inputs[i].type) >= 0){
           if(this.inputs[i].type == 'list') local_path = path;            
