@@ -31,7 +31,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
          this.options.className += " inputEx-ButtonField-Action-Transform";
       };
 
-      if(this.options.action == 'screen flow'){
+      if(this.options.action == 'screen flow (overlay)'){
          this.options.className += " inputEx-ButtonField-Action-ScreenFlow";
       };
 
