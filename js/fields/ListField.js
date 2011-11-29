@@ -112,6 +112,10 @@
         this.legend.appendChild(inputEx.cn("span", null, null, " " + this.options.legend));
       }
 
+      if (!lang.isUndefined(this.options.legend) && this.options.legend !== '') {
+        this.legend.appendChild(inputEx.cn("a", {className: 'inputEx-link-top'}, null, "Back to top"));
+      }
+
       if (this.options.collapsible || (!lang.isUndefined(this.options.legend) && this.options.legend !== '')) {
         this.fieldContainer.appendChild(this.legend);
       }

@@ -104,6 +104,10 @@
         this.fieldset.appendChild(this.legend);
       }
 
+      if (!lang.isUndefined(this.options.legend) && this.options.legend !== '') {
+        this.legend.appendChild(inputEx.cn("a", {className: 'inputEx-link-top'}, null, "Back to top"));
+      }
+
       // Iterate this.createInput on input fields
       for (var i = 0; i < this.options.fields.length; i++) {
         var fieldOptions = this.options.fields[i];
