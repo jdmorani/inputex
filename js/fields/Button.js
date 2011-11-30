@@ -138,11 +138,11 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
    },
 
    setValue: function(value){
-      if( this.options.xsl && (typeof value === 'undefined' || value == null || value == '')){
-        Dom.setStyle(this.divEl, 'display', 'none');
-      }else{
-        Dom.setStyle(this.divEl, 'display', '');
-      }
+      // if( this.options.xsl && (typeof value === 'undefined' || value == null || value == '')){
+      //   Dom.setStyle(this.divEl, 'display', 'none');
+      // }else{
+      //   Dom.setStyle(this.divEl, 'display', '');
+      // }
    },
 
    getValue: function(path){
