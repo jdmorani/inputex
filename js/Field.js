@@ -113,7 +113,7 @@
       var parentFieldId = null;
 
       if(typeof this.parentField !== 'undefined' && typeof this.parentField.options.name !== 'undefined')
-        var parentFieldId = this.parentField.options.id;
+        parentFieldId = this.parentField.options.id;
 
       //get the actual field name, making sure there is no dot in the name
       var fieldName = (!this.options.name || this.options.name == '' ? Dom.generateId() : this.options.name).replace(/\./g, "_");

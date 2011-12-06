@@ -138,7 +138,7 @@
           group.inputs[i].setValue(fields);
         }
       }
-    },
+    }
 
 
   });

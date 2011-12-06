@@ -25,17 +25,21 @@
  *
  * </ul>
  */
-inputEx.widget.DataTable = function(options) {
+inputEx.DataTable = function(options) {
    
-   this.setOptions(options);
+   inputEx.DataTable.superclass.constructor.call(this, options);
+
+   // this.setOptions(options);
    
-   this.render();
+   // this.render();
    
-   this.initEvents();
+   // this.initEvents();
 	
 };
 
-inputEx.widget.DataTable.prototype = {
+//inputEx.widget.DataTable.prototype = {
+
+lang.extend(inputEx.DataTable, inputEx.Field, {
    
    /**
     * Set the options
@@ -43,10 +47,11 @@ inputEx.widget.DataTable.prototype = {
    setOptions: function(options) {
 
       this.options = {};
+
       this.options.id = options.id || Dom.generateId();
       this.options.parentEl = lang.isString(options.parentEl) ? Dom.get(options.parentEl) : options.parentEl;
       
-		this.options.columnDefs = options.columnDefs;
+		  this.options.columnDefs = options.columnDefs;
 
       this.options.allowInsert = lang.isUndefined(options.allowInsert) ? true : options.allowInsert;
       this.options.allowModify = lang.isUndefined(options.allowModify) ? true : options.allowModify;
@@ -72,6 +77,12 @@ inputEx.widget.DataTable.prototype = {
       this.options.datatableOpts = options.datatableOpts;
       this.options.fields = options.fields;
 
+      this.options.fields = [{type: 'hidden', label: 'Id', name: 'id' },
+      {type: 'string', label: 'Date', name: 'date' },
+      {type: 'string', label: 'Quantity', name: 'quantity' },
+      {type: 'string', label: 'Amount', name: 'amount'},
+      {type: 'string', label: 'Title', name: 'title', required: true, showMsg: true }]
+
 		this.options.dialogId = options.dialogId || null;
 		this.options.dialogLabel = options.dialogLabel || "";
 		
@@ -91,9 +102,6 @@ inputEx.widget.DataTable.prototype = {
     * Init the events
     */
    initEvents: function() {
-      
-      // Call the rendering method when the container is available
-      Event.onAvailable(this.options.id, this.renderDatatable, this, true);
       
       // Table options
       if(this.options.showHideColumnsDlg) {
@@ -125,7 +133,7 @@ inputEx.widget.DataTable.prototype = {
    /**
     * Render the main container only (not the datatable)
     */
-   render: function() {
+   renderComponent: function() {
       
       /**
        * Main container 
@@ -139,6 +147,9 @@ inputEx.widget.DataTable.prototype = {
       // append it immediatly to the parent DOM element
       this.options.parentEl.appendChild(this.element);
       
+      // Call the rendering method when the container is available
+      //Event.onAvailable(this.element, this.renderDatatable, this, true);
+      this.renderDatatable();
    },
    
    
@@ -563,7 +574,7 @@ inputEx.widget.DataTable.prototype = {
       
    }
    
-};
+});
 
 
 msgs.saveText = "Save";
@@ -582,5 +593,17 @@ msgs.showColumnButton = "Show";
 msgs.hideColumnButton = "Hide";
 msgs.columnDialogTitle = "Choose which columns you would like to see";
 msgs.columnDialogCloseButton = "Close";
+
+// Register this class as "slider" type
+inputEx.registerType("data-table", inputEx.DataTable, [
+
+{
+    type: "dynamicfield",
+    label: "Field",
+    name: "name",    
+    required: true
+  }
+
+], true);
 
 })();
