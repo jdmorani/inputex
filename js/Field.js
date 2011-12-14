@@ -77,7 +77,8 @@
       this.options.label = options.label;
       this.options.description = options.description;
       this.options.placeholder = options.placeholder;
-      this.options.hide = options.hide;
+      this.options.hide = lang.isUndefined(options.hide) ? false : options.hide;
+      this.options.readonly = lang.isUndefined(options.readonly) ? false : options.readonly;
 
       // Define default messages
       this.options.messages = {};
@@ -85,7 +86,7 @@
       this.options.messages.invalid = (options.messages && options.messages.invalid) ? options.messages.invalid : inputEx.messages.invalid;
       //this.options.messages.valid = (options.messages && options.messages.valid) ? options.messages.valid : inputEx.messages.valid;
       // Other options
-      this.options.className = options.className ? options.className : 'inputEx-Field';
+      this.options.className = options.className ? options.className : 'inputEx-Field ' + this.options.name;
       this.options.required = lang.isUndefined(options.required) ? false : options.required;
       this.options.showMsg = lang.isUndefined(options.showMsg) ? false : options.showMsg;
       this.options.align = options.align;
@@ -256,6 +257,11 @@
         Dom.setStyle(this.divEl, 'display', 'none');
       else
         Dom.setStyle(this.divEl, 'display', '');
+
+      if(this.options.readonly)
+        this.disable();
+      else
+        this.enable();
 
     },
 
@@ -593,7 +599,12 @@
     label: "Hide?",
     name: "hide",
     value: false
-  } 
+  },{
+    type: "boolean",
+    label: "readonly?",
+    name: "readonly",
+    value: false
+  },  
   ];
 
 })();
