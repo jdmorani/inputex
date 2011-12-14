@@ -115,7 +115,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
     * render a slider widget
     */
    renderComponent: function() {
-      this.el = inputEx.cn('input', {type: this.options.type, name: this.options.name, value: this.options.label, className: this.options.className, id:this.options.id + '-button', 'data-xsl': this.options.xsl, 'data-screenflow': this.getScreenFlowKey() });
+      this.el = inputEx.cn('input', {type: this.options.type, name: this.options.value, value: this.options.label, className: this.options.className, id:this.options.id + '-button', 'data-xsl': this.options.xsl, 'data-screenflow': this.getScreenFlowKey() });
       
       Dom.addClass(this.el,"inputEx-Button");
       
@@ -138,16 +138,17 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
    },
 
    setValue: function(value){
-      // if( this.options.xsl && (typeof value === 'undefined' || value == null || value == '')){
-      //   Dom.setStyle(this.divEl, 'display', 'none');
-      // }else{
-      //   Dom.setStyle(this.divEl, 'display', '');
-      // }
+      if( this.options.action == 'transform' && (typeof value === 'undefined' || value == null || value == '')){
+        Dom.setStyle(this.divEl, 'display', 'none');
+      }else{
+        Dom.setStyle(this.divEl, 'display', '');
+      }
    },
 
    getValue: function(path){
       path = path ? path : this.options.name;
       this.setFieldName(path);
+      return path;
    }
    
 });
