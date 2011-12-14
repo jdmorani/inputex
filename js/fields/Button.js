@@ -135,6 +135,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
 
    setFieldName: function(name){
       this.el.name = name;
+      this.options.value = name;
    },
 
    setValue: function(value){
@@ -146,9 +147,9 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
    },
 
    getValue: function(path){
-      path = path ? path : this.options.name;
-      this.setFieldName(path);
-      return path;
+      if(typeof path !== 'undefined' && path)
+        this.setFieldName(path);
+      return path | this.options.value;
    }
    
 });
