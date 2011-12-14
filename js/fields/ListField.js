@@ -79,7 +79,7 @@
       //get the parentfield name
       var elementTypeName = 'root';
 
-      if(typeof options.elementType !== 'undefined' && options.elementType.name !== 'undefined')
+      if(typeof options.elementType !== 'undefined' && typeof options.elementType.name !== 'undefined')
         elementTypeName = options.elementType.name;
 
       var id = elementTypeName + '-List';
