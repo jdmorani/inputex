@@ -177,7 +177,7 @@
     render: function() {
       // Create a DIV element to wrap the editing el and the image
       this.divEl = inputEx.cn('div', {
-        className: 'inputEx-fieldWrapper'
+        className: 'inputEx-fieldWrapper ' + this.options.name + 'inputEx-fieldWrapper'
       });
       if (this.options.id) {
         this.divEl.id = this.options.id;
@@ -209,7 +209,7 @@
       if (YAHOO.lang.isString(this.options.label)) {
         this.labelDiv = inputEx.cn('div', {
           id: this.divEl.id + '-label-wrapper',
-          className: 'inputEx-label',
+          className: 'inputEx-label ' + this.options.name + '-inputEx-label',
           'for': this.divEl.id + '-field'
         });
         this.labelEl = inputEx.cn('label', {id: this.options.id + '-label' }, null, this.options.label === "" ? "&nbsp;" : this.options.label);
@@ -242,7 +242,7 @@
       if (this.options.description) {
         this.fieldContainer.appendChild(inputEx.cn('div', {
           id: this.divEl.id + '-desc',
-          className: 'inputEx-description'
+          className: 'inputEx-description ' + this.options.name + '-inputEx-description'
         }, null, this.options.description));
       }
 
@@ -472,7 +472,7 @@
       }
       if (!this.msgEl) {
         this.msgEl = inputEx.cn('div', {
-          className: 'inputEx-message'
+          className: 'inputEx-message ' + this.options.name + '-inputEx-message'
         });
         try {
           var divElements = this.divEl.getElementsByTagName('div');
