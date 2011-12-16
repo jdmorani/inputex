@@ -304,8 +304,7 @@
         var v = null;
         var local_path = this.inputs[i].options.name.split('@_@@_@')[0] + (['table','list'].indexOf(this.inputs[i].type) >= 0 ? "[" + i + "]" : "");
         local_path = !path ? local_path : path + "." + local_path
-        if (['button', 'list', 'group', 'table'].indexOf(this.inputs[i].type) >= 0 &&
-            (['list', 'group', 'table'].indexOf(this.inputs[i].parentField.type) && path)){
+        if (['button', 'list', 'group', 'table'].indexOf(this.inputs[i].type) >= 0){
           if(this.inputs[i].type == 'list') local_path = path;            
           v = this.inputs[i].getValue(local_path);
         } else{

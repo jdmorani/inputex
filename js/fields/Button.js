@@ -25,7 +25,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
       this.options.action = options.action;
       this.options.name = this.parseName(options.name)
       this.options.id = this.generateId(options);
-      this.options.className = options.className || "inputEx-ButtonField";
+      this.options.className = options.className || "inputEx-ButtonField " + this.options.id + '-inputEx-ButtonField';
 
       if(this.options.action == 'transform'){
          this.options.className += " inputEx-ButtonField-Action-Transform";
@@ -146,9 +146,10 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
    },
 
    getValue: function(path){
+      if (['list', 'group', 'table'].indexOf(this.parentField.type) >=0 && (!path || !path.match(/\./)))  return;
+      if(lang.isUndefined(path)) path = null;
       path = path ? path : this.options.name;
       this.setFieldName(path);
-      return path;
    }
    
 });
