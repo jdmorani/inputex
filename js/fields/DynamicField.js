@@ -190,7 +190,7 @@
      */
     setValue: function(value, sendUpdatedEvt) {      
       this.hiddenEl.value = value || "";
-      this.el.value  =  value.split('@_@@_@')[0] || "";
+      this.el.value  =  this.hiddenEl.value.split('@_@@_@')[0] || "";
       // "inherited" from inputex.Field :
       //    (can't inherit of inputex.StringField because would set this.el.value...)
       //
@@ -244,18 +244,19 @@
         return this.options.required ? inputEx.stateRequired : inputEx.stateEmpty;
       }
 
-      // if the field is empty :
-      if (this.hiddenEl.value.indexOf('@_@@_@') >= 0) {
-        return 'linked';
-      }
+      if(this.parentField.type != 'multifield'){
+        // if the field is empty :
+        if (this.hiddenEl.value.indexOf('@_@@_@') >= 0) {
+          return 'linked';
+        }
 
-      return 'unlinked';
+        return 'unlinked';
+      }
     }
 
   });
 
   // Register this class as "select" type
-  inputEx.registerType("dynamicfield", inputEx.DynamicField, [{    
-  }]);
-
+  inputEx.registerType("dynamicfield", inputEx.DynamicField, [
+  ]);
 }());
