@@ -25,7 +25,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
       this.options.action = options.action;
       this.options.name = this.parseName(options.name)
       this.options.id = this.generateId(options);
-      this.options.className = options.className || "inputEx-ButtonField " + this.options.id + '-inputEx-ButtonField';
+      this.options.className = options.className || "inputEx-ButtonField " + this.options.name + '-inputEx-ButtonField';
 
       if(this.options.action == 'transform'){
          this.options.className += " inputEx-ButtonField-Action-Transform";
@@ -63,7 +63,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
    render: function() {
      // Create a DIV element to wrap the editing el and the image
      this.divEl = inputEx.cn('div', {
-       className: 'inputEx-fieldWrapper'
+       className: 'inputEx-fieldWrapper ' + this.options.name + '-inputEx-fieldWrapper'
      });
      if (this.options.id) {
        this.divEl.id = this.options.id;
@@ -139,9 +139,9 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
 
    setValue: function(value){
       if( this.options.action == 'transform' && (typeof value === 'undefined' || value == null || value == '')){
-        Dom.setStyle(this.divEl, 'display', 'none');
+        Dom.setStyle(this.fieldContainer, 'display', 'none');
       }else{
-        Dom.setStyle(this.divEl, 'display', '');
+        Dom.setStyle(this.fieldContainer, 'display', '');
       }
    },
 
