@@ -46,6 +46,26 @@ lang.extend(inputEx.DataTable, inputEx.Field, {
     */
    setOptions: function(options) {
 
+
+var myDataSource = new YAHOO.util.DataSource([ 
+       {id:"po-0167", date:new Date(1980, 2, 24), quantity:1, amount:4, title:"A Book About Nothing", category: "SF"}, 
+       {id:"po-0783", date:new Date("January 3, 1983"), quantity:null, amount:12.12345, title:"The Meaning of Life", category: "Novel"}, 
+       {id:"po-0297", date:new Date(1978, 11, 12), quantity:12, amount:1.25, title:"This Book Was Meant to Be Read Aloud", category: "SF"}, 
+       {id:"po-1482", date:new Date("March 11, 1985"), quantity:6, amount:3.5, title:"Read Me Twice", category: "Philosophy"} 
+ ]); 
+  myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY; 
+  myDataSource.responseSchema = { fields: ["id","date","quantity","amount","title", "category"] }; 
+   
+  var myFields = [ 
+      {type: 'hidden', label: 'Id', name: 'id' }, 
+      {type: 'date', label: 'Date', name: 'date' }, 
+      {type: 'integer', label: 'Quantity', name: 'quantity' }, 
+      {type: 'number', label: 'Amount', name: 'amount'}, 
+      {type: 'string', label: 'Title', name: 'title', required: true, showMsg: true }, 
+      {type: 'select', label: 'Category', name: 'category', choices: ['SF','Novel','Philosophy'] } 
+  ]; 
+
+
       this.options = {};
 
       this.options.id = options.id || Dom.generateId();
@@ -62,17 +82,19 @@ lang.extend(inputEx.DataTable, inputEx.Field, {
       this.options.datasource = options.datasource;
 
 		// Create a datasource if it does not exist, from the datasourceConfig Object
-		if(!options.datasource && options.datasourceConfig) {
-			var ds = new YAHOO.util.DataSource(options.datasourceConfig.url), fields = [];
-			if(options.datasourceConfig.keys) {
-				for ( var i = 0 ; i < options.datasourceConfig.keys.length ; i++ ) {
-	         	fields.push({ key: options.datasourceConfig.keys[i] });
-	      	}
-			}
-	      ds.responseType = options.datasourceConfig.responseType || YAHOO.util.DataSource.TYPE_JSON;
-	      ds.responseSchema = options.datasourceConfig.responseSchema || { resultsList : "Result", fields : fields};
-			this.options.datasource = ds;
-		}
+		//if(!options.datasource && options.datasourceConfig) {
+		//	var ds = new YAHOO.util.DataSource(options.datasourceConfig.url), fields = [];
+		//	if(options.datasourceConfig.keys) {
+		//		for ( var i = 0 ; i < options.datasourceConfig.keys.length ; i++ ) {
+	  //       	fields.push({ key: options.datasourceConfig.keys[i] });
+	  //    	}
+		//	}
+	  //    ds.responseType = options.datasourceConfig.responseType || YAHOO.util.DataSource.TYPE_JSON;
+	  //    ds.responseSchema = options.datasourceConfig.responseSchema || { resultsList : "Result", fields : fields};
+		//	this.options.datasource = ds;
+		//}
+
+    this.options.datasource = myDataSource;
 
       this.options.datatableOpts = options.datatableOpts;
       this.options.fields = options.fields;
@@ -602,7 +624,13 @@ inputEx.registerType("data-table", inputEx.DataTable, [
     label: "Field",
     name: "name",    
     required: true
-  }
+  },
+  { 
+    type: 'list', 
+    label: 'Fields', 
+    name: 'fields', 
+    elementType: {type: 'dynamicfield'} 
+  }  
 
 ], true);
 
