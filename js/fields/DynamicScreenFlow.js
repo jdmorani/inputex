@@ -203,8 +203,8 @@
 
   });
 
-  // Register this class as "select" type
-  inputEx.registerType("dynamicscreenflow", inputEx.DynamicScreenFlow, [{    
-  }]);
+  // // Register this class as "select" type
+  // inputEx.registerType("dynamicscreenflow", inputEx.DynamicScreenFlow, [{    
+  // }]);
 
 }());
