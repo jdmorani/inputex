@@ -550,7 +550,7 @@
   };
 
   inputEx.Field.groupOptions = [{
-    type: "dynamicfield",
+    type: "autocomplete-field",
     label: "Field",
     name: "name",    
     required: true

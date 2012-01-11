@@ -139,9 +139,9 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
 
    setValue: function(value){
       if( this.options.action == 'transform' && (typeof value === 'undefined' || value == null || value == '')){
-        Dom.setStyle(this.fieldContainer, 'display', 'none');
+        Dom.setStyle(this.fieldContainer, 'visibility', 'hidden');
       }else{
-        Dom.setStyle(this.fieldContainer, 'display', '');
+        Dom.setStyle(this.fieldContainer, 'visibility', 'visible');
       }
    },
 
@@ -156,7 +156,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
 
 // Register this class as "slider" type
 inputEx.registerType("button", inputEx.ButtonField, [{
-    type: "dynamicfield",
+    type: "autocomplete-field",
     label: "Field",
     name: "name",
     choices: [''],
@@ -187,7 +187,7 @@ inputEx.registerType("button", inputEx.ButtonField, [{
     name: "xsl",
     required: false
   }, {
-    type: "dynamicscreenflow",
+    type: "autocomplete-screen-flow",
     label: "Flow",
     name: "screenflow",
     typeInvite: "Start typing a flow name",

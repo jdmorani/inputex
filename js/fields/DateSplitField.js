@@ -168,7 +168,7 @@ inputEx.messages.yearTypeInvite = "YYYY";
 
 // Register this class as "datesplit" type
 inputEx.registerType("datesplit", inputEx.DateSplitField, [{
-    type: "dynamicfield",
+    type: "autocomplete-field",
     label: "Field",
     name: "name",
     choices: [],

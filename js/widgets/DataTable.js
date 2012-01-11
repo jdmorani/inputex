@@ -10,7 +10,7 @@
  * <ul>
  *    <li>parentEl: DOMelement in which we have to insert the datatable</li>
  *
- *		<li>datasource (or datasourceConfig)</li>
+ *    <li>datasource (or datasourceConfig)</li>
  *    <li>datatableOpts: additionnal datatable options</li>
  *    <li>fields: inputEx fields</li>
  *    <li>dialogLabel: title of the dialog</li>
@@ -21,57 +21,32 @@
  *    <li>allowModify: default true</li>
  *    <li>allowDelete: default true</li>
  *    <li>showHideColumnsDlg: add a link to a dialog to show/hide columns</li>
- * 	<li>panelConfig: (optional) YUI's dialog panelConfig object</li>
+ *  <li>panelConfig: (optional) YUI's dialog panelConfig object</li>
  *
  * </ul>
  */
-inputEx.DataTable = function(options) {
+inputEx.widget.DataTable = function(options) {
    
-   inputEx.DataTable.superclass.constructor.call(this, options);
-
-   // this.setOptions(options);
+   this.setOptions(options);
    
-   // this.render();
+   this.render();
    
-   // this.initEvents();
-	
+   this.initEvents();
+  
 };
 
-//inputEx.widget.DataTable.prototype = {
-
-lang.extend(inputEx.DataTable, inputEx.Field, {
+inputEx.widget.DataTable.prototype = {
    
    /**
     * Set the options
     */
    setOptions: function(options) {
 
-
-var myDataSource = new YAHOO.util.DataSource([ 
-       {id:"po-0167", date:new Date(1980, 2, 24), quantity:1, amount:4, title:"A Book About Nothing", category: "SF"}, 
-       {id:"po-0783", date:new Date("January 3, 1983"), quantity:null, amount:12.12345, title:"The Meaning of Life", category: "Novel"}, 
-       {id:"po-0297", date:new Date(1978, 11, 12), quantity:12, amount:1.25, title:"This Book Was Meant to Be Read Aloud", category: "SF"}, 
-       {id:"po-1482", date:new Date("March 11, 1985"), quantity:6, amount:3.5, title:"Read Me Twice", category: "Philosophy"} 
- ]); 
-  myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY; 
-  myDataSource.responseSchema = { fields: ["id","date","quantity","amount","title", "category"] }; 
-   
-  var myFields = [ 
-      {type: 'hidden', label: 'Id', name: 'id' }, 
-      {type: 'date', label: 'Date', name: 'date' }, 
-      {type: 'integer', label: 'Quantity', name: 'quantity' }, 
-      {type: 'number', label: 'Amount', name: 'amount'}, 
-      {type: 'string', label: 'Title', name: 'title', required: true, showMsg: true }, 
-      {type: 'select', label: 'Category', name: 'category', choices: ['SF','Novel','Philosophy'] } 
-  ]; 
-
-
       this.options = {};
-
       this.options.id = options.id || Dom.generateId();
       this.options.parentEl = lang.isString(options.parentEl) ? Dom.get(options.parentEl) : options.parentEl;
       
-		  this.options.columnDefs = options.columnDefs;
+    this.options.columnDefs = options.columnDefs;
 
       this.options.allowInsert = lang.isUndefined(options.allowInsert) ? true : options.allowInsert;
       this.options.allowModify = lang.isUndefined(options.allowModify) ? true : options.allowModify;
@@ -81,42 +56,34 @@ var myDataSource = new YAHOO.util.DataSource([
       
       this.options.datasource = options.datasource;
 
-		// Create a datasource if it does not exist, from the datasourceConfig Object
-		//if(!options.datasource && options.datasourceConfig) {
-		//	var ds = new YAHOO.util.DataSource(options.datasourceConfig.url), fields = [];
-		//	if(options.datasourceConfig.keys) {
-		//		for ( var i = 0 ; i < options.datasourceConfig.keys.length ; i++ ) {
-	  //       	fields.push({ key: options.datasourceConfig.keys[i] });
-	  //    	}
-		//	}
-	  //    ds.responseType = options.datasourceConfig.responseType || YAHOO.util.DataSource.TYPE_JSON;
-	  //    ds.responseSchema = options.datasourceConfig.responseSchema || { resultsList : "Result", fields : fields};
-		//	this.options.datasource = ds;
-		//}
-
-    this.options.datasource = myDataSource;
+    // Create a datasource if it does not exist, from the datasourceConfig Object
+    if(!options.datasource && options.datasourceConfig) {
+      var ds = new YAHOO.util.DataSource(options.datasourceConfig.url), fields = [];
+      if(options.datasourceConfig.keys) {
+        for ( var i = 0 ; i < options.datasourceConfig.keys.length ; i++ ) {
+            fields.push({ key: options.datasourceConfig.keys[i] });
+          }
+      }
+        ds.responseType = options.datasourceConfig.responseType || YAHOO.util.DataSource.TYPE_JSON;
+        ds.responseSchema = options.datasourceConfig.responseSchema || { resultsList : "Result", fields : fields};
+      this.options.datasource = ds;
+    }
 
       this.options.datatableOpts = options.datatableOpts;
       this.options.fields = options.fields;
 
-      this.options.fields = [{type: 'hidden', label: 'Id', name: 'id' },
-      {type: 'string', label: 'Date', name: 'date' },
-      {type: 'string', label: 'Quantity', name: 'quantity' },
-      {type: 'string', label: 'Amount', name: 'amount'},
-      {type: 'string', label: 'Title', name: 'title', required: true, showMsg: true }]
-
-		this.options.dialogId = options.dialogId || null;
-		this.options.dialogLabel = options.dialogLabel || "";
-		
-		this.options.panelConfig = options.panelConfig || {
-			constraintoviewport: true, 
-			underlay:"shadow", 
-			close:true, 
-			fixedcenter: true,
-			visible:true, 
-			draggable:true,
-			modal: true
-		};
+    this.options.dialogId = options.dialogId || null;
+    this.options.dialogLabel = options.dialogLabel || "";
+    
+    this.options.panelConfig = options.panelConfig || {
+      constraintoviewport: true, 
+      underlay:"shadow", 
+      close:true, 
+      fixedcenter: true,
+      visible:true, 
+      draggable:true,
+      modal: true
+    };
    },
    
    
@@ -125,37 +92,40 @@ var myDataSource = new YAHOO.util.DataSource([
     */
    initEvents: function() {
       
+      // Call the rendering method when the container is available
+      Event.onAvailable(this.options.id, this.renderDatatable, this, true);
+      
       // Table options
       if(this.options.showHideColumnsDlg) {
          Event.addListener(this.tableOptions, 'click', this.showTableOptions, this, true);
       }
 
       /**
-   	 * @event Event fired when an item is removed
-   	 * @param {YAHOO.widget.Record} Removed record
-   	 * @desc YAHOO custom event fired when an item is removed
-   	 */
-    	this.itemRemovedEvt = new util.CustomEvent('itemRemoved', this);
+     * @event Event fired when an item is removed
+     * @param {YAHOO.widget.Record} Removed record
+     * @desc YAHOO custom event fired when an item is removed
+     */
+      this.itemRemovedEvt = new util.CustomEvent('itemRemoved', this);
 
       /**
-   	 * @event Event fired when an item is added
-    	 * @param {YAHOO.widget.Record} Added record
-   	 * @desc YAHOO custom event fired when an item is added
-   	 */
-    	this.itemAddedEvt = new util.CustomEvent('itemAdded', this);
+     * @event Event fired when an item is added
+       * @param {YAHOO.widget.Record} Added record
+     * @desc YAHOO custom event fired when an item is added
+     */
+      this.itemAddedEvt = new util.CustomEvent('itemAdded', this);
 
       /**
-   	 * @event Event fired when an item is modified
-    	 * @param {YAHOO.widget.Record} Modified record
-   	 * @desc YAHOO custom event fired when an item is modified
-   	 */
-    	this.itemModifiedEvt = new util.CustomEvent('itemModified', this);
+     * @event Event fired when an item is modified
+       * @param {YAHOO.widget.Record} Modified record
+     * @desc YAHOO custom event fired when an item is modified
+     */
+      this.itemModifiedEvt = new util.CustomEvent('itemModified', this);
    },
    
    /**
     * Render the main container only (not the datatable)
     */
-   renderComponent: function() {
+   render: function() {
       
       /**
        * Main container 
@@ -169,9 +139,6 @@ var myDataSource = new YAHOO.util.DataSource([
       // append it immediatly to the parent DOM element
       this.options.parentEl.appendChild(this.element);
       
-      // Call the rendering method when the container is available
-      //Event.onAvailable(this.element, this.renderDatatable, this, true);
-      this.renderDatatable();
    },
    
    
@@ -182,21 +149,21 @@ var myDataSource = new YAHOO.util.DataSource([
       
       var columndefs = this.setColumnDefs();
 
-		/**
-		 * YUI's datatable instance
-		 */
+    /**
+     * YUI's datatable instance
+     */
       this.datatable = new YAHOO.widget.DataTable(this.element, columndefs, this.options.datasource, this.options.datatableOpts);
       this.datatable.subscribe('cellClickEvent', this._onCellClick, this, true);
 
-		// Automatically set up the paginator
-		if(this.options.datatableOpts && this.options.datatableOpts.paginator) {
-			this.datatable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
-				if(oPayload) {
-	        		oPayload.totalRecords = oResponse.meta.totalRecords;
-				}
-	        	return oPayload;
-	    	};
-		}
+    // Automatically set up the paginator
+    if(this.options.datatableOpts && this.options.datatableOpts.paginator) {
+      this.datatable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
+        if(oPayload) {
+              oPayload.totalRecords = oResponse.meta.totalRecords;
+        }
+            return oPayload;
+        };
+    }
             
       // Insert button
       if ( this.options.allowInsert ){
@@ -205,7 +172,7 @@ var myDataSource = new YAHOO.util.DataSource([
          this.options.parentEl.appendChild(this.insertButton);
       }
 
-		
+    
       // Set up editing flow
       var highlightEditableCell = function(oArgs) {
           var elCell = oArgs.target;
@@ -213,30 +180,30 @@ var myDataSource = new YAHOO.util.DataSource([
               this.highlightCell(elCell);
           }
       };
-		
-		// Locals
-		this.datatable.set("MSG_LOADING", msgs.loadingText );
-		this.datatable.set("MSG_EMPTY", msgs.emptyDataText );
-		this.datatable.set("MSG_ERROR", msgs.errorDataText );
+    
+    // Locals
+    this.datatable.set("MSG_LOADING", msgs.loadingText );
+    this.datatable.set("MSG_EMPTY", msgs.emptyDataText );
+    this.datatable.set("MSG_ERROR", msgs.errorDataText );
 
       this.datatable.subscribe("cellMouseoverEvent", highlightEditableCell);
       this.datatable.subscribe("cellMouseoutEvent", this.datatable.onEventUnhighlightCell);
 
    },
 
-	/**
-	 * Set the column definitions, create them if none from the fields, adds the modify and delete buttons
-	 */
-	setColumnDefs: function() {
-		
-		var columndefs = this.options.columnDefs || this.fieldsToColumndefs(this.options.fields);
+  /**
+   * Set the column definitions, create them if none from the fields, adds the modify and delete buttons
+   */
+  setColumnDefs: function() {
+    
+    var columndefs = this.options.columnDefs || this.fieldsToColumndefs(this.options.fields);
 
-    	// Adding modify column if we use form editing and if allowModify is true
+      // Adding modify column if we use form editing and if allowModify is true
       if(this.options.allowModify ) {
-    	   columndefs = columndefs.concat([{
-    	      key:'modify',
-    	      label:' ',
-    	      formatter:function(elCell) {
+         columndefs = columndefs.concat([{
+            key:'modify',
+            label:' ',
+            formatter:function(elCell) {
                elCell.innerHTML = msgs.modifyText;
                elCell.style.cursor = 'pointer';
             }
@@ -245,19 +212,19 @@ var myDataSource = new YAHOO.util.DataSource([
       
       // Adding delete column
       if(this.options.allowDelete) {
-      	 columndefs = columndefs.concat([{
-      	    key:'delete',
-      	    label:' ',
-      	    formatter:function(elCell) {
+         columndefs = columndefs.concat([{
+            key:'delete',
+            label:' ',
+            formatter:function(elCell) {
                elCell.innerHTML = msgs.deleteText;
                elCell.style.cursor = 'pointer';
             }
          }]);
       }
-		
-		return columndefs;
-	},
-	
+    
+    return columndefs;
+  },
+  
    /**
     * Render the dialog for row edition
     */
@@ -266,80 +233,80 @@ var myDataSource = new YAHOO.util.DataSource([
      var that = this;
       
      this.dialog = new inputEx.widget.Dialog({
-				id: this.options.dialogId,
-				inputExDef: {
-				         type: 'form',
-			            fields: this.options.fields,
-			            buttons: [
-			               {type: 'submit', value: msgs.saveText, onClick: function() { that.onDialogSave(); return false; /* prevent form submit */} },
-			               {type: 'link', value: msgs.cancelText, onClick: function() { that.onDialogCancel(); } }
-			            ]
-				      },
-				title: this.options.dialogLabel,
-				panelConfig: this.options.panelConfig
-		});
-		
-		// Add a listener on the closing button and hook it to onDialogCancel()
-		YAHOO.util.Event.addListener(that.dialog.close,"click",function(){
-			that.onDialogCancel();
-		},that);
-		
+        id: this.options.dialogId,
+        inputExDef: {
+                 type: 'form',
+                  fields: this.options.fields,
+                  buttons: [
+                     {type: 'submit', value: msgs.saveText, onClick: function() { that.onDialogSave(); return false; /* prevent form submit */} },
+                     {type: 'link', value: msgs.cancelText, onClick: function() { that.onDialogCancel(); } }
+                  ]
+              },
+        title: this.options.dialogLabel,
+        panelConfig: this.options.panelConfig
+    });
+    
+    // Add a listener on the closing button and hook it to onDialogCancel()
+    YAHOO.util.Event.addListener(that.dialog.close,"click",function(){
+      that.onDialogCancel();
+    },that);
+    
    },
 
-	/**
+  /**
     * When saving the Dialog
     */
    onDialogSave: function() {
-		
-		var newvalues, record;
-		
-	  	//Validate the Form
-	  	if ( !this.dialog.getForm().validate() ) return ;
-	   
-		// Update the record
-		if(!this.insertNewRecord){
-						
-			// Update the row
-			newvalues = this.dialog.getValue();
-			this.datatable.updateRow( this.selectedRecord , newvalues );
+    
+    var newvalues, record;
+    
+      //Validate the Form
+      if ( !this.dialog.getForm().validate() ) return ;
+     
+    // Update the record
+    if(!this.insertNewRecord){
+            
+      // Update the row
+      newvalues = this.dialog.getValue();
+      this.datatable.updateRow( this.selectedRecord , newvalues );
 
-			// Get the new record
-			record = this.datatable.getRecord(this.selectedRecord);
-			
-			// Fire the modify event
+      // Get the new record
+      record = this.datatable.getRecord(this.selectedRecord);
+      
+      // Fire the modify event
          this.itemModifiedEvt.fire(record);
 
-		}
-		// Adding new record
-		else{
-			// Insert a new row
-	      this.datatable.addRow({});
+    }
+    // Adding new record
+    else{
+      // Insert a new row
+        this.datatable.addRow({});
 
-			// Set the Selected Record
-			var rowIndex = this.datatable.getRecordSet().getLength() - 1;
-			this.selectedRecord = rowIndex;
-			
-			// Update the row
-			newvalues = this.dialog.getValue();
-			this.datatable.updateRow( this.selectedRecord , newvalues );
-			
-			// Get the new record
-			record = this.datatable.getRecord(this.selectedRecord);
-						
-			// Fire the add event
+      // Set the Selected Record
+      var rowIndex = this.datatable.getRecordSet().getLength() - 1;
+      this.selectedRecord = rowIndex;
+      
+      // Update the row
+      newvalues = this.dialog.getValue();
+      this.datatable.updateRow( this.selectedRecord , newvalues );
+      
+      // Get the new record
+      record = this.datatable.getRecord(this.selectedRecord);
+            
+      // Fire the add event
          this.itemAddedEvt.fire(record);
-		}
+    }
       
       this.dialog.hide();
    },
 
-	/**
+  /**
     * When canceling the Dialog
     */
-	onDialogCancel: function(){
-		this.insertNewRecord = false;
-		this.dialog.hide();
-	},
+  onDialogCancel: function(){
+    this.insertNewRecord = false;
+    this.dialog.hide();
+  },
 
    
    /**
@@ -365,8 +332,8 @@ var myDataSource = new YAHOO.util.DataSource([
       else if(column.key == 'modify') {
          this.onClickModify(rowIndex);
       } 
-      else {				
-      	this.onCellClick(ev,rowIndex);
+      else {        
+        this.onCellClick(ev,rowIndex);
       }
    },
 
@@ -388,23 +355,23 @@ var myDataSource = new YAHOO.util.DataSource([
       }
 
       // NOT Inserting new record
-		this.insertNewRecord = false;
-		
-		// Set the selected Record
-		this.selectedRecord = rowIndex;
-		
-		// Get the selected Record
-		var record = this.datatable.getRecord(this.selectedRecord);
-		
-		this.dialog.whenFormAvailable({
-			fn: function() {
-				this.dialog.setValue(record.getData());
-				this.dialog.show();
-			},
-			scope: this
-		});
-		
-	},
+    this.insertNewRecord = false;
+    
+    // Set the selected Record
+    this.selectedRecord = rowIndex;
+    
+    // Get the selected Record
+    var record = this.datatable.getRecord(this.selectedRecord);
+    
+    this.dialog.whenFormAvailable({
+      fn: function() {
+        this.dialog.setValue(record.getData());
+        this.dialog.show();
+      },
+      scope: this
+    });
+    
+  },
    
    /**
     * Insert button event handler
@@ -414,18 +381,18 @@ var myDataSource = new YAHOO.util.DataSource([
       if(!this.dialog) {
          this.renderDialog();
       }
-		
-		// Inserting new record
-		this.insertNewRecord = true;
-		
-		this.dialog.whenFormAvailable({
-			fn: function() {
-				this.dialog.getForm().clear();
-				this.dialog.show();
-			},
-			scope: this
-		});
-		
+    
+    // Inserting new record
+    this.insertNewRecord = true;
+    
+    this.dialog.whenFormAvailable({
+      fn: function() {
+        this.dialog.getForm().clear();
+        this.dialog.show();
+      },
+      scope: this
+    });
+    
    },
    
    /**
@@ -454,10 +421,10 @@ var myDataSource = new YAHOO.util.DataSource([
     */
    fieldsToColumndefs: function(fields) {
       var columndefs = [];
-    	for(var i = 0 ; i < fields.length ; i++) {
-    		columndefs.push( this.fieldToColumndef(fields[i]) );
-    	}
-    	return columndefs;
+      for(var i = 0 ; i < fields.length ; i++) {
+        columndefs.push( this.fieldToColumndef(fields[i]) );
+      }
+      return columndefs;
    },
 
    /**
@@ -487,15 +454,15 @@ var myDataSource = new YAHOO.util.DataSource([
 
       // Field formatter
       if(field.type == "date") {
-      	columnDef.formatter = YAHOO.widget.DataTable.formatDate;
+        columnDef.formatter = YAHOO.widget.DataTable.formatDate;
       }
-		else if(field.type == "integer" || field.type == "number") {
-			columnDef.formatter = YAHOO.widget.DataTable.formatNumber;
-			/*columnDef.sortOptions = {
-				defaultDir: "asc",
-				sortFunction: // TODO: sort numbers !!!
-			}*/
-		}
+    else if(field.type == "integer" || field.type == "number") {
+      columnDef.formatter = YAHOO.widget.DataTable.formatNumber;
+      /*columnDef.sortOptions = {
+        defaultDir: "asc",
+        sortFunction: // TODO: sort numbers !!!
+      }*/
+    }
       // TODO: other formatters
       return columnDef;
    },
@@ -509,21 +476,21 @@ var myDataSource = new YAHOO.util.DataSource([
       
       this.tableOptionsDlg = new YAHOO.widget.SimpleDialog( Dom.generateId(), {
               width: "30em",
-		        visible: false,
-		        modal: true,
-		        buttons: [ 
-				      { text:msgs.columnDialogCloseButton,  handler: function(e) { this.hide(); } }
+            visible: false,
+            modal: true,
+            buttons: [ 
+              { text:msgs.columnDialogCloseButton,  handler: function(e) { this.hide(); } }
               ],
               fixedcenter: true,
               constrainToViewport: true
-	   });
-	
-		Dom.addClass(this.tableOptionsDlg.element.firstChild, "inputex-datatable-columnsDlg");
-		
-	   this.tableOptionsDlg.bodyId = Dom.generateId();
-	   this.tableOptionsDlg.setHeader(msgs.columnDialogTitle);
-	   this.tableOptionsDlg.setBody("<div id='"+this.tableOptionsDlg.bodyId+"'></div>");
-	   this.tableOptionsDlg.render(document.body);
+     });
+  
+    Dom.addClass(this.tableOptionsDlg.element.firstChild, "inputex-datatable-columnsDlg");
+    
+     this.tableOptionsDlg.bodyId = Dom.generateId();
+     this.tableOptionsDlg.setHeader(msgs.columnDialogTitle);
+     this.tableOptionsDlg.setBody("<div id='"+this.tableOptionsDlg.bodyId+"'></div>");
+     this.tableOptionsDlg.render(document.body);
    },
    
    /**
@@ -591,12 +558,12 @@ var myDataSource = new YAHOO.util.DataSource([
                }
            }
            this.noNewCols = true;
-   	}
+    }
        this.tableOptionsDlg.show();
       
    }
    
-});
+};
 
 
 msgs.saveText = "Save";
@@ -615,23 +582,5 @@ msgs.showColumnButton = "Show";
 msgs.hideColumnButton = "Hide";
 msgs.columnDialogTitle = "Choose which columns you would like to see";
 msgs.columnDialogCloseButton = "Close";
-
-// Register this class as "slider" type
-inputEx.registerType("data-table", inputEx.DataTable, [
-
-{
-    type: "dynamicfield",
-    label: "Field",
-    name: "name",    
-    required: true
-  },
-  { 
-    type: 'list', 
-    label: 'Fields', 
-    name: 'fields', 
-    elementType: {type: 'dynamicfield'} 
-  }  
-
-], true);
 
 })();

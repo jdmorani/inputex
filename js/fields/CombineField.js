@@ -329,7 +329,7 @@
 
   // Register this class as "combine" type
   inputEx.registerType("combine", inputEx.CombineField, [{
-    type: "dynamicfield",
+    type: "autocomplete-field",
     label: "Field",
     name: "name",
     choices: [],

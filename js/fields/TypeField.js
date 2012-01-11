@@ -28,7 +28,7 @@ lang.extend(inputEx.TypeField, inputEx.Field, {
       
       // The list of all inputEx declared types to be used in the "type" selector
       var selectOptions = [];
-      var skipFields = ["form", "type", "dynamictable", "dynamicfield", "tablefield"]
+      var skipFields = ["form", "type", "dynamictable", "autocomplete-field", "tablefield"]
 
       if(this.getParentField().subFields)
 
