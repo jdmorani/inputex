@@ -157,7 +157,7 @@
      */
     setValue: function(value, sendUpdatedEvt) {      
       this.hiddenEl.value = value || "";
-      this.el.value  =  value.split('@_@@_@')[0] || "";
+      this.el.value  =  this.hiddenEl.value.split('@_@@_@')[0] || "";
       // "inherited" from inputex.Field :
       //    (can't inherit of inputex.StringField because would set this.el.value...)
       //
