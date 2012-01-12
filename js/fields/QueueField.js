@@ -29,7 +29,8 @@
       func: function(value){
         if(value){
           name_key = value.split('@_@@_@');
-          return "<div class='inputex-queue-placeholder'>["+ name_key[0] +"]</div><table id='queue-" + name_key[1]+ "' class='inputEx-queue' data-name='" + name_key[0] + "' data-key='" + name_key[1] + "'></table><div id='" + name_key[1] + "-pager'></div>"
+          return "<div class='inputex-queue-placeholder'>["+ name_key[0] +"]</div> \
+                  <table id='queue-" + name_key[1]+ "' class='inputEx-queue' data-name='" + name_key[0] + "' data-key='" + name_key[1] + "'></table><div id='" + name_key[1] + "-pager'></div>"                  
         }
       }       
     }    
