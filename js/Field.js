@@ -254,9 +254,9 @@
       }, " "));
 
       if(this.options.hide)
-        Dom.setStyle(this.divEl, 'display', 'none');
+        Dom.setStyle(this.divEl, 'visibility', 'hidden');
       else
-        Dom.setStyle(this.divEl, 'display', '');
+        Dom.setStyle(this.divEl, 'visibility', 'visible');
 
       if(this.options.readonly)
         this.disable();
