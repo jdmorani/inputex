@@ -24,12 +24,14 @@
 
       this.options.parentDynamicTable = this.retrieveParentDynamicTable(this);
 
+      this.options.include_all_tables = options.include_all_tables || false;
+
       if (typeof this.options.parentDynamicTable != 'undefined' && this.options.parentDynamicTable)
         this.options.table_key = this.options.parentDynamicTable.inputs[0].options.selectedValue;
       else
         this.options.table_key = '';
 
-      this.options.datasource = new YAHOO.util.XHRDataSource("<%=CaseCenter::Application.routes.url_helpers.admin_fields_path(:format => :json)%>?table_key=" + this.options.table_key + "&");
+      this.options.datasource = new YAHOO.util.XHRDataSource("<%=CaseCenter::Application.routes.url_helpers.admin_fields_path(:format => :json)%>?include_all_tables=" + this.options.include_all_tables +"&table_key=" + this.options.table_key + "&");
     },
 
     /**
@@ -92,7 +94,13 @@
 
   });
 
-  // Register this class as "select" type
-  inputEx.registerType("autocomplete-field", inputEx.CCAutoCompleteField);
+
+  // Register this class as "autocomplete-field" type
+  inputEx.registerType("autocomplete-field", inputEx.CCAutoCompleteField, [{
+      type: "boolean",
+      label: "include all tables",
+      name: "include_all_tables"
+    }
+  ], false);
 
 }());
