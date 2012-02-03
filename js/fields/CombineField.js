@@ -260,6 +260,8 @@
     validate: function() {
       var response = true;
 
+      if(this.isHidden()) return true;
+
       var val = this.getValue();
 
       // empty field

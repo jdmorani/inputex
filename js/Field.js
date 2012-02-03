@@ -265,6 +265,10 @@
 
     },
 
+    isHidden: function(){
+      return (Dom.getStyle(this.divEl, 'display') == 'none' ||  Dom.getStyle(this.fieldContainer, 'display') == 'none');
+    },
+
     /**
      * Fire the "updated" event (only if the field validated)
      * Escape the stack using a setTimeout

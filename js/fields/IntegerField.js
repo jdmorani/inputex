@@ -52,6 +52,8 @@ YAHOO.lang.extend(inputEx.IntegerField, inputEx.StringField, {
     */
    validate: function() {
       
+      if(this.isHidden()) return true;         
+
       var v = this.getValue(), str_value = inputEx.IntegerField.superclass.getValue.call(this);
       
       // empty field

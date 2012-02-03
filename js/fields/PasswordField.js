@@ -109,6 +109,8 @@ lang.extend(inputEx.PasswordField, inputEx.StringField, {
 	 * The validation adds the confirmation password field support
 	 */
 	validate: function() {
+	   if(this.isHidden()) return true;		
+
 	   if(this.options.confirmPasswordField) {
 	      if(this.options.confirmPasswordField.getValue() != this.getValue() ) {
 	         return false;

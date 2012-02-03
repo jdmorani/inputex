@@ -189,6 +189,8 @@
     validate: function() {
       var response = true;
 
+      if(this.isHidden()) return true;
+
       // Validate all the sub fields
       for (var i = 0; i < this.inputs.length; i++) {
         var input = this.inputs[i];

@@ -46,6 +46,8 @@ YAHOO.lang.extend(inputEx.NumberField, inputEx.StringField, {
     * Check if the entered number is a float
     */
    validate: function() { 
+
+      if(this.isHidden()) return true;
       
       var v = this.getValue(), str_value = inputEx.NumberField.superclass.getValue.call(this);
       

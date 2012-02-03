@@ -191,6 +191,8 @@
      */
     validate: function() {
 
+      if(this.isHidden()) return true;
+
       var response = true;
 
       var uniques = {}; // Hash for unique values option

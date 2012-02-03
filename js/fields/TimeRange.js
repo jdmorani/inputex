@@ -72,6 +72,9 @@ YAHOO.lang.extend(inputEx.TimeRange, inputEx.CombineField, {
 	},
 
 	validate: function(){
+
+		if(this.isHidden()) return true;
+		
 		var values = this.getValue();
 		
 		var hm = values[1].split(":");

@@ -347,6 +347,8 @@
 		
 		validate: function () {
 			
+			if(this.isHidden()) return true;
+
 			var i, length, radioInput, anyVal;
 			
 			if (this.options.allowAny) {

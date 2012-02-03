@@ -36,21 +36,23 @@ lang.extend(inputEx.DateField, inputEx.StringField, {
    * Specific Date validation depending of the 'format' option
    */
   validate: function() {
-     var value = this.el.value;
+    var value = this.el.value;
+
+    if(this.isHidden()) return true;
   
     var separator = this.options.dateFormat.match(/[^Ymd ]/g)[0];
-     var ladate = value.split(separator);
-     if( ladate.length != 3) { return false; }
-     if ( isNaN(parseInt(ladate[0],10)) || isNaN(parseInt(ladate[1],10)) || isNaN(parseInt(ladate[2],10))) { return false; }
-     var formatSplit = this.options.dateFormat.split(separator);
-     var yearIndex = inputEx.indexOf('Y',formatSplit);
-     if (ladate[yearIndex].length!=4) { return false; } // Avoid 3-digits years...
-     var d = parseInt(ladate[ inputEx.indexOf('d',formatSplit) ],10);
-     var Y = parseInt(ladate[yearIndex],10);
-     var m = parseInt(ladate[ inputEx.indexOf('m',formatSplit) ],10)-1;
-     var unedate = new Date(Y,m,d);
-     var annee = unedate.getFullYear();
-     return ((unedate.getDate() == d) && (unedate.getMonth() == m) && (annee == Y));
+    var ladate = value.split(separator);
+    if( ladate.length != 3) { return false; }
+    if ( isNaN(parseInt(ladate[0],10)) || isNaN(parseInt(ladate[1],10)) || isNaN(parseInt(ladate[2],10))) { return false; }
+    var formatSplit = this.options.dateFormat.split(separator);
+    var yearIndex = inputEx.indexOf('Y',formatSplit);
+    if (ladate[yearIndex].length!=4) { return false; } // Avoid 3-digits years...
+    var d = parseInt(ladate[ inputEx.indexOf('d',formatSplit) ],10);
+    var Y = parseInt(ladate[yearIndex],10);
+    var m = parseInt(ladate[ inputEx.indexOf('m',formatSplit) ],10)-1;
+    var unedate = new Date(Y,m,d);
+    var annee = unedate.getFullYear();
+    return ((unedate.getDate() == d) && (unedate.getMonth() == m) && (annee == Y));
   },
   
      

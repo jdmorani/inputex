@@ -61,6 +61,9 @@ YAHOO.lang.extend(inputEx.Textarea, inputEx.StringField, {
     * Uses the optional regexp to validate the field value
     */
    validate: function() { 
+
+      if(this.isHidden()) return true;
+      
       var previous = inputEx.Textarea.superclass.validate.call(this);
       
       // emulate maxLength property for textarea

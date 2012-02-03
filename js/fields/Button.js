@@ -27,6 +27,8 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
       this.options.id = this.generateId(options);
       this.options.className = options.className || "inputEx-ButtonField " + this.options.name + '-inputEx-ButtonField';
 
+      this.options.newwindow = options.newwindow || false;
+
       if(this.options.action == 'transform'){
          this.options.className += " inputEx-ButtonField-Action-Transform";
       };
@@ -110,12 +112,16 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
        clear: 'both'
      }, " "));
    },   
-      
+
    /**
     * render a slider widget
     */
    renderComponent: function() {
-      this.el = inputEx.cn('input', {type: this.options.type, name: this.options.value, value: this.options.label, className: this.options.className, id:this.options.id + '-button', 'data-xsl': this.options.xsl, 'data-screenflow': this.getScreenFlowKey() });
+      this.el = inputEx.cn('input', {
+        type: this.options.type, name: this.options.value, 
+        value: this.options.label, className: this.options.className, 
+        id:this.options.id + '-button', 'data-new-window': this.options.newwindow , 
+        'data-xsl': this.options.xsl, 'data-screenflow': this.getScreenFlowKey() });
       
       Dom.addClass(this.el,"inputEx-Button");
       
@@ -154,7 +160,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
       this.setFieldName(path);
       return this.options.value;
    }
-   
+
 });
 
 // Register this class as "slider" type
@@ -178,7 +184,14 @@ inputEx.registerType("button", inputEx.ButtonField, [{
     label: "On new line?",
     name: "newline",
     value: false
-  },{
+  },
+  {
+    type: "boolean",
+    label: "New window?",
+    name: "newwindow",
+    value: false
+  },
+  {
     type: "select",
     label: "Action",
     name: "action",

@@ -90,6 +90,8 @@
 		
 		validate: function () {
 			
+			if(this.isHidden()) return true;
+
 			var val = this.getValue();
 			
 			// empty field

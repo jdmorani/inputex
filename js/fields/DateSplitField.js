@@ -89,6 +89,9 @@ lang.extend(inputEx.DateSplitField, inputEx.CombineField, {
    },
    
    validate: function() {
+
+      if(this.isHidden()) return true;
+
       var subFieldsValidation = inputEx.DateSplitField.superclass.validate.call(this);
       if (!subFieldsValidation) return false;
       

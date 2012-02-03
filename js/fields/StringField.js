@@ -148,6 +148,9 @@
      * Uses the optional regexp to validate the field value
      */
     validate: function() {
+
+      if (this.isHidden()) return true;
+
       var val = this.getValue();
 
       // empty field
@@ -304,7 +307,7 @@
     name: 'maxLength',
     value: 255
   }, {
-    type: 'string',
+    type: 'regexp',
     label: 'RegExp Validation',
     name: 'regexp',
     value: ''
