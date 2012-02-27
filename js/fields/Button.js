@@ -118,14 +118,18 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
     */
    renderComponent: function() {
       this.el = inputEx.cn('input', {
-        type: this.options.type, name: this.options.value, 
+        type: this.options.type, name: (this.options.value || this.options.name), 
         value: this.options.label, className: this.options.className, 
         id:this.options.id + '-button', 'data-new-window': this.options.newwindow , 
         'data-xsl': this.options.xsl, 'data-screenflow': this.getScreenFlowKey() });
       
       Dom.addClass(this.el,"inputEx-Button");
       
-      this.fieldContainer.appendChild(this.el);      
+      this.fieldContainer.appendChild(this.el);
+
+      if(this.options.action == 'transform'){
+        this.hideButton();
+      }
       
       this.initEvents();
       
@@ -143,12 +147,20 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
       this.el.name = name;
    },
 
+   hideButton: function(){
+      Dom.setStyle(this.fieldContainer, 'visibility', 'hidden');
+   },
+
+   showButton: function(){
+      Dom.setStyle(this.fieldContainer, 'visibility', 'visible');
+   },
+
    setValue: function(value){
       if( this.options.action == 'transform' && (typeof value === 'undefined' || value == null || value == '')){
-        Dom.setStyle(this.fieldContainer, 'visibility', 'hidden');
+        this.hideButton();
         this.options.value = '';
       }else{
-        Dom.setStyle(this.fieldContainer, 'visibility', 'visible');
+        this.showButton();
         this.options.value = '[BUTTON]';
       }
    },
