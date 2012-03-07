@@ -31,7 +31,7 @@
       this.options.regexp = options.regexp;
 
       // Overwrite options
-      this.options.className = options.className ? options.className : 'inputEx-CombineField';
+      this.options.className = options.className ? options.className : 'inputEx-CombineField ' + this.options.name;
 
       // Added options
       this.options.separators = options.separators;
