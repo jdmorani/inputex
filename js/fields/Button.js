@@ -156,7 +156,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
    },
 
    setValue: function(value){
-      if( this.options.action == 'transform' && (typeof value === 'undefined' || value == null || value == '')){
+      if( this.options.action == 'transform' && (typeof value === 'undefined' || value == null || value == '' || value == '[BUTTON]')){
         this.hideButton();
         this.options.value = '';
       }else{

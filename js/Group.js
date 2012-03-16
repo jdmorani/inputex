@@ -304,29 +304,30 @@
       var o = {};
       for (var i = 0; i < this.inputs.length; i++) {
         var v = null;
-        var local_path = this.inputs[i].options.name.split('@_@@_@')[0] + (['table','list'].indexOf(this.inputs[i].type) >= 0 ? "[" + i + "]" : "");
+        var local_path = this.inputs[i].options.name.split('@_@@_@')[0] + (['list'].indexOf(this.inputs[i].type) >= 0 ? "[" + i + "]" : "");
+        if(this.inputs[i].type == 'table' && this.inputs[i].parentField.type != 'list')
+          local_path = local_path +"[0]";
         local_path = !path ? local_path : path + "." + local_path
         if (['button', 'list', 'group', 'table'].indexOf(this.inputs[i].type) >= 0){
-          if(this.inputs[i].type == 'list') local_path = path;            
+          if(this.inputs[i].type == 'list') 
+            local_path = path;
           v = this.inputs[i].getValue(local_path);
+          if(this.inputs[i].type == 'table' && this.inputs[i].parentField.type != 'list')
+            v = [v];
         } else{
           v = this.inputs[i].getValue();
         }
         if (this.inputs[i].options.name) {
-          if(this.inputs[i].options.flatten && lang.isObject(v) ) {
-          // if(o[this.inputs[i].options.name] && lang.isObject(v) && !lang.isArray(v)){
-          //   for(p in v){
-          //     if(lang.isObject(v)){
-                lang.augmentObject(o[this.inputs[i].options.name][p], v[p]);
-              // }else{
-                  
-              // }
-          //}
-        } else {
-          o[this.inputs[i].options.name] = v;
+          if(this.inputs[i].options.name in o && lang.isObject(o[this.inputs[i].options.name])){
+            if(lang.isArray(o[this.inputs[i].options.name]) && lang.isArray(v) && o[this.inputs[i].options.name].length == 1 && v.length == 1)
+              lang.augmentObject(o[this.inputs[i].options.name][0], v[0]);
+            else
+              lang.augmentObject(o[this.inputs[i].options.name], v);
+          }else{
+            o[this.inputs[i].options.name] = v;
+          }
         }
       }
-    }
     return o;
   },
 
