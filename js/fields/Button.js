@@ -161,7 +161,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
         this.options.value = '';
       }else{
         this.showButton();
-        this.options.value = '[BUTTON]';
+        this.options.value = value;
       }
    },
 
