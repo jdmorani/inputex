@@ -37,7 +37,7 @@
       
       this.options.regexp = options.regexp;
       this.options.size = options.size;
-      this.options.maxLength = options.maxLength;
+      this.options.maxLength = options.maxLength || 255;
       this.options.minLength = options.minLength;
       this.options.typeInvite = options.typeInvite;
       this.options.readonly = options.readonly;

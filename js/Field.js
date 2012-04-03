@@ -84,6 +84,7 @@
       this.options.messages = {};
       this.options.messages.required = (options.messages && options.messages.required) ? options.messages.required : inputEx.messages.required;
       this.options.messages.invalid = (options.messages && options.messages.invalid) ? options.messages.invalid : inputEx.messages.invalid;
+      this.options.messages.custom = null;
       //this.options.messages.valid = (options.messages && options.messages.valid) ? options.messages.valid : inputEx.messages.valid;
       // Other options
       this.options.className = options.className ? options.className : 'inputEx-Field ' + this.options.name;
@@ -360,8 +361,10 @@
     getStateString: function(state) {
       if (state == inputEx.stateRequired) {
         return this.options.messages.required;
+      } else if (typeof this.options.messages.custom !== 'undefined' && this.options.messages.custom) {
+        return this.options.messages.custom;
       } else if (state == inputEx.stateInvalid) {
-        return this.options.messages.invalid;
+        return this.options.messages.invalid;      
       } else {
         return '';
       }
