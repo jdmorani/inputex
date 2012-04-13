@@ -194,7 +194,7 @@
       // Validate all the sub fields
       for (var i = 0; i < this.inputs.length; i++) {
         var input = this.inputs[i];
-        if (!input.isDisabled()) {
+        if (!input.isDisabled() && !input.isHidden() ) {
           input.setClassFromState(); // update field classes (mark invalid fields...)
           var state = input.getState();
           if (state == inputEx.stateRequired || state == inputEx.stateInvalid) {
