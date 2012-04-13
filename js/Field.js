@@ -319,9 +319,6 @@
      */
     setValue: function(value, sendUpdatedEvt) {
       // to be inherited
-      // set corresponding style
-      this.setClassFromState();
-
       if (sendUpdatedEvt !== false) {
         // fire update event
         this.fireUpdatedEvt();
