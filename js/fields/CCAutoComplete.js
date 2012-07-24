@@ -38,7 +38,8 @@
         queryMatchContains: true,
         typeAhead: false,
         animVert: false,
-        forceSelection: false
+        forceSelection: false,
+        maxResultsDisplayed: 15
       };
 
       this.options.datasource = options.datasource;
