@@ -25,7 +25,7 @@ lang.extend(inputEx.DateField, inputEx.StringField, {
     
     // Overwrite options
     this.options.className = options.className ? options.className : 'inputEx-Field inputEx-DateField';
-    this.options.messages.invalid = inputEx.messages.invalidDate ? inputEx.messages.invalidDate : "Invalid date, ex: 03/27/2008";
+    this.options.messages.invalid = (this.options.dateFormat == 'm/d/Y' ? "Invalid date, ex: MM/DD/YYYY" : "Invalid date, ex: DD/MM/YYYY");
     
     // Added options
     this.options.dateFormat = options.dateFormat || inputEx.messages.defaultDateFormat;
@@ -73,7 +73,7 @@ lang.extend(inputEx.DateField, inputEx.StringField, {
       str = inputEx.DateField.formatDate(val, this.options.dateFormat);
      } 
     else if(this.options.valueFormat && val){
-      var dateVal = inputEx.DateField.parseWithFormat(val, this.options.valueFormat);
+      var dateVal = inputEx.DateField.parseWithFormat(val, "Y/m/d");
       str = inputEx.DateField.formatDate(dateVal, this.options.dateFormat);
     }
      // else date must match this.options.dateFormat
@@ -100,7 +100,7 @@ lang.extend(inputEx.DateField, inputEx.StringField, {
   
     // if valueFormat is specified, we format the string
     if(!forceDate && this.options.valueFormat){ 
-      return inputEx.DateField.formatDate(finalDate, this.options.valueFormat);
+      return inputEx.DateField.formatDate(finalDate, "Y/m/d");
     } 
     
     return finalDate;

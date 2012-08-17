@@ -247,12 +247,12 @@
       }
 
       // Remove additional subFields
-      var additionalElements = this.subFields.length - value.length;
-      if (additionalElements > 0) {
-        for (i = 0; i < additionalElements; i++) {
-          this.removeElement(value.length);
-        }
-      }
+      // var additionalElements = this.subFields.length - value.length;
+      // if (additionalElements > 0) {
+      //   for (i = 0; i < additionalElements; i++) {
+      //     this.removeElement(value.length);
+      //   }
+      // }
 
       inputEx.ListField.superclass.setValue.call(this, value, sendUpdatedEvt);
     },

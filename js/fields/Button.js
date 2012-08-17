@@ -22,6 +22,7 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
       
       this.options.xsl = options.xsl || null;
       this.options.screenflow = options.screenflow || null;
+      this.options.pattern = this.parseName(options.pattern) || null;
       this.options.action = options.action;
       this.options.name = this.parseName(options.name);
       this.options.id = this.generateId(options);
@@ -35,6 +36,10 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
 
       if(this.options.action == 'screen flow (overlay)'){
          this.options.className += " inputEx-ButtonField-Action-ScreenFlow";
+      };
+
+      if(this.options.action == 'pattern'){
+         this.options.className += " inputEx-ButtonField-Action-Pattern";
       };
 
       if(this.options.action == 'submit'){
@@ -114,14 +119,19 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
    },   
 
    /**
-    * render a slider widget
+    * render a button widget
     */
    renderComponent: function() {
       this.el = inputEx.cn('input', {
-        type: this.options.type, name: (this.options.value || this.options.name), 
-        value: this.options.label, className: this.options.className, 
-        id:this.options.id + '-button', 'data-new-window': this.options.newwindow , 
-        'data-xsl': this.options.xsl, 'data-screenflow': this.getScreenFlowKey() });
+        type: this.options.type,
+        name: (this.options.value || this.options.name),
+        value: this.options.label,
+        className: this.options.className,
+        id:this.options.id + '-button',
+        'data-new-window': this.options.newwindow ,
+        'data-xsl': this.options.xsl,
+        'data-screenflow': this.getScreenFlowKey(),
+        'data-pattern': this.options.pattern});
       
       Dom.addClass(this.el,"inputEx-Button");
       
@@ -207,7 +217,7 @@ inputEx.registerType("button", inputEx.ButtonField, [{
     type: "select",
     label: "Action",
     name: "action",
-    choices: ['','transform', 'screen flow (overlay)', 'submit'],
+    choices: ['','transform', 'screen flow (overlay)', 'pattern', 'submit'],
     required: false
   },{
     type: "string",
@@ -219,6 +229,13 @@ inputEx.registerType("button", inputEx.ButtonField, [{
     label: "Flow",
     name: "screenflow",
     typeInvite: "Start typing a flow name",
+    required: false
+  },
+  {
+    type: "autocomplete-pattern",
+    label: "Pattern",
+    name: "pattern",
+    typeInvite: "Start typing a pattern name",
     required: false
   }
 ], true);
