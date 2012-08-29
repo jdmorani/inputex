@@ -73,6 +73,9 @@
             Event.addListener(this.removeAllFieldsElement,"click",function(e, obj){
                 obj.setFieldsList(obj.parentField.group, []);
             }, this)
+
+            inputEx.Table.superclass.initEvents.call(this);
+
         },
 
         subscribeToTableDidChangeEvent:function () {
