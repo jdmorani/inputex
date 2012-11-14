@@ -17,4 +17,9 @@
     lang.extend(inputEx.CCAutoCompletePattern, inputEx.CCAutoComplete, {
 
     });
+
+
+      // Register this class as "select" type
+  inputEx.registerType("autocomplete-pattern", inputEx.CCAutoCompletePattern);
+
 }());

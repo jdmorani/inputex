@@ -42,6 +42,10 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
          this.options.className += " inputEx-ButtonField-Action-Pattern";
       };
 
+      if(this.options.action == 'attachments'){
+         this.options.className += " inputEx-ButtonField-Action-Attachment";
+      };
+
       if(this.options.action == 'submit'){
         this.options.type = 'submit';
       }else{
@@ -188,8 +192,8 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
 // Register this class as "slider" type
 inputEx.registerType("button", inputEx.ButtonField, [{
     type: "autocomplete-field",
-    label: "Field",
     name: "name",
+    label: "Field",
     choices: [''],
     required: true
   }, {
@@ -217,7 +221,7 @@ inputEx.registerType("button", inputEx.ButtonField, [{
     type: "select",
     label: "Action",
     name: "action",
-    choices: ['','transform', 'screen flow (overlay)', 'pattern', 'submit'],
+    choices: ['','transform', 'screen flow (overlay)', 'pattern', 'attachments', 'submit'],
     required: false
   },{
     type: "string",

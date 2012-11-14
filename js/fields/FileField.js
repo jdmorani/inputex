@@ -50,20 +50,5 @@
 
     });
 
-// Register this class as "url" type
-    inputEx.registerType("file", inputEx.FileField, [
-        {
-            type:"accept",
-            label:"File Format",
-            name:"accept",
-            required:false
-        },
-        {
-            type:"boolean",
-            label:"Multiple",
-            name:"multiple",
-            required:false
-        }
-    ], false);
 
 })();
