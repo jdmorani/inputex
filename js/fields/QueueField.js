@@ -55,15 +55,15 @@
 inputEx.registerType("queue", inputEx.QueueField, [
 {
     type: "autocomplete-field",
-    label: "Field",
+    label: I18n.t('form.field.label'),
     name: "name",    
     required: true
 },
 {
   type: "autocomplete-queue",
-  label: "Queue",
+  label: I18n.t('form.field.queue'),
   name: "queue",
-  typeInvite: "Start typing a queue name",
+  typeInvite: I18n.t('form.field.invite.queue_name'),
   required: false
   }], true);
 

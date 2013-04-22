@@ -131,9 +131,9 @@
             return (new Date(Y, m, d));
         } else {
             var ladate = sDate.match(/(\d{4})(\d{2})(\d{2})/);
-            var Y = parseInt(ladate[1])
-            var m = parseInt(ladate[2])
-            var d = parseInt(ladate[3])
+            var Y = parseInt(ladate[1]);
+            var m = parseInt(ladate[2]) - 1;
+            var d = parseInt(ladate[3]);
             return (new Date(Y, m, d));
         }
     };
@@ -155,7 +155,7 @@
 
 // Register this class as "date" type
     inputEx.registerType("date", inputEx.DateField, [
-        {type:'select', label:'Date format', name:'dateFormat', choices:[
+        {type:'select', label: I18n.t('form.date.date_format'), name:'dateFormat', choices:[
             { value:"m/d/Y" },
             { value:"d/m/Y" }
         ] }

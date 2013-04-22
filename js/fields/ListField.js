@@ -573,48 +573,48 @@
   // Register this class as "list" type
   inputEx.registerType("list", inputEx.ListField, [{
     type: 'integer',
-    label: 'Min. Items',
+    label: I18n.t('form.list.min_items'),
     name: 'minItems',
     value: ''
   }, {
     type: 'integer',
-    label: 'Max. Items',
+    label: I18n.t('form.list.max_items'),
     name: 'maxItems',
     value: ''
   }, {
     type: 'boolean',
-    label: 'Use Buttons?',
+    label: I18n.t('form.list.use_buttons'),
     required: false,
     name: 'useButtons',
     value: true
   }, {
     type: 'boolean',
-    label: 'editable?',
+    label: I18n.t('form.list.editable'),
     required: false,
     name: 'editable',
     value: true
   }, {
     type: 'boolean',
-    label: 'Sortable?',
+    label: I18n.t('form.list.sortable'),
     required: false,
     name: 'sortable'
   }, {
     type: 'string',
-    label: 'Legend',
+    label: I18n.t('form.group.legend'),
     name: 'legend'
   }, {
     type: 'boolean',
-    label: 'Collapsible',
+    label: I18n.t('form.group.collapsible'),
     name: 'collapsible',
     value: false
   }, {
     type: 'boolean',
-    label: 'Collapsed',
+    label: I18n.t('form.group.collapsed'),
     name: 'collapsed',
     value: false
   }, {
     type: 'type',
-    label: 'List element type',
+    label: I18n.t('form.list.list_element_type'),
     required: true,
     name: 'elementType'
   }

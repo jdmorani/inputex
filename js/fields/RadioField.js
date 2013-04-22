@@ -487,18 +487,18 @@
 		{
 			type: 'list',
 			name: 'choices',
-			label: 'Choices',
+			label: I18n.t('form.group.choices'),
 			elementType: {
 				type: 'group',
 				fields: [
-					{ label: 'Value', name: 'value', value: '' }, // not required to allow '' value (which is default)
-					{ label: 'Label', name: 'label' } // optional : if left empty, label is not created
+					{ label: I18n.t('form.field.value'), name: 'value', value: '' }, // not required to allow '' value (which is default)
+					{ label: I18n.t('form.field.label'), name: 'label' } // optional : if left empty, label is not created
 				]
 			},
 			value: [],
 			required: true
 		},
-		{type: 'boolean', label: 'Allow custom value', name: 'allowAny', value: false  }
+		{type: 'boolean', label: I18n.t('form.radio.allow_custom_values'), name: 'allowAny', value: false  }
 	]);
 	
 })();

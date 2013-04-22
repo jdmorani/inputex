@@ -198,8 +198,8 @@ lang.extend( inputEx.MultiField, inputEx.Group, {
   
 // Register this class as "multifield" type
 inputEx.registerType("multifield", inputEx.MultiField, [
-   { type: 'list', name: 'fields', label: 'Elements', required: true, elementType: {type: 'type'} },
-   { type: 'list', name: 'separators', label: 'Separators', required: true }
+   { type: 'list', name: 'fields', label: I18n.t('form.list.elements'), required: true, elementType: {type: 'type'} },
+   { type: 'list', name: 'separators', label: I18n.t('form.field.separators'), required: true }
 ]);
   
 })();

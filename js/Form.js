@@ -412,30 +412,18 @@
   // Register this class as "form" type
   inputEx.registerType("form", inputEx.Form, [{
     type: 'list',
-    label: 'Buttons',
+    label: I18n.t('form.field.buttons'),
     name: 'buttons',
     useButtons: true,
+    hide: true,
     elementType: {
       type: 'group',
       fields: [{
-        label: 'Label',
+        label: I18n.t('form.field.label'),
         name: 'value'
       }, {
-        label: 'Key',
+        label: I18n.t('form.field.key'),
         name: 'key'
-      }, {
-        type: 'select',
-        label: 'Type',
-        name: 'type',
-        choices: [{
-          value: "javascript"
-        },{
-          value: "link"
-        }, {
-          value: "next"
-        }, {
-          value: "previous"
-        }]
       }]
     }
   }]);

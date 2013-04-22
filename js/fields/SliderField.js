@@ -98,8 +98,8 @@ YAHOO.lang.extend(inputEx.SliderField, inputEx.Field, {
 
 // Register this class as "slider" type
 inputEx.registerType("slider", inputEx.SliderField, [
-   { type: 'integer', label: 'Min. value',  name: 'minValue', value: 0 },
-   { type: 'integer', label: 'Max. value', name: 'maxValue', value: 100 }
+   { type: 'integer', label: I18n.t('form.slider.min_value'),  name: 'minValue', value: 0 },
+   { type: 'integer', label: I18n.t('form.slider.max_value'), name: 'maxValue', value: 100 }
 ]);
 
 })();

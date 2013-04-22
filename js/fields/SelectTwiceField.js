@@ -209,21 +209,21 @@
 		{
 			type: 'list',
 			name: 'choices',
-			label: 'Choices',
+            label: I18n.t('form.group.choices'),
 			elementType: {
 				type: 'group',
 				fields: [
-					{ label: 'Value', name: 'value', value: '' }, // not required to allow '' value (which is default)
-					{ label: 'Label', name: 'label' }, // optional : if left empty, label is same as value
+					{ label: I18n.t('form.field.value'), name: 'value', value: '' }, // not required to allow '' value (which is default)
+					{ label: I18n.t('form.field.label'), name: 'label' }, // optional : if left empty, label is same as value
 					{ 
 						type: 'list',
 						name: 'choices',
-						label: 'Choices',
+                        label: I18n.t('form.group.choices'),
 						elementType: {
 							type: 'group',
 							fields: [
-								{ label: 'Value', name: 'value', value: '' }, // not required to allow '' value (which is default)
-								{ label: 'Label', name: 'label' } // optional : if left empty, label is same as value
+								{ label: I18n.t('form.field.value'), name: 'value', value: '' }, // not required to allow '' value (which is default)
+								{ label: I18n.t('form.field.label'), name: 'label' } // optional : if left empty, label is same as value
 							]
 						},
 						value: [],

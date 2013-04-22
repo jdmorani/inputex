@@ -170,31 +170,31 @@
     inputEx.registerType("table", inputEx.Table, [
         {
             type:"dynamictable",
-            label:"Name",
+            label: I18n.t('form.field.field'),
             name:"name",
             choices:[],
             required:true
         },
         {
             type:'string',
-            label:'Legend',
+            label: I18n.t('form.group.legend'),
             name:'legend'
         },
         {
             type:'boolean',
-            label:'Collapsible',
+            label: I18n.t('form.group.collapsible'),
             name:'collapsible',
             value:false
         },
         {
             type:'boolean',
-            label:'Collapsed',
+            label: I18n.t('form.group.collapsed'),
             name:'collapsed',
             value:false
         },
         {
             type:'list',
-            label:'Fields',
+            label: I18n.t('form.field.fields'),
             name:'fields',
             sortable:'true',
             align: 'true',
@@ -204,13 +204,13 @@
         },
         {
             type:'button',
-            label:'Add all fields',
+            label: I18n.t('form.button.actions.add_all_fields'),
             name:'addallfields',
             align: 'true'
         },
         {
             type:'button',
-            label:'Remove all fields',
+            label: I18n.t('form.button.actions.remove_all_fields'),
             name:'removeallfields',
             align: 'true'
         },

@@ -542,26 +542,26 @@
 // Register this class as "group" type
 inputEx.registerType("group", inputEx.Group, [{
   type: "string",
-  label: "Name",
+  label: I18n.t('form.field.name'),
   name: "name",
   value: ''
 }, {
   type: 'string',
-  label: 'Legend',
+  label: I18n.t('form.group.legend'),
   name: 'legend'
 }, {
   type: 'boolean',
-  label: 'Collapsible',
+  label: I18n.t('form.group.collapsible'),
   name: 'collapsible',
   value: false
 }, {
   type: 'boolean',
-  label: 'Collapsed',
+  label: I18n.t('form.group.collapsed'),
   name: 'collapsed',
   value: false
 }, {
   type: 'list',
-  label: 'Fields',
+  label: I18n.t('form.field.fields'),
   name: 'fields',
   elementType: {
     type: 'type'

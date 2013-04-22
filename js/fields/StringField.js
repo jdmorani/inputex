@@ -289,31 +289,33 @@
     inputEx.registerType("string", inputEx.StringField, [
         {
             type:'string',
+            label: I18n.t('form.field.type_invite'),
             label:'Type invite',
             name:'typeInvite',
             value:''
         },
         {
             type:'integer',
-            label:'Size',
+            label: I18n.t('form.field.size'),
             name:'size',
             value:20
         },
         {
             type:'integer',
+            label: I18n.t('form.field.min_length'),
             label:'Min. length',
             name:'minLength',
             value:0
         },
         {
             type:'integer',
-            label:'Max. length',
+            label: I18n.t('form.field.max_length'),
             name:'maxLength',
             value:255
         },
         {
             type:'regexp',
-            label:'RegExp Validation',
+            label: I18n.t('form.field.regexp_validation'),
             name:'regexp',
             value:''
         }

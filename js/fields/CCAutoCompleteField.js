@@ -98,7 +98,7 @@
   // Register this class as "autocomplete-field" type
   inputEx.registerType("autocomplete-field", inputEx.CCAutoCompleteField, [{
       type: "boolean",
-      label: "include all tables",
+      label: I18n.t('form.field.autocomplete.include_all_tables'),
       name: "include_all_tables"
     }
   ], false);

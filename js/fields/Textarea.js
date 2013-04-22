@@ -121,8 +121,8 @@ inputEx.messages.stringTooLong = ["This field should contain at most "," numbers
 
 // Register this class as "text" type
 inputEx.registerType("text", inputEx.Textarea, [
-   { type: 'integer', label: 'Rows',  name: 'rows', value: 6 },
-   { type: 'integer', label: 'Cols', name: 'cols', value: 23 }
+   { type: 'integer', label: I18n.t('form.text_area.rows'),  name: 'rows', value: 6 },
+   { type: 'integer', label: I18n.t('form.text_area.cols'), name: 'cols', value: 23 }
 ]);
 
 })();

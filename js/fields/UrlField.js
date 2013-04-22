@@ -97,7 +97,7 @@ inputEx.messages.invalidUrl = "Invalid URL, ex: http://www.test.com";
 
 // Register this class as "url" type
 inputEx.registerType("url", inputEx.UrlField, [
-   { type: 'boolean', label: 'Display favicon', name:'favicon', value: true}
+   { type: 'boolean', label: I18n.t('form.url.display_favicon'), name:'favicon', value: true}
 ]);
 
 })();

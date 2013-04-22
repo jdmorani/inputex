@@ -555,57 +555,57 @@
 
   inputEx.Field.groupOptions = [{
     type: "autocomplete-field",
-    label: "Field",
+    label: I18n.t('form.field.field'),
     name: "name",    
     required: true
   }, {
     type: "string",
-    label: "Label",
+    label: I18n.t('form.field.label'),
     name: "label",
     value: ''
   }, {
     type: "string",
-    label: "Description",
+    label: I18n.t('form.field.description'),
     name: "description",
     value: ''
   }, {
     type: "boolean",
-    label: "Required?",
+    label: I18n.t('form.field.required'),
     name: "required",
     value: false
   }, {
     type: "boolean",
-    label: "Show messages",
+    label: I18n.t('form.field.show_messages'),
     name: "showMsg",
     value: false
   }, {
     type: "boolean",
-    label: "On same line?",
+    label: I18n.t('form.field.on_same_line'),
     name: "align",
     value: false
   }, {
     type: "boolean",
-    label: "On new line?",
+    label: I18n.t('form.field.on_new_line'),
     name: "newline",
     value: false
   },{
     type: "boolean",
-    label: "Label on top?",
+    label: I18n.t('form.field.label_on_top'),
     name: "toplabel",
     value: false
   },{
     type: "boolean",
-    label: "Placeholder?",
+    label: I18n.t('form.field.placeholder'),
     name: "placeholder",
     value: false
   },{
     type: "boolean",
-    label: "Hide?",
+    label: I18n.t('form.field.hide'),
     name: "hide",
     value: false
   },{
     type: "boolean",
-    label: "readonly?",
+    label: I18n.t('form.field.readonly'),
     name: "readonly",
     value: false
   },  

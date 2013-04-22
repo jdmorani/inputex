@@ -172,34 +172,34 @@ inputEx.messages.yearTypeInvite = "YYYY";
 // Register this class as "datesplit" type
 inputEx.registerType("datesplit", inputEx.DateSplitField, [{
     type: "autocomplete-field",
-    label: "Field",
+    label: I18n.t('form.field.field'),
     name: "name",
     choices: [],
     required: true
   },{
     type: "string",
-    label: "Label",
+    label: I18n.t('form.field.label'),
     name: "label",
     value: ''
   }, {
     type: "string",
-    label: "Description",
+    label: I18n.t('form.field.description'),
     name: "description",
     value: ''
   }, {
     type: "boolean",
-    label: "Required?",
+    label: I18n.t('form.field.required'),
     name: "required",
     value: false
   }, {
     type: "boolean",
-    label: "Show messages",
+    label: I18n.t('form.field.show_messages'),
     name: "showMsg",
     value: false
   },{
     type: 'list',
     name: 'separators',
-    label: 'Separators',
+    label: I18n.t('form.field.separators'),
     elementType: {type: 'string'},
     required: true
   }], true)

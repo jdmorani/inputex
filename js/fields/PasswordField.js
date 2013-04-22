@@ -260,8 +260,8 @@ inputEx.messages.passwordStrength = "Password Strength";
 
 // Register this class as "password" type
 inputEx.registerType("password", inputEx.PasswordField, [
-   {type: 'boolean', label: 'Strength indicator', name: 'strengthIndicator', value: false },
-   {type: 'boolean', label: 'CapsLock warning', name: 'capsLockWarning', value: false }
+   {type: 'boolean', label: I18n.t('form.password.strength_indicator'), name: 'strengthIndicator', value: false },
+   {type: 'boolean', label: I18n.t('form.password.caps_lock_warning'), name: 'capsLockWarning', value: false }
 ]);
 	
 })();

@@ -337,44 +337,44 @@
   // Register this class as "combine" type
   inputEx.registerType("combine", inputEx.CombineField, [{
     type: "autocomplete-field",
-    label: "Field",
+    label: I18n.t('form.field.field'),
     name: "name",
     choices: [],
     required: true
   }, {
     type: "string",
-    label: "Label",
+    label: I18n.t('form.field.label'),
     name: "label",
     value: ''
   },{
     type: "boolean",
-    label: "On same line?",
+    label: I18n.t('form.field.on_same_line'),
     name: "align",
     value: false
   }, {
     type: "boolean",
-    label: "On new line?",
+    label: I18n.t('form.field.on_new_line'),
     name: "newline",
     value: false
   },{
     type: "boolean",
-    label: "Label on top?",
+    label: I18n.t('form.field.label_on_top'),
     name: "toplabel",
     value: false
   }, {
     type: 'string',
-    label: 'RegExp Validation',
+    label: I18n.t('form.field.regexp_validation'),
     name: 'regexp',
     value: ''
   }, { 
     type: 'list', 
-    label: 'Fields', 
+    label: I18n.t('form.field.fields'),
     name: 'fields', 
     elementType: {type: 'type' } 
   },{
     type: 'list',
     name: 'separators',
-    label: 'Separators',
+    label: I18n.t('form.field.separators'),
     elementType: {type: 'string'},
     required: true
   }], true);

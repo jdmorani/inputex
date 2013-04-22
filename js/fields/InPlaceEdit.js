@@ -300,9 +300,9 @@ inputEx.messages.okEditor = "Ok";
 
 // Register this class as "inplaceedit" type
 inputEx.registerType("inplaceedit", inputEx.InPlaceEdit, [
-   { type: 'boolean', label: 'Always Hide', name: 'alwayshide'},
-   { type: 'integer', label: 'Show last # chars', name: 'securedisplay'},
-   { type:'type', label: 'Editor', name: 'editorField'}
+   { type: 'boolean', label: I18n.t('form.in_place_edit.always_hide'), name: 'alwayshide'},
+   { type: 'integer', label: I18n.t('form.in_place_edit.secure_display'), name: 'securedisplay'},
+   { type:'type', label: I18n.t('form.in_place_edit.editor'), name: 'editorField'}
 ]);
 
 })();

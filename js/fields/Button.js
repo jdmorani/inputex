@@ -30,26 +30,30 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
 
       this.options.newwindow = options.newwindow || false;
 
-      if(this.options.action == 'transform'){
+      if(this.options.action == I18n.t('form.button.actions.transform')){
          this.options.className += " inputEx-ButtonField-Action-Transform";
       };
 
-      if(this.options.action == 'screen flow (overlay)'){
+      if(this.options.action == I18n.t('form.button.actions.screen_flow_overlay')){
          this.options.className += " inputEx-ButtonField-Action-ScreenFlow";
       };
 
-      if(this.options.action == 'pattern'){
+      if(this.options.action == I18n.t('form.button.actions.pattern')){
          this.options.className += " inputEx-ButtonField-Action-Pattern";
       };
 
-      if(this.options.action == 'attachments'){
+      if(this.options.action == I18n.t('form.button.actions.attachments')){
          this.options.className += " inputEx-ButtonField-Action-Attachment";
       };
 
-      if(this.options.action == 'submit'){
+      if(this.options.action == I18n.t('form.button.actions.submit')){
         this.options.type = 'submit';
       }else{
         this.options.type = 'button';
+      }
+
+      if(this.options.action == I18n.t('form.button.actions.previous')){
+        this.options.name = '__btn_previous__';
       }
 
       this.options.parentEl = lang.isString(options.parentEl) ? Dom.get(options.parentEl) : options.parentEl;
@@ -193,53 +197,53 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
 inputEx.registerType("button", inputEx.ButtonField, [{
     type: "autocomplete-field",
     name: "name",
-    label: "Field",
+    label: I18n.t('form.field.field'),
     choices: [''],
     required: true
   }, {
     type: "string",
-    label: "Label",
+    label: I18n.t('form.field.label'),
     name: "label"
   }, {
     type: "boolean",
-    label: "On same line?",
+    label: I18n.t('form.field.on_same_line'),
     name: "align",
     value: false
   }, {
     type: "boolean",
-    label: "On new line?",
+    label: I18n.t('form.field.on_new_line'),
     name: "newline",
     value: false
   },
   {
     type: "boolean",
-    label: "New window?",
+    label: I18n.t('form.field.new_window'),
     name: "newwindow",
     value: false
   },
   {
     type: "select",
-    label: "Action",
+    label: I18n.t('form.button.action'),
     name: "action",
-    choices: ['','transform', 'screen flow (overlay)', 'pattern', 'attachments', 'submit'],
+    choices: ['',I18n.t('form.button.actions.transform'), I18n.t('form.button.actions.screen_flow_overlay'), I18n.t('form.button.actions.pattern'), I18n.t('form.button.actions.attachments'), I18n.t('form.button.actions.submit'), I18n.t('form.button.actions.previous')],
     required: false
   },{
     type: "string",
-    label: "XSL",
+    label: I18n.t('form.field.xsl'),
     name: "xsl",
     required: false
   }, {
     type: "autocomplete-screen-flow",
-    label: "Flow",
+    label: I18n.t('form.field.flow'),
     name: "screenflow",
-    typeInvite: "Start typing a flow name",
+    typeInvite: I18n.t('form.field.invite.flow_name'),
     required: false
   },
   {
     type: "autocomplete-pattern",
-    label: "Pattern",
+    label: I18n.t('form.field.pattern'),
     name: "pattern",
-    typeInvite: "Start typing a pattern name",
+    typeInvite: I18n.t('form.field.invite.pattern_name'),
     required: false
   }
 ], true);
