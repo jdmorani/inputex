@@ -290,7 +290,6 @@
         {
             type:'string',
             label: I18n.t('form.field.type_invite'),
-            label:'Type invite',
             name:'typeInvite',
             value:''
         },
@@ -303,7 +302,6 @@
         {
             type:'integer',
             label: I18n.t('form.field.min_length'),
-            label:'Min. length',
             name:'minLength',
             value:0
         },
