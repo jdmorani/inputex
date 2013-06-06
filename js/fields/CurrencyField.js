@@ -36,6 +36,8 @@
             if(value !== '' && value !== undefined){
                 inputEx.CurrencyField.superclass.setValue.call(this, value, sendUpdatedEvt);
                 $j('input', this.divEl).formatCurrency({'roundToDecimalPlace': this.options.decimal , 'region': this.options.region, 'hideSymbol': this.options.hidecurrency});
+            }else{
+                inputEx.CurrencyField.superclass.setValue.call(this, '', sendUpdatedEvt);
             }
         },
 
