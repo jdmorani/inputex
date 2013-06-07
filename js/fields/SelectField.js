@@ -99,6 +99,10 @@
 
       var i, length, choice, firstIndexAvailable, choiceFound = false;
 
+      if(!value || lang.isUndefined(value)){
+          value = '';
+      }
+
       for (i = 0, length = this.choicesList.length; i < length; i += 1) {
 
         if (this.choicesList[i].visible) {
