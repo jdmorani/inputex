@@ -131,9 +131,9 @@
             return (new Date(Y, m, d));
         } else {
             var ladate = sDate.match(/(\d{4})(\d{2})(\d{2})/);
-            var Y = parseInt(ladate[1]);
-            var m = parseInt(ladate[2]) - 1;
-            var d = parseInt(ladate[3]);
+            var Y = parseInt(ladate[1], 10);
+            var m = parseInt(ladate[2], 10) - 1;
+            var d = parseInt(ladate[3], 10);
             return (new Date(Y, m, d));
         }
     };
