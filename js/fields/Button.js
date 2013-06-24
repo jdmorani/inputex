@@ -30,30 +30,31 @@ YAHOO.lang.extend(inputEx.ButtonField, inputEx.Field, {
 
       this.options.newwindow = options.newwindow || false;
 
-      if(this.options.action == I18n.t('form.button.actions.transform')){
+      if(this.options.action == 'transform'){
          this.options.className += " inputEx-ButtonField-Action-Transform";
       };
 
-      if(this.options.action == I18n.t('form.button.actions.screen_flow_overlay')){
+      if(this.options.action == 'screen flow (overlay)'){
          this.options.className += " inputEx-ButtonField-Action-ScreenFlow";
       };
 
-      if(this.options.action == I18n.t('form.button.actions.pattern')){
+      if(this.options.action == 'pattern'){
          this.options.className += " inputEx-ButtonField-Action-Pattern";
       };
 
-      if(this.options.action == I18n.t('form.button.actions.attachments')){
+      if(this.options.action == 'attachments'){
          this.options.className += " inputEx-ButtonField-Action-Attachment";
       };
 
-      if(this.options.action == I18n.t('form.button.actions.submit')){
+      if(this.options.action == 'submit'){
         this.options.type = 'submit';
       }else{
         this.options.type = 'button';
       }
 
-      if(this.options.action == I18n.t('form.button.actions.previous')){
+      if(this.options.action == 'previous'){
         this.options.name = '__btn_previous__';
+        this.options.type = 'submit';
       }
 
       this.options.parentEl = lang.isString(options.parentEl) ? Dom.get(options.parentEl) : options.parentEl;
@@ -225,7 +226,7 @@ inputEx.registerType("button", inputEx.ButtonField, [{
     type: "select",
     label: I18n.t('form.button.action'),
     name: "action",
-    choices: ['',I18n.t('form.button.actions.transform'), I18n.t('form.button.actions.screen_flow_overlay'), I18n.t('form.button.actions.pattern'), I18n.t('form.button.actions.attachments'), I18n.t('form.button.actions.submit'), I18n.t('form.button.actions.previous')],
+    choices: ['','transform', 'screen flow (overlay)', 'pattern', 'attachments', 'submit', 'previous'],
     required: false
   },{
     type: "string",
