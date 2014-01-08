@@ -41,8 +41,7 @@
 
             if (this.isHidden()) return true;
 
-            var separator = this.options.dateFormat.match(/[^Ymd ]/g)[0];
-            var ladate = value.split(separator);
+            var ladate = value.split(/\/|-/);
             if (ladate.length != 3) {
                 return false;
             }
