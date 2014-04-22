@@ -48,7 +48,7 @@
             if (isNaN(parseInt(ladate[0], 10)) || isNaN(parseInt(ladate[1], 10)) || isNaN(parseInt(ladate[2], 10))) {
                 return false;
             }
-            var formatSplit = this.options.dateFormat.split(separator);
+            var formatSplit = this.options.dateFormat.split('/');
             var yearIndex = inputEx.indexOf('Y', formatSplit);
             if (ladate[yearIndex].length != 4) {
                 return false;
