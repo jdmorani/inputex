@@ -39,10 +39,8 @@
 
   setValue: function(val, sendUpdatedEvt) {
    this.value = val;
-    
+
    inputEx.renderVisu(this.options.visu, this.options.queue, this.fieldContainer);
-    
-   inputEx.QueueField.superclass.setValue.call(this, val, sendUpdatedEvt);
   },
 
   renderComponent: function() {
