@@ -519,32 +519,35 @@
         return;
       }
 
-      // Get the wrapping div element
-      var elementDiv = Event.getTarget(e).parentNode;
+      if (confirm(I18n.t('form.list.confirm_delete'))) {
 
-      // Get the index of the subField
-      var index = -1;
+        // Get the wrapping div element
+        var elementDiv = Event.getTarget(e).parentNode;
 
-      // field to destroy
-      var subFieldEl = elementDiv.childNodes[(this.options.useButtons && this.options.editable) ? 1 : 0];
-      for (var i = 0; i < this.subFields.length; i++) {
-        if (this.subFields[i].getEl() == subFieldEl) {
-          field = this.subFields[i];
-          index = i;
-          break;
+        // Get the index of the subField
+        var index = -1;
+
+        // field to destroy
+        var subFieldEl = elementDiv.childNodes[(this.options.useButtons && this.options.editable) ? 1 : 0];
+        for (var i = 0; i < this.subFields.length; i++) {
+          if (this.subFields[i].getEl() == subFieldEl) {
+            field = this.subFields[i];
+            index = i;
+            break;
+          }
         }
+        // Remove it
+        if (index != -1) {
+          this.removeElement(index);
+        }
+
+        // Note: not very efficient
+        this.resetAllNames();
+
+
+        // Fire the updated event
+        this.fireUpdatedEvt();
       }
-      // Remove it
-      if (index != -1) {
-        this.removeElement(index);
-      }
-
-      // Note: not very efficient
-      this.resetAllNames();
-
-
-      // Fire the updated event
-      this.fireUpdatedEvt();
     },
 
 
