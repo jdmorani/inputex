@@ -37,6 +37,7 @@ lang.extend(inputEx.AutoComplete, inputEx.StringField, {
       this.options.returnValue = options.returnValue;
       this.options.generateRequest = options.generateRequest;
       this.options.datasourceParameters = options.datasourceParameters;
+      this.options.requireSelection = true;
    },
    
    /**

@@ -38,7 +38,7 @@
         queryMatchContains: true,
         typeAhead: false,
         animVert: false,
-        forceSelection: false,
+        forceSelection: true,
         maxResultsDisplayed: 15
       };
 
@@ -66,7 +66,9 @@
         
         // Instantiate AutoComplete
         this.oAutoComp = new YAHOO.widget.AutoComplete(this.el, this.listEl, this.options.datasource, this.options.autoComp);
-        
+
+        console.log("--------> " + this.oAutoComp.forceSelection);
+
         if(!this.oAutoComp.itemSelectEvent)
           return; //this may happen when the field is embedded in the type editor property panel because the field may be deleted right after the autocomplete event is fired.
 
@@ -83,8 +85,24 @@
         //    -> so fired after autocomp internal "blur" callback (which would erase typeInvite...)
         this.oAutoComp.textboxBlurEvent.subscribe(this.onBlur, this, true);
 
+        this.oAutoComp.dataReturnEvent.subscribe(this.onReturn, this, true);
+
         this.setClassFromState();
      },
+
+      onReturn: function(sType, aArgs) {
+        // place the onChange codes here
+
+        // if this.options.requireSelection is true, do this:
+        var lastValue = '';
+        if (aArgs[2].length > 0) {
+          lastValue = this.getValue();
+        } else {
+          this.setValue(lastValue);
+        }
+        // else, do nothing.
+
+      },
 
      /**
       * itemSelect handler
