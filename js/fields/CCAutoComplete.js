@@ -38,7 +38,7 @@
         queryMatchContains: true,
         typeAhead: false,
         animVert: false,
-        forceSelection: true,
+        forceSelection: false,
         maxResultsDisplayed: 15
       };
 
@@ -67,8 +67,6 @@
         // Instantiate AutoComplete
         this.oAutoComp = new YAHOO.widget.AutoComplete(this.el, this.listEl, this.options.datasource, this.options.autoComp);
 
-        console.log("--------> " + this.oAutoComp.forceSelection);
-
         if(!this.oAutoComp.itemSelectEvent)
           return; //this may happen when the field is embedded in the type editor property panel because the field may be deleted right after the autocomplete event is fired.
 
@@ -90,19 +88,19 @@
         this.setClassFromState();
      },
 
-      onReturn: function(sType, aArgs) {
-        // place the onChange codes here
+    onReturn: function(sType, aArgs) {
+       // place the onChange codes here
 
-        // if this.options.requireSelection is true, do this:
+      console.log("onReturn: " + this.options.requireSelection);
+      if (this.options.requireSelection) {
         var lastValue = '';
         if (aArgs[2].length > 0) {
-          lastValue = this.getValue();
+            lastValue = this.getValue();
         } else {
-          this.setValue(lastValue);
+            this.setValue(lastValue);
         }
-        // else, do nothing.
-
-      },
+      }
+    },
 
      /**
       * itemSelect handler
@@ -136,6 +134,7 @@
      this.el = inputEx.cn('input', attributes);
 
      this.linkEl = inputEx.cn('span', {className: 'inputEx-link-img'});
+     this.flagEl = inputEx.cn('span', {className: 'inputEx-flag-img'});
 
      // Create the hidden input
      var hiddenAttrs = {
@@ -149,6 +148,7 @@
      this.wrapEl.appendChild(this.el);
      this.wrapEl.appendChild(this.hiddenEl);
      this.wrapEl.appendChild(this.linkEl);
+     this.wrapEl.appendChild(this.flagEl);
      this.fieldContainer.appendChild(this.wrapEl);
 
      // Render the list :
@@ -156,9 +156,22 @@
      this.fieldContainer.appendChild(this.listEl);
 
      Event.onAvailable([this.el, this.listEl], this.buildAutocomplete, this, true);
-    },    
+     Dom.addClass(this.divEl, "inputEx-flag-red");
+     Event.addListener(this.flagEl, 'click', this.onReqSelectClick, this, true);
+    },
 
-
+    onReqSelectClick: function(e) {
+      console.log("clicking the flagq icon");
+      this.setValue("");
+      this.options.requireSelection = !(this.options.requireSelection);
+      if (this.options.requireSelection) {
+          console.log("true red");
+        Dom.addClass(this, "inputEx-flag-red");
+      } else {
+          console.log("false green");
+        Dom.addClass(this, "inputEx-flag-green");
+      }
+    },
 
     onChange: function(e) {
       inputEx.CCAutoComplete.superclass.onChange.call(this, e);
