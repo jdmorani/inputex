@@ -89,9 +89,6 @@
      },
 
     onReturn: function(sType, aArgs) {
-       // place the onChange codes here
-
-      console.log("onReturn: " + this.options.requireSelection);
       if (this.options.requireSelection) {
         var lastValue = '';
         if (aArgs[2].length > 0) {
@@ -161,16 +158,19 @@
     },
 
     onReqSelectClick: function(e) {
-      console.log("clicking the flagq icon");
       this.setValue("");
       this.options.requireSelection = !(this.options.requireSelection);
+
+      Dom.removeClass(this.divEl, this.previousFlag);
+      var flag, className;
       if (this.options.requireSelection) {
-          console.log("true red");
-        Dom.addClass(this, "inputEx-flag-red");
+          flag = "red";
       } else {
-          console.log("false green");
-        Dom.addClass(this, "inputEx-flag-green");
+          flag = "green";
       }
+      className = 'inputEx-flag-' + flag;
+      Dom.addClass(this.divEl, className);
+      this.previousFlag = className;
     },
 
     onChange: function(e) {
@@ -215,9 +215,9 @@
     */
     onChange: function(e) {
       this.setClassFromState();
-      // Clear the field when no value 
+      // Clear the field when no value
       if (this.hiddenEl.value.split('@_@@_@')[0] != this.el.value) this.hiddenEl.value = this.el.value;
-      lang.later(50, this, function() {
+      lang.later(0, this, function() {
        if(this.el.value == "") {
         this.setValue("");
        }
