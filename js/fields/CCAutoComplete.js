@@ -226,6 +226,7 @@
 
 
     onBlur: function(e){
+     if (this.options.requireSelection == true && this.hiddenEl.value.indexOf('@_@@_@') < 0) this.setValue("");
      if (this.hiddenEl.value.split('@_@@_@')[0] != this.el.value && this.el.value != this.options.typeInvite) this.el.value = this.hiddenEl.value;
      if(this.el.value == '' && this.options.typeInvite) {
        Dom.addClass(this.divEl, "inputEx-typeInvite");
