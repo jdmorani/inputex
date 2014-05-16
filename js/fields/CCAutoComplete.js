@@ -153,7 +153,7 @@
      this.fieldContainer.appendChild(this.listEl);
 
      Event.onAvailable([this.el, this.listEl], this.buildAutocomplete, this, true);
-     Dom.addClass(this.divEl, "inputEx-flag-red");
+     if (this.parentField.type != 'multifield') Dom.addClass(this.divEl, "inputEx-flag-red");
      Event.addListener(this.flagEl, 'click', this.onReqSelectClick, this, true);
     },
 
